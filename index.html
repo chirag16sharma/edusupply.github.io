@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduSupply — School Appliances Delivered</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== PHOTO ADDITIONS ===== */
+
+    /* Hero photo */
+    .hero-photo-wrap {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+      max-width: 480px;
+      width: 100%;
+    }
+    .hero-photo-wrap img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(16,185,129,0.1));
+    }
+
+    /* Category card photos */
+    .cat-photo {
+      width: 100%;
+      height: 140px;
+      overflow: hidden;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .cat-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .cat-card:hover .cat-photo img {
+      transform: scale(1.07);
+    }
+
+    /* Step photos */
+    .step-photo-wrap {
+      width: 100%;
+      height: 160px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 14px 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .step-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .step:hover .step-photo-wrap img {
+      transform: scale(1.05);
+    }
+
+    /* Gallery strip */
+    .photo-gallery {
+      padding: 60px 5%;
+      background: #f8f9ff;
+    }
+    .photo-gallery h2 {
+      text-align: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    .photo-gallery .section-tag {
+      text-align: center;
+      display: block;
+      color: #6366f1;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 200px 200px;
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .gallery-grid .g-item {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+    .gallery-grid .g-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .gallery-grid .g-item:hover img { transform: scale(1.07); }
+    .gallery-grid .g-item.tall { grid-row: span 2; }
+    .gallery-grid .g-label {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(6px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .gallery-grid .g-item.tall { grid-row: span 1; }
+      .hero-photo-wrap { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="images/logo.svg" alt="EduSupply Logo" class="logo-img" />
+      <span class="logo-text">EduSupply</span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-cart" id="cartBtn" aria-label="Cart">
+        <img src="images/cart-icon.svg" alt="cart" />
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <button class="btn-primary" onclick="document.getElementById('orderModal').classList.add('open')">Order Now</button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="home">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">📦 Free delivery on orders above ₹5,000</div>
+      <h1 class="hero-title">
+        Everything Your<br/>
+        <em>School Needs</em>,<br/>
+        Delivered.
+      </h1>
+      <p class="hero-sub">From lab chemicals to smart boards — we supply every corner of your institution with quality-assured school appliances, fast.</p>
+      <div class="hero-cta">
+        <button class="btn-primary large" onclick="scrollToSection('products')">Browse Products</button>
+        <button class="btn-outline large" onclick="scrollToSection('how-it-works')">How It Works</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Products</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">1200+</span><span class="stat-label">Schools Served</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">24hr</span><span class="stat-label">Avg Delivery</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-photo-wrap">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80" alt="Modern Classroom" />
+        <div class="hero-photo-overlay"></div>
+      </div>
+      <div class="hero-card-stack">
+        <div class="floating-card card1">
+          <img src="images/smartboard.svg" alt="Smart Board" />
+          <span>Smart Board</span>
+        </div>
+        <div class="floating-card card2">
+          <img src="images/beaker.svg" alt="Lab Chemicals" />
+          <span>Lab Chemicals</span>
+        </div>
+        <div class="floating-card card3">
+          <img src="images/desk.svg" alt="Student Desk" />
+          <span>Student Desks</span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CATEGORIES ========== -->
+  <section class="categories" id="categories">
+    <div class="section-header">
+      <p class="section-tag">Browse by Category</p>
+      <h2>What do you need today?</h2>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card" onclick="filterProducts('furniture')">
+        <div class="cat-photo"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=80" alt="School Furniture" /></div>
+        <div class="cat-icon"><img src="images/cat-furniture.svg" alt="Furniture" /></div>
+        <h3>Furniture</h3>
+        <p>Benches, desks, chairs, teacher cabins & tables</p>
+      </div>
+      <div class="cat-card" onclick="filterProducts('lab')">
+        <div class="cat-photo"><img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=500&q=80" alt="Lab Supplies" /></div>
+        <div class="cat-icon"><img src="images/cat-lab.svg" alt="Lab" /></div>
+        <h3>Lab Supplies</h3>
+        <p>Chemistry chemicals, physics instruments & lab ware</p>
+      </div>
+      <div class="cat-card" onclick="filterProducts('boards')">
+        <div class="cat-photo"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=500&q=80" alt="Smart Boards" /></div>
+        <div class="cat-icon"><img src="images/cat-board.svg" alt="Boards" /></div>
+        <h3>Boards & Displays</h3>
+        <p>Chalkboards, whiteboards & smart boards</p>
+      </div>
+      <div class="cat-card" onclick="filterProducts('stationery')">
+        <div class="cat-photo"><img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=500&q=80" alt="Stationery" /></div>
+        <div class="cat-icon"><img src="images/cat-stationery.svg" alt="Stationery" /></div>
+        <h3>Stationery & Accessories</h3>
+        <p>Dusters, chalk, markers, projectors & more</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRODUCTS ========== -->
+  <section class="products-section" id="products">
+    <div class="section-header">
+      <p class="section-tag">Our Catalogue</p>
+      <h2>Top School Appliances</h2>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all" onclick="filterProducts('all', this)">All</button>
+      <button class="filter-btn" data-filter="furniture" onclick="filterProducts('furniture', this)">Furniture</button>
+      <button class="filter-btn" data-filter="lab" onclick="filterProducts('lab', this)">Lab</button>
+      <button class="filter-btn" data-filter="boards" onclick="filterProducts('boards', this)">Boards</button>
+      <button class="filter-btn" data-filter="stationery" onclick="filterProducts('stationery', this)">Stationery</button>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Populated by script.js -->
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS ========== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header light">
+      <p class="section-tag">Simple Process</p>
+      <h2>Order in 3 Easy Steps</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-photo-wrap"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=500&q=80" alt="Browse online" /></div>
+        <h3>Browse & Select</h3>
+        <p>Explore our full catalogue of school appliances. Filter by category, compare specs and add to cart.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-photo-wrap"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=500&q=80" alt="Place order" /></div>
+        <h3>Place Your Order</h3>
+        <p>Fill in your school address, contact details and preferred delivery date. We'll confirm within 2 hours.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-photo-wrap"><img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=500&q=80" alt="Fast delivery" /></div>
+        <h3>Fast Delivery</h3>
+        <p>Our logistics team delivers and installs heavy items like smart boards and cabins right in your classrooms.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PHOTO GALLERY ========== -->
+  <section class="photo-gallery">
+    <p class="section-tag">Our Infrastructure</p>
+    <h2>Schools We've Transformed</h2>
+    <div class="gallery-grid">
+      <div class="g-item tall">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=600&q=80" alt="Modern Classroom" />
+        <span class="g-label">Modern Classrooms</span>
+      </div>
+      <div class="g-item">
+        <img src="https://images.unsplash.com/photo-1532094349884-32e3e9d64ef9?auto=format&fit=crop&w=600&q=80" alt="Science Lab" />
+        <span class="g-label">Science Labs</span>
+      </div>
+      <div class="g-item">
+        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=600&q=80" alt="Smart Board" />
+        <span class="g-label">Smart Boards</span>
+      </div>
+      <div class="g-item">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="School Furniture" />
+        <span class="g-label">Quality Furniture</span>
+      </div>
+      <div class="g-item">
+        <img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=600&q=80" alt="Stationery" />
+        <span class="g-label">Stationery & Supplies</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-header">
+      <p class="section-tag">What Schools Say</p>
+      <h2>Trusted by Institutions</h2>
+    </div>
+    <div class="testimonials-track" id="testimonialsTrack">
+      <div class="testimonial-card">
+        <p>"EduSupply transformed our science labs. The chemicals arrived properly labeled and packed. Delivery was on time!"</p>
+        <div class="t-author"><div class="t-avatar">SP</div><div><strong>S. Priya</strong><br/><span>Principal, GreenLeaf Academy</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <p>"We ordered 40 student benches and 10 teacher cabins. Everything assembled perfectly. Amazing quality and service."</p>
+        <div class="t-author"><div class="t-avatar">RM</div><div><strong>R. Mehta</strong><br/><span>Admin, Sunrise Public School</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <p>"The smart boards were installed within 24 hours of delivery. Our teachers couldn't be happier!"</p>
+        <div class="t-author"><div class="t-avatar">AK</div><div><strong>A. Kumar</strong><br/><span>IT Head, Bharat Vidyalaya</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <p>"Best supplier for physics instruments. Their catalogue has everything from vernier calipers to full optics kits."</p>
+        <div class="t-author"><div class="t-avatar">DN</div><div><strong>D. Nair</strong><br/><span>Science Dept., Meridian School</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="contact-section" id="contact">
+    <div class="contact-box">
+      <div class="contact-info">
+        <h2>Get a Custom Quote</h2>
+        <p>Need bulk orders or a custom supply list for your institution? Reach out and we'll provide a tailored quote within 24 hours.</p>
+        <div class="contact-detail"><img src="images/icon-phone.svg" alt="phone" /><span>+91 98765 43210</span></div>
+        <div class="contact-detail"><img src="images/icon-email.svg" alt="email" /><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d322f39382f2e1d3839282e282d2d3124733433">[email&#160;protected]</a></span></div>
+        <div class="contact-detail"><img src="images/icon-location.svg" alt="location" /><span>Serving all states across India</span></div>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <input type="text" placeholder="School Name" required />
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Email Address" required />
+        <input type="tel" placeholder="Phone Number" required />
+        <textarea placeholder="Describe your requirements..." rows="4"></textarea>
+        <button type="submit" class="btn-primary large">Send Enquiry</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="images/logo.svg" alt="EduSupply" class="logo-img" />
+        <span class="logo-text">EduSupply</span>
+        <p>India's trusted school appliances delivery platform. Supplying quality educational infrastructure since 2018.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Products</h4>
+        <ul>
+          <li>Classroom Furniture</li>
+          <li>Lab Equipment</li>
+          <li>Smart Boards</li>
+          <li>Stationery</li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li>About Us</li>
+          <li>Careers</li>
+          <li>Partner With Us</li>
+          <li>Blog</li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul>
+          <li>Track Order</li>
+          <li>Return Policy</li>
+          <li>FAQs</li>
+          <li>Contact Us</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 EduSupply. All rights reserved.</p>
+      <p>Made with ❤️ for Indian Schools</p>
+    </div>
+  </footer>
+
+  <!-- ========== CART SIDEBAR ========== -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button onclick="toggleCart()" class="close-btn">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="empty-cart">
+        <img src="images/empty-cart.svg" alt="empty" />
+        <p>Your cart is empty</p>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total">Total: <strong id="cartTotal">₹0</strong></div>
+      <button class="btn-primary large" onclick="document.getElementById('orderModal').classList.add('open'); toggleCart()">Proceed to Order</button>
+    </div>
+  </div>
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+  <!-- ========== ORDER MODAL ========== -->
+  <div class="modal" id="orderModal">
+    <div class="modal-box">
+      <button class="close-btn" onclick="document.getElementById('orderModal').classList.remove('open')">✕</button>
+      <h2>Place Your Order</h2>
+      <p class="modal-sub">Fill in your details and we'll process your order right away.</p>
+      <form id="orderForm">
+        <div class="form-row">
+          <input type="text" placeholder="School / Institution Name" required />
+          <input type="text" placeholder="Contact Person" required />
+        </div>
+        <div class="form-row">
+          <input type="email" placeholder="Email" required />
+          <input type="tel" placeholder="Phone" required />
+        </div>
+        <textarea placeholder="Full Delivery Address" rows="3" required></textarea>
+        <input type="date" id="deliveryDate" required />
+        <textarea placeholder="Special instructions or bulk requirements..." rows="2"></textarea>
+        <button type="submit" class="btn-primary large">Confirm Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==
