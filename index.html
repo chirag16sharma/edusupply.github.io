@@ -108,22 +108,17 @@
   </section>
 
   <!-- ========== PRODUCTS ========== -->
-  <section class="products-section" id="products">
-    <div class="section-header">
-      <p class="section-tag">Our Catalogue</p>
-      <h2>Top School Appliances</h2>
-    </div>
-    <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all" onclick="filterProducts('all', this)">All</button>
-      <button class="filter-btn" data-filter="furniture" onclick="filterProducts('furniture', this)">Furniture</button>
-      <button class="filter-btn" data-filter="lab" onclick="filterProducts('lab', this)">Lab</button>
-      <button class="filter-btn" data-filter="boards" onclick="filterProducts('boards', this)">Boards</button>
-      <button class="filter-btn" data-filter="stationery" onclick="filterProducts('stationery', this)">Stationery</button>
-    </div>
-    <div class="products-grid" id="productsGrid">
-      <!-- Populated by script.js -->
-    </div>
-  </section>
+  <section id="products">
+  <!-- filter tabs should have class="filter-tab" and data-filter -->
+  <button class="filter-tab active" data-filter="All">All</button>
+  <button class="filter-tab" data-filter="Furniture">Furniture</button>
+  <button class="filter-tab" data-filter="Lab">Lab</button>
+  <button class="filter-tab" data-filter="Boards">Boards</button>
+  <button class="filter-tab" data-filter="Stationery">Stationery</button>
+
+  <!-- THIS div is where products render — must have this exact ID -->
+  <div id="products-grid"></div>
+</section>
 
   <!-- ========== HOW IT WORKS ========== -->
   <section class="how-it-works" id="how-it-works">
