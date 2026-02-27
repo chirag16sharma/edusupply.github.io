@@ -866,3 +866,28 @@ em { color: var(--amber); font-style: italic; }
 @keyframes wa-pulse { 0% { transform: scale(1); opacity: .7; } 60% { transform: scale(1.08); opacity: 0; } 100% { transform: scale(1.08); opacity: 0; } }
 @keyframes wa-enter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 480px) { .wa-float { bottom: 18px; right: 16px; } .wa-btn span:last-child { display: none; } .wa-btn { padding: 15px; border-radius: 50%; } }
+
+/* ===== FILTER TABS ===== */
+.filter-tab {
+  padding: 0.5rem 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 999px;
+  background: white;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.filter-tab:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.filter-tab.active {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: white;
+}
