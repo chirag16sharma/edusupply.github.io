@@ -6,41 +6,129 @@
   <title>Login — EduSupply</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: #f5f7fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .box { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
-    .logo { text-align: center; margin-bottom: 24px; font-size: 22px; font-weight: bold; color: #1a73e8; }
-    h2 { text-align: center; color: #333; margin-bottom: 24px; font-size: 20px; }
-    input { width: 100%; padding: 12px 16px; margin-bottom: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f5f7fa, #e8f0fe); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .box { background: white; padding: 44px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); width: 100%; max-width: 440px; }
+    .logo { text-align: center; margin-bottom: 8px; font-size: 24px; font-weight: 800; color: #1a73e8; }
+    .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 32px; }
+    h2 { text-align: center; color: #222; margin-bottom: 24px; font-size: 20px; font-weight: 700; }
+    label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
+    input { width: 100%; padding: 12px 16px; margin-bottom: 18px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 15px; transition: border 0.2s; }
     input:focus { outline: none; border-color: #1a73e8; }
-    .btn { width: 100%; padding: 13px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-bottom: 10px; font-weight: 600; }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-bottom: 12px; font-weight: 700; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
     .btn-login { background: #1a73e8; color: white; }
-    .btn-login:hover { background: #1558b0; }
     .btn-signup { background: #34a853; color: white; }
-    .btn-signup:hover { background: #288a41; }
-    .divider { text-align: center; color: #aaa; margin: 10px 0; font-size: 13px; }
-    .msg { color: red; font-size: 13px; margin-top: 8px; text-align: center; min-height: 18px; }
+    .msg { font-size: 13px; margin: -8px 0 14px; text-align: center; min-height: 18px; padding: 8px; border-radius: 8px; display: none; }
+    .msg.error { background: #fdecea; color: #c62828; display: block; }
+    .msg.success { background: #e6f4ea; color: #2e7d32; display: block; }
     .back { display: block; text-align: center; margin-top: 20px; color: #1a73e8; font-size: 14px; text-decoration: none; }
     .back:hover { text-decoration: underline; }
-    .toggle { text-align: center; font-size: 14px; margin-top: 10px; color: #555; }
+    .toggle { text-align: center; font-size: 14px; margin-top: 12px; color: #666; }
     .toggle span { color: #1a73e8; cursor: pointer; font-weight: 600; }
+    .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
   </style>
 </head>
 <body>
 <div class="box">
   <div class="logo">🏫 EduSupply</div>
+  <div class="subtitle">India's trusted school appliances platform</div>
 
   <!-- LOGIN FORM -->
   <div id="loginForm">
-    <h2>Welcome Back!</h2>
-    <input type="email" id="loginEmail" placeholder="School Email" />
-    <input type="password" id="loginPassword" placeholder="Password" />
-    <button class="btn btn-login" onclick="login()">Login</button>
+    <h2>Welcome Back</h2>
+    <label>Email</label>
+    <input type="email" id="loginEmail" placeholder="school@example.com" />
+    <label>Password</label>
+    <input type="password" id="loginPassword" placeholder="Enter your password" />
     <div class="msg" id="loginMsg"></div>
-    <div class="toggle">Don't have an account? <span onclick="showSignup()">Sign Up</span></div>
+    <button class="btn btn-login" onclick="login()">🔐 Login</button>
+    <div class="toggle">Don't have an account? <span onclick="showSignup()">Sign Up Free</span></div>
   </div>
 
   <!-- SIGNUP FORM -->
   <div id="signupForm" style="display:none;">
-    <h2>Create Account</h2>
-    <input type="text" id="signupName" placeholder="School Name" />
-    <input type="email" id="signupEmail" placeholder="
+    <h2>Create School Account</h2>
+    <label>School Name</label>
+    <input type="text" id="signupName" placeholder="e.g. Sunrise Public School" />
+    <label>Email</label>
+    <input type="email" id="signupEmail" placeholder="school@example.com" />
+    <label>Password</label>
+    <input type="password" id="signupPassword" placeholder="Minimum 6 characters" />
+    <div class="msg" id="signupMsg"></div>
+    <button class="btn btn-signup" onclick="signup()">✅ Create Account</button>
+    <div class="toggle">Already have an account? <span onclick="showLogin()">Login</span></div>
+  </div>
+
+  <hr class="divider"/>
+  <a href="index.html" class="back">← Back to EduSupply</a>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
+    authDomain: "edusupply-b92ad.firebaseapp.com",
+    projectId: "edusupply-b92ad",
+    storageBucket: "edusupply-b92ad.firebasestorage.app",
+    messagingSenderId: "993801689755",
+    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.login = async function() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const msg = document.getElementById('loginMsg');
+    msg.className = 'msg';
+    if (!email || !password) { msg.className = 'msg error'; msg.innerText = 'Please fill in all fields.'; return; }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = 'dashboard.html';
+    } catch(err) {
+      msg.className = 'msg error';
+      if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg.innerText = '❌ Incorrect email or password.';
+      else if (err.code === 'auth/user-not-found') msg.innerText = '❌ No account found with this email.';
+      else msg.innerText = '❌ ' + err.message;
+    }
+  }
+
+  window.signup = async function() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const msg = document.getElementById('signupMsg');
+    msg.className = 'msg';
+    if (!name || !email || !password) { msg.className = 'msg error'; msg.innerText = 'Please fill in all fields.'; return; }
+    if (password.length < 6) { msg.className = 'msg error'; msg.innerText = 'Password must be at least 6 characters.'; return; }
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        schoolName: name, email: email, createdAt: new Date().toISOString(), role: 'school'
+      });
+      msg.className = 'msg success';
+      msg.innerText = '✅ Account created! Redirecting...';
+      setTimeout(() => window.location.href = 'dashboard.html', 1500);
+    } catch(err) {
+      msg.className = 'msg error';
+      if (err.code === 'auth/email-already-in-use') msg.innerText = '❌ This email is already registered. Try logging in.';
+      else msg.innerText = '❌ ' + err.message;
+    }
+  }
+
+  window.showSignup = function() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('signupForm').style.display = 'block';
+  }
+  window.showLogin = function() {
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+  }
+</script>
+</body>
+</html>

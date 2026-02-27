@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — EduSupply</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
+    nav { background: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .nav-logo { font-size: 20px; font-weight: 800; color: #1a73e8; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .school-name { font-weight: 600; color: #333; font-size: 14px; }
+    .btn-logout { background: #f44336; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
+    .btn-shop { background: #1a73e8; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; }
+    .container { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
+    .welcome { font-size: 26px; font-weight: 800; color: #222; margin-bottom: 6px; }
+    .welcome-sub { color: #888; font-size: 15px; margin-bottom: 32px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    .stat-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .stat-icon { font-size: 28px; margin-bottom: 10px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: #1a73e8; }
+    .stat-label { color: #888; font-size: 14px; margin-top: 4px; }
+    .section-title { font-size: 20px; font-weight: 700; color: #222; margin-bottom: 20px; }
+    .orders-table { width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .orders-table table { width: 100%; border-collapse: collapse; }
+    .orders-table th { background: #f8f9ff; padding: 14px 20px; text-align: left; font-size: 13px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .orders-table td { padding: 16px 20px; border-top: 1px solid #f0f0f0; font-size: 14px; color: #333; }
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-pending { background: #fff3e0; color: #e65100; }
+    .badge-confirmed { background: #e8f5e9; color: #2e7d32; }
+    .badge-delivered { background: #e3f2fd; color: #1565c0; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state p { font-size: 16px; margin-bottom: 20px; }
+    .btn-primary { background: #1a73e8; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; display: inline-block; }
+    .loading { text-align: center; padding: 40px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">🏫 EduSupply</a>
+  <div class="nav-right">
+    <span class="school-name" id="schoolName">Loading...</span>
+    <a href="index.html" class="btn-shop">🛒 Shop</a>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="welcome" id="welcomeText">Welcome back!</div>
+  <div class="welcome-sub">Here's a summary of your EduSupply activity.</div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-value" id="totalOrders">0</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-value" id="totalSpent">₹0</div>
+      <div class="stat-label">Total Spent</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🚚</div>
+      <div class="stat-value" id="pendingOrders">0</div>
+      <div class="stat-label">Pending Deliveries</div>
+    </div>
+  </div>
+
+  <div class="section-title">Your Orders</div>
+  <div class="orders-table">
+    <div id="ordersContent" class="loading">Loading your orders...</div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
+    authDomain: "edusupply-b92ad.firebaseapp.com",
+    projectId: "edusupply-b92ad",
+    storageBucket: "edusupply-b92ad.firebasestorage.app",
+    messagingSenderId: "993801689755",
+    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = 'login.html'; return; }
+
+    // Load user info
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    const userData = userDoc.exists() ? userDoc.data() : { schoolName: user.email };
+    document.getElementById('schoolName').innerText = userData.schoolName || user.email;
+    document.getElementById('welcomeText').innerText = `Welcome, ${userData.schoolName || 'School'}! 👋`;
+
+    // Load orders
+    try {
+      const q = query(collection(db, 'orders'), where('userId', '==', user.uid));
+      const snapshot = await getDocs(q);
+      const orders = [];
+      snapshot.forEach(d => orders.push({ id: d.id, ...d.data() }));
+      orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      // Update stats
+      document.getElementById('totalOrders').innerText = orders.length;
+      const totalSpent = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+      document.getElementById('totalSpent').innerText = '₹' + totalSpent.toLocaleString('en-IN');
+      const pending = orders.filter(o => o.status === 'Pending').length;
+      document.getElementById('pendingOrders').innerText = pending;
+
+      // Render table
+      if (orders.length === 0) {
+        document.getElementById('ordersContent').innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🛒</div>
+            <p>You haven't placed any orders yet.</p>
+            <a href="index.html" class="btn-primary">Browse Products</a>
+          </div>`;
+      } else {
+        document.getElementById('ordersContent').innerHTML = `
+          <table>
+            <thead><tr>
+              <th>Order ID</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              ${orders.map(o => `
+                <tr>
+                  <td><strong>#EDU-${o.id.substring(0,6).toUpperCase()}</strong></td>
+                  <td>${o.items ? o.items.map(i => i.name).join(', ') : 'N/A'}</td>
+                  <td>₹${(o.total || 0).toLocaleString('en-IN')}</td>
+                  <td>${o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN') : 'N/A'}</td>
+                  <td><span class="badge badge-${(o.status||'pending').toLowerCase()}">${o.status || 'Pending'}</span></td>
+                </tr>`).join('')}
+            </tbody>
+          </table>`;
+      }
+    } catch(e) {
+      document.getElementById('ordersContent').innerHTML = '<div class="empty-state"><p>Could not load orders.</p></div>';
+    }
+  });
+
+  window.logout = async function() {
+    await signOut(auth);
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>

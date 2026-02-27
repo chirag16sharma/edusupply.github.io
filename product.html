@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product — EduSupply</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
+    nav { background: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .nav-logo { font-size: 20px; font-weight: 800; color: #1a73e8; text-decoration: none; }
+    .nav-right { display: flex; gap: 12px; align-items: center; }
+    .nav-link { color: #1a73e8; text-decoration: none; font-weight: 600; font-size: 14px; }
+    .container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+    .back-link { color: #1a73e8; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block; margin-bottom: 24px; }
+    .back-link:hover { text-decoration: underline; }
+    .product-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    @media(max-width:700px) { .product-card { grid-template-columns: 1fr; } }
+    .product-image { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #f0f4ff; border-radius: 16px; font-size: 80px; }
+    .product-image img { width: 80%; height: 80%; object-fit: contain; }
+    .category-badge { background: #e8f0fe; color: #1a73e8; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .product-name { font-size: 28px; font-weight: 800; color: #222; margin-bottom: 12px; }
+    .product-price { font-size: 32px; font-weight: 800; color: #1a73e8; margin-bottom: 8px; }
+    .product-price span { font-size: 16px; color: #aaa; font-weight: 400; text-decoration: line-through; margin-left: 8px; }
+    .product-desc { color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+    .stock-info { font-size: 14px; color: #34a853; font-weight: 600; margin-bottom: 24px; }
+    .qty-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .qty-label { font-size: 14px; font-weight: 600; color: #555; }
+    .qty-control { display: flex; align-items: center; border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+    .qty-btn { width: 40px; height: 40px; border: none; background: #f5f7fa; font-size: 20px; cursor: pointer; font-weight: 700; color: #1a73e8; }
+    .qty-btn:hover { background: #e8f0fe; }
+    .qty-display { width: 50px; text-align: center; font-size: 16px; font-weight: 700; color: #222; border: none; background: white; }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { padding: 14px 28px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn-order { background: #1a73e8; color: white; flex: 1; }
+    .btn-cart { background: #f0f4ff; color: #1a73e8; border: 2px solid #1a73e8; flex: 1; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #222; color: white; padding: 14px 28px; border-radius: 30px; font-size: 15px; font-weight: 600; display: none; z-index: 999; }
+
+    /* ORDER MODAL */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+    .modal-bg.show { display: flex; }
+    .modal { background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .modal h2 { font-size: 22px; font-weight: 800; margin-bottom: 24px; color: #222; }
+    .modal label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
+    .modal input, .modal textarea { width: 100%; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
+    .modal input:focus, .modal textarea:focus { outline: none; border-color: #1a73e8; }
+    .modal textarea { resize: vertical; min-height: 80px; }
+    .order-summary { background: #f8f9ff; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+    .order-summary .row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #555; }
+    .order-summary .total { font-weight: 800; color: #222; font-size: 16px; border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 4px; }
+    .modal-btns { display: flex; gap: 12px; }
+    .btn-confirm { background: #34a853; color: white; flex: 1; }
+    .btn-cancel { background: #f5f5f5; color: #555; flex: 1; }
+    .success-screen { display: none; text-align: center; padding: 20px; }
+    .success-screen .icon { font-size: 60px; margin-bottom: 16px; }
+    .success-screen h3 { font-size: 22px; font-weight: 800; color: #34a853; margin-bottom: 8px; }
+    .success-screen p { color: #666; margin-bottom: 24px; }
+    .loading-state { display: none; text-align: center; padding: 40px; color: #888; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">🏫 EduSupply</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">← Back to Products</a>
+    <a href="dashboard.html" class="nav-link" id="dashLink" style="display:none;">My Dashboard</a>
+    <a href="login.html" class="nav-link" id="loginLink">Login</a>
+  </div>
+</nav>
+
+<div class="container">
+  <a href="index.html" class="back-link">← All Products</a>
+
+  <div id="productContent">
+    <div style="text-align:center; padding:60px; color:#aaa;">Loading product...</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ORDER MODAL -->
+<div class="modal-bg" id="orderModal">
+  <div class="modal">
+    <div id="orderForm">
+      <h2>📦 Place Your Order</h2>
+      <div class="order-summary">
+        <div class="row"><span id="summaryName">Product</span><span></span></div>
+        <div class="row"><span>Quantity</span><span id="summaryQty">1</span></div>
+        <div class="row total"><span>Total</span><span id="summaryTotal">₹0</span></div>
+      </div>
+      <label>Contact Person Name</label>
+      <input type="text" id="contactName" placeholder="e.g. Mr. Sharma" />
+      <label>Phone Number</label>
+      <input type="tel" id="contactPhone" placeholder="e.g. 9876543210" />
+      <label>Delivery Address</label>
+      <textarea id="deliveryAddress" placeholder="Full school address with city and PIN code"></textarea>
+      <label>Preferred Delivery Date</label>
+      <input type="date" id="deliveryDate" />
+      <div class="modal-btns">
+        <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-confirm" onclick="confirmOrder()">✅ Confirm Order</button>
+      </div>
+    </div>
+    <div class="loading-state" id="orderLoading">
+      <div style="font-size:40px">⏳</div>
+      <p>Placing your order...</p>
+    </div>
+    <div class="success-screen" id="orderSuccess">
+      <div class="icon">🎉</div>
+      <h3>Order Placed!</h3>
+      <p>Your order has been received. We'll confirm within 2 hours!</p>
+      <p style="font-size:13px; color:#aaa;" id="orderIdDisplay"></p>
+      <br/>
+      <button class="btn btn-order" onclick="window.location.href='dashboard.html'" style="width:100%">View My Orders</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
+    authDomain: "edusupply-b92ad.firebaseapp.com",
+    projectId: "edusupply-b92ad",
+    storageBucket: "edusupply-b92ad.firebasestorage.app",
+    messagingSenderId: "993801689755",
+    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+  let product = null;
+  let qty = 1;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (user) {
+      document.getElementById('dashLink').style.display = 'inline';
+      document.getElementById('loginLink').style.display = 'none';
+    }
+  });
+
+  async function loadProduct() {
+    if (!productId) { document.getElementById('productContent').innerHTML = '<div style="text-align:center;padding:60px;color:#aaa;">Product not found.</div>'; return; }
+    const snap = await getDoc(doc(db, 'products', productId));
+    if (!snap.exists()) { document.getElementById('productContent').innerHTML = '<div style="text-align:center;padding:60px;color:#aaa;">Product not found.</div>'; return; }
+    product = { id: snap.id, ...snap.data() };
+    renderProduct();
+  }
+
+  function renderProduct() {
+    const imgEmoji = product.category === 'Boards' ? '📺' : product.category === 'Lab' ? '🧪' : product.category === 'Furniture' ? '🪑' : '📦';
+    document.getElementById('productContent').innerHTML = `
+      <div class="product-card">
+        <div class="product-image">${imgEmoji}</div>
+        <div>
+          <div class="category-badge">${product.category || 'Product'}</div>
+          <div class="product-name">${product.name}</div>
+          <div class="product-price">₹${(product.price || 0).toLocaleString('en-IN')}</div>
+          <div class="product-desc">${product.description || ''}</div>
+          <div class="stock-info">✅ ${product.stock || 0} units in stock</div>
+          <div class="qty-row">
+            <span class="qty-label">Quantity:</span>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(-1)">−</button>
+              <div class="qty-display" id="qtyDisplay">1</div>
+              <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-order" onclick="openOrderModal()">⚡ Order Now</button>
+          </div>
+          <p style="font-size:12px; color:#aaa; margin-top:16px;">🧾 GST invoice provided &nbsp;|&nbsp; 🚚 Delivered in 24hrs &nbsp;|&nbsp; 📞 Support: +91 98765 43210</p>
+        </div>
+      </div>`;
+  }
+
+  window.changeQty = function(delta) {
+    qty = Math.max(1, Math.min(product.stock || 99, qty + delta));
+    document.getElementById('qtyDisplay').innerText = qty;
+  }
+
+  window.openOrderModal = function() {
+    if (!currentUser) { window.location.href = 'login.html'; return; }
+    document.getElementById('summaryName').innerText = product.name;
+    document.getElementById('summaryQty').innerText = qty;
+    document.getElementById('summaryTotal').innerText = '₹' + ((product.price || 0) * qty).toLocaleString('en-IN');
+    document.getElementById('orderModal').classList.add('show');
+    document.getElementById('orderForm').style.display = 'block';
+    document.getElementById('orderLoading').style.display = 'none';
+    document.getElementById('orderSuccess').style.display = 'none';
+  }
+
+  window.closeModal = function() {
+    document.getElementById('orderModal').classList.remove('show');
+  }
+
+  window.confirmOrder = async function() {
+    const name = document.getElementById('contactName').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const address = document.getElementById('deliveryAddress').value.trim();
+    const date = document.getElementById('deliveryDate').value;
+    if (!name || !phone || !address) { alert('Please fill in all fields.'); return; }
+
+    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('orderLoading').style.display = 'block';
+
+    try {
+      const orderRef = await addDoc(collection(db, 'orders'), {
+        userId: currentUser.uid,
+        userEmail: currentUser.email,
+        items: [{ productId: product.id, name: product.name, price: product.price, qty }],
+        total: product.price * qty,
+        contactName: name,
+        contactPhone: phone,
+        deliveryAddress: address,
+        deliveryDate: date,
+        status: 'Pending',
+        createdAt: new Date().toISOString()
+      });
+      document.getElementById('orderLoading').style.display = 'none';
+      document.getElementById('orderSuccess').style.display = 'block';
+      document.getElementById('orderIdDisplay').innerText = `Order ID: #EDU-${orderRef.id.substring(0,6).toUpperCase()}`;
+    } catch(e) {
+      alert('Error placing order: ' + e.message);
+      document.getElementById('orderForm').style.display = 'block';
+      document.getElementById('orderLoading').style.display = 'none';
+    }
+  }
+
+  loadProduct();
+</script>
+</body>
+</html>

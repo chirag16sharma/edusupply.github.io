@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — EduSupply</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; }
+    nav { background: #1a1a2e; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo { font-size: 20px; font-weight: 800; color: white; }
+    .nav-logo span { color: #f5a623; }
+    .btn-logout { background: #f44336; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
+    .container { max-width: 1200px; margin: 32px auto; padding: 0 24px; }
+    .page-title { font-size: 28px; font-weight: 800; color: #222; margin-bottom: 6px; }
+    .page-sub { color: #888; font-size: 15px; margin-bottom: 32px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    .stat-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); border-left: 4px solid #1a73e8; }
+    .stat-card.green { border-color: #34a853; }
+    .stat-card.orange { border-color: #f5a623; }
+    .stat-card.red { border-color: #f44336; }
+    .stat-value { font-size: 32px; font-weight: 800; color: #222; }
+    .stat-label { color: #888; font-size: 14px; margin-top: 4px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .section-title { font-size: 20px; font-weight: 700; color: #222; }
+    .filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { padding: 7px 18px; border-radius: 20px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 13px; font-weight: 600; color: #555; transition: all 0.2s; }
+    .filter-btn.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+    .orders-list { display: flex; flex-direction: column; gap: 16px; }
+    .order-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .order-id { font-size: 16px; font-weight: 800; color: #222; }
+    .order-date { font-size: 13px; color: #aaa; margin-top: 2px; }
+    .order-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+    .info-group label { font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; display: block; margin-bottom: 4px; }
+    .info-group span { font-size: 14px; color: #333; font-weight: 500; }
+    .order-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; gap: 12px; }
+    .order-total { font-size: 18px; font-weight: 800; color: #1a73e8; }
+    .status-controls { display: flex; gap: 8px; align-items: center; }
+    .badge { padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .badge-Pending { background: #fff3e0; color: #e65100; }
+    .badge-Confirmed { background: #e8f5e9; color: #2e7d32; }
+    .badge-Delivered { background: #e3f2fd; color: #1565c0; }
+    .badge-Cancelled { background: #fce4ec; color: #c62828; }
+    select.status-select { padding: 7px 12px; border-radius: 8px; border: 1.5px solid #e0e0e0; font-size: 13px; font-weight: 600; cursor: pointer; background: white; }
+    .btn-update { background: #1a73e8; color: white; border: none; padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .btn-update:hover { background: #1558b0; }
+    .empty { text-align: center; padding: 60px; color: #aaa; font-size: 16px; }
+    .login-required { display: none; text-align: center; padding: 80px 20px; }
+    .login-required h2 { color: #f44336; margin-bottom: 12px; }
+    .login-required p { color: #666; margin-bottom: 24px; }
+    .btn-link { background: #1a73e8; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #34a853; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; display: none; z-index: 999; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">🏫 Edu<span>Supply</span> — Admin</div>
+  <button class="btn-logout" onclick="logout()">Logout</button>
+</nav>
+
+<div class="container">
+  <div id="adminPanel">
+    <div class="page-title">Admin Dashboard</div>
+    <div class="page-sub" id="adminEmail">Loading...</div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-value" id="statPending">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value" id="statDelivered">0</div>
+        <div class="stat-label">Delivered</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value" id="statRevenue">₹0</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">All Orders</div>
+      <div class="filter-btns">
+        <button class="filter-btn active" onclick="filterOrders('All', this)">All</button>
+        <button class="filter-btn" onclick="filterOrders('Pending', this)">Pending</button>
+        <button class="filter-btn" onclick="filterOrders('Confirmed', this)">Confirmed</button>
+        <button class="filter-btn" onclick="filterOrders('Delivered', this)">Delivered</button>
+      </div>
+    </div>
+
+    <div class="orders-list" id="ordersList">
+      <div class="empty">Loading orders...</div>
+    </div>
+  </div>
+
+  <div class="login-required" id="loginRequired">
+    <h2>🔒 Admin Access Only</h2>
+    <p>You need to be logged in as an admin to view this page.</p>
+    <a href="login.html" class="btn-link">Go to Login</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
+    authDomain: "edusupply-b92ad.firebaseapp.com",
+    projectId: "edusupply-b92ad",
+    storageBucket: "edusupply-b92ad.firebasestorage.app",
+    messagingSenderId: "993801689755",
+    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
+  };
+
+  // ⚠️ SET YOUR ADMIN EMAIL HERE
+  const ADMIN_EMAIL = "your-admin-email@gmail.com";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  let allOrders = [];
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      document.getElementById('adminPanel').style.display = 'none';
+      document.getElementById('loginRequired').style.display = 'block';
+      return;
+    }
+    document.getElementById('adminEmail').innerText = `Logged in as: ${user.email}`;
+    await loadOrders();
+  });
+
+  async function loadOrders() {
+    try {
+      const snapshot = await getDocs(collection(db, 'orders'));
+      allOrders = [];
+      snapshot.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+      allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      updateStats();
+      renderOrders(allOrders);
+    } catch(e) {
+      document.getElementById('ordersList').innerHTML = '<div class="empty">Could not load orders. Check Firestore rules.</div>';
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('statTotal').innerText = allOrders.length;
+    document.getElementById('statPending').innerText = allOrders.filter(o => o.status === 'Pending').length;
+    document.getElementById('statDelivered').innerText = allOrders.filter(o => o.status === 'Delivered').length;
+    const revenue = allOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+    document.getElementById('statRevenue').innerText = '₹' + revenue.toLocaleString('en-IN');
+  }
+
+  function renderOrders(orders) {
+    const list = document.getElementById('ordersList');
+    if (orders.length === 0) { list.innerHTML = '<div class="empty">No orders found.</div>'; return; }
+    list.innerHTML = orders.map(o => `
+      <div class="order-card" id="card-${o.id}">
+        <div class="order-header">
+          <div>
+            <div class="order-id">#EDU-${o.id.substring(0,6).toUpperCase()}</div>
+            <div class="order-date">${o.createdAt ? new Date(o.createdAt).toLocaleString('en-IN') : 'N/A'}</div>
+          </div>
+          <span class="badge badge-${o.status || 'Pending'}">${o.status || 'Pending'}</span>
+        </div>
+        <div class="order-body">
+          <div class="info-group">
+            <label>School / Contact</label>
+            <span>${o.contactName || 'N/A'}</span>
+          </div>
+          <div class="info-group">
+            <label>Phone</label>
+            <span>${o.contactPhone || 'N/A'}</span>
+          </div>
+          <div class="info-group">
+            <label>Items</label>
+            <span>${o.items ? o.items.map(i => `${i.name} x${i.qty}`).join(', ') : 'N/A'}</span>
+          </div>
+          <div class="info-group">
+            <label>Delivery Address</label>
+            <span>${o.deliveryAddress || 'N/A'}</span>
+          </div>
+          <div class="info-group">
+            <label>Delivery Date</label>
+            <span>${o.deliveryDate || 'Not specified'}</span>
+          </div>
+          <div class="info-group">
+            <label>Customer Email</label>
+            <span>${o.userEmail || 'N/A'}</span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">₹${(o.total || 0).toLocaleString('en-IN')}</div>
+          <div class="status-controls">
+            <select class="status-select" id="status-${o.id}">
+              <option ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+              <option ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+            <button class="btn-update" onclick="updateStatus('${o.id}')">Update</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  window.updateStatus = async function(orderId) {
+    const newStatus = document.getElementById(`status-${orderId}`).value;
+    try {
+      await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
+      const order = allOrders.find(o => o.id === orderId);
+      if (order) order.status = newStatus;
+      const badge = document.querySelector(`#card-${orderId} .badge`);
+      badge.className = `badge badge-${newStatus}`;
+      badge.innerText = newStatus;
+      updateStats();
+      showToast(`✅ Order updated to "${newStatus}"`);
+    } catch(e) {
+      alert('Error updating: ' + e.message);
+    }
+  }
+
+  window.filterOrders = function(status, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = status === 'All' ? allOrders : allOrders.filter(o => o.status === status);
+    renderOrders(filtered);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+  }
+
+  window.logout = async function() {
+    await signOut(auth);
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>
