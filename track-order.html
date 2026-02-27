@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Track Your Order — EduSupply</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f7fa; margin: 0; padding: 40px 20px; }
+    .container { max-width: 600px; margin: auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h1 { color: #1a73e8; margin-bottom: 8px; }
+    p { color: #666; margin-bottom: 24px; }
+    input { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
+    button { margin-top: 16px; width: 100%; padding: 13px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #1558b0; }
+    .status-box { margin-top: 30px; display: none; }
+    .step { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid #eee; }
+    .dot { width: 16px; height: 16px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
+    .dot.done { background: #34a853; }
+    .dot.active { background: #1a73e8; }
+    .label { font-size: 15px; font-weight: 500; color: #333; }
+    .sublabel { font-size: 13px; color: #888; }
+    .back { display: inline-block; margin-top: 24px; color: #1a73e8; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📦 Track Your Order</h1>
+    <p>Enter your Order ID to see the current delivery status.</p>
+    <input type="text" id="orderId" placeholder="e.g. EDU-20251234" />
+    <button onclick="trackOrder()">Track Order</button>
 
+    <div class="status-box" id="statusBox">
+      <h3 style="color:#333; margin-bottom:16px;">Order Status</h3>
+      <div class="step"><div class="dot done"></div><div><div class="label">✅ Order Confirmed</div><div class="sublabel">Your order has been received</div></div></div>
+      <div class="step"><div class="dot done"></div><div><div class="label">✅ Processing</div><div class="sublabel">Items are being packed</div></div></div>
+      <div class="step"><div class="dot active"></div><div><div class="label">🚚 Out for Delivery</div><div class="sublabel">Expected delivery: within 24 hours</div></div></div>
+      <div class="step"><div class="dot"></div><div><div class="label">📬 Delivered</div><div class="sublabel">Pending</div></div></div>
+      <p style="margin-top:20px; font-size:13px; color:#888;">For real-time updates, call us at <strong>+91 98765 43210</strong> or WhatsApp us.</p>
+    </div>
+
+    <a href="index.html" class="back">← Back to EduSupply</a>
+  </div>
+
+  <script>
+    function trackOrder() {
+      const id = document.getElementById('orderId').value.trim();
+      if (id.length < 4) { alert('Please enter a valid Order ID'); return; }
+      document.getElementById('statusBox').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
