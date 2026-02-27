@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — EduSupply</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #f5f7fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .box { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
+    .logo { text-align: center; margin-bottom: 24px; font-size: 22px; font-weight: bold; color: #1a73e8; }
+    h2 { text-align: center; color: #333; margin-bottom: 24px; font-size: 20px; }
+    input { width: 100%; padding: 12px 16px; margin-bottom: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+    input:focus { outline: none; border-color: #1a73e8; }
+    .btn { width: 100%; padding: 13px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-bottom: 10px; font-weight: 600; }
+    .btn-login { background: #1a73e8; color: white; }
+    .btn-login:hover { background: #1558b0; }
+    .btn-signup { background: #34a853; color: white; }
+    .btn-signup:hover { background: #288a41; }
+    .divider { text-align: center; color: #aaa; margin: 10px 0; font-size: 13px; }
+    .msg { color: red; font-size: 13px; margin-top: 8px; text-align: center; min-height: 18px; }
+    .back { display: block; text-align: center; margin-top: 20px; color: #1a73e8; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .toggle { text-align: center; font-size: 14px; margin-top: 10px; color: #555; }
+    .toggle span { color: #1a73e8; cursor: pointer; font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <div class="logo">🏫 EduSupply</div>
 
+  <!-- LOGIN FORM -->
+  <div id="loginForm">
+    <h2>Welcome Back!</h2>
+    <input type="email" id="loginEmail" placeholder="School Email" />
+    <input type="password" id="loginPassword" placeholder="Password" />
+    <button class="btn btn-login" onclick="login()">Login</button>
+    <div class="msg" id="loginMsg"></div>
+    <div class="toggle">Don't have an account? <span onclick="showSignup()">Sign Up</span></div>
+  </div>
+
+  <!-- SIGNUP FORM -->
+  <div id="signupForm" style="display:none;">
+    <h2>Create Account</h2>
+    <input type="text" id="signupName" placeholder="School Name" />
+    <input type="email" id="signupEmail" placeholder="
