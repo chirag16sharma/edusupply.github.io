@@ -108,15 +108,20 @@
   </section>
 
   <!-- ========== PRODUCTS ========== -->
-  <section id="products">
-  <!-- filter tabs should have class="filter-tab" and data-filter -->
-  <button class="filter-tab active" data-filter="All">All</button>
-  <button class="filter-tab" data-filter="Furniture">Furniture</button>
-  <button class="filter-tab" data-filter="Lab">Lab</button>
-  <button class="filter-tab" data-filter="Boards">Boards</button>
-  <button class="filter-tab" data-filter="Stationery">Stationery</button>
+<section id="products" style="padding: 4rem 2rem; max-width: 1200px; margin: 0 auto;">
+  <p style="text-align:center; font-weight:600; color:#6366f1; text-transform:uppercase; letter-spacing:0.08em; font-size:0.85rem;">Our Catalogue</p>
+  <h2 style="text-align:center; font-size:2rem; font-weight:800; color:#1e293b; margin-bottom:1.5rem;">Top School Appliances</h2>
 
-  <!-- THIS div is where products render — must have this exact ID -->
+  <!-- Filter Tabs -->
+  <div style="display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem;">
+    <button class="filter-tab active" data-filter="All">All</button>
+    <button class="filter-tab" data-filter="Furniture">Furniture</button>
+    <button class="filter-tab" data-filter="Lab">Lab</button>
+    <button class="filter-tab" data-filter="Boards">Boards</button>
+    <button class="filter-tab" data-filter="Stationery">Stationery</button>
+  </div>
+
+  <!-- Products render here -->
   <div id="products-grid"></div>
 </section>
 
