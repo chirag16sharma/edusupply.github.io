@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Table top -->
+  <rect x="15" y="55" width="170" height="20" rx="5" fill="#7c5c3a"/>
+  <rect x="15" y="55" width="170" height="7" rx="4" fill="#9b7352"/>
+  <!-- Left panel -->
+  <rect x="15" y="75" width="50" height="85" rx="4" fill="#6b4f30"/>
+  <!-- Drawers -->
+  <rect x="20" y="82" width="40" height="22" rx="3" fill="#7c5c3a"/>
+  <circle cx="40" cy="93" r="3" fill="#d4af70"/>
+  <rect x="20" y="110" width="40" height="22" rx="3" fill="#7c5c3a"/>
+  <circle cx="40" cy="121" r="3" fill="#d4af70"/>
+  <rect x="20" y="138" width="40" height="18" rx="3" fill="#7c5c3a"/>
+  <circle cx="40" cy="147" r="3" fill="#d4af70"/>
+  <!-- Right leg -->
+  <rect x="155" y="75" width="16" height="85" rx="4" fill="#6b4f30"/>
+  <!-- Monitor on desk -->
+  <rect x="90" y="25" width="55" height="35" rx="4" fill="#1e293b"/>
+  <rect x="93" y="28" width="49" height="28" rx="2" fill="#334155"/>
+  <rect x="110" y="57" width="16" height="6" rx="1" fill="#1e293b"/>
+  <rect x="106" y="62" width="24" height="3" rx="1" fill="#1e293b"/>
+  <!-- Screen content -->
+  <line x1="98" y1="35" x2="136" y2="35" stroke="#6366f1" stroke-width="2"/>
+  <line x1="98" y1="40" x2="128" y2="40" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="98" y1="44" x2="130" y2="44" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="98" y1="48" x2="120" y2="48" stroke="#64748b" stroke-width="1.5"/>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Frame -->
+  <rect x="20" y="10" width="14" height="165" rx="3" fill="#475569"/>
+  <rect x="166" y="10" width="14" height="165" rx="3" fill="#475569"/>
+  <rect x="20" y="10" width="160" height="12" rx="3" fill="#475569"/>
+  <rect x="20" y="163" width="160" height="12" rx="3" fill="#475569"/>
+  <!-- Shelves -->
+  <rect x="20" y="42" width="160" height="8" rx="2" fill="#64748b"/>
+  <rect x="20" y="74" width="160" height="8" rx="2" fill="#64748b"/>
+  <rect x="20" y="106" width="160" height="8" rx="2" fill="#64748b"/>
+  <rect x="20" y="138" width="160" height="8" rx="2" fill="#64748b"/>
+  <!-- Books row 1 -->
+  <rect x="36" y="18" width="12" height="24" rx="1" fill="#ef4444"/>
+  <rect x="50" y="22" width="10" height="20" rx="1" fill="#f97316"/>
+  <rect x="62" y="18" width="14" height="24" rx="1" fill="#eab308"/>
+  <rect x="78" y="20" width="11" height="22" rx="1" fill="#22c55e"/>
+  <rect x="91" y="18" width="13" height="24" rx="1" fill="#06b6d4"/>
+  <rect x="106" y="22" width="10" height="20" rx="1" fill="#6366f1"/>
+  <rect x="118" y="18" width="15" height="24" rx="1" fill="#ec4899"/>
+  <rect x="135" y="20" width="11" height="22" rx="1" fill="#8b5cf6"/>
+  <!-- Books row 2 -->
+  <rect x="36" y="50" width="10" height="24" rx="1" fill="#06b6d4"/>
+  <rect x="48" y="53" width="13" height="21" rx="1" fill="#6366f1"/>
+  <rect x="63" y="50" width="11" height="24" rx="1" fill="#ef4444"/>
+  <rect x="76" y="52" width="14" height="22" rx="1" fill="#22c55e"/>
+  <rect x="92" y="50" width="10" height="24" rx="1" fill="#f97316"/>
+  <rect x="104" y="53" width="12" height="21" rx="1" fill="#eab308"/>
+  <rect x="118" y="50" width="13" height="24" rx="1" fill="#8b5cf6"/>
+  <!-- Books row 3 -->
+  <rect x="36" y="82" width="14" height="24" rx="1" fill="#ec4899"/>
+  <rect x="52" y="85" width="10" height="21" rx="1" fill="#ef4444"/>
+  <rect x="64" y="82" width="12" height="24" rx="1" fill="#06b6d4"/>
+  <rect x="78" y="84" width="11" height="22" rx="1" fill="#8b5cf6"/>
+  <rect x="91" y="82" width="13" height="24" rx="1" fill="#22c55e"/>
+  <rect x="106" y="85" width="10" height="21" rx="1" fill="#f97316"/>
+  <!-- Books row 4 -->
+  <rect x="36" y="114" width="11" height="24" rx="1" fill="#eab308"/>
+  <rect x="49" y="116" width="13" height="22" rx="1" fill="#6366f1"/>
+  <rect x="64" y="114" width="10" height="24" rx="1" fill="#ef4444"/>
+  <rect x="76" y="117" width="14" height="21" rx="1" fill="#22c55e"/>
+  <rect x="92" y="114" width="11" height="24" rx="1" fill="#ec4899"/>
+</svg>

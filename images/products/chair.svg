@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Back rest -->
+  <rect x="55" y="30" width="90" height="70" rx="12" fill="#6366f1"/>
+  <rect x="62" y="37" width="76" height="56" rx="8" fill="#818cf8"/>
+  <!-- Back design lines -->
+  <line x1="75" y1="50" x2="125" y2="50" stroke="white" stroke-width="2" opacity="0.4"/>
+  <line x1="75" y1="60" x2="125" y2="60" stroke="white" stroke-width="2" opacity="0.4"/>
+  <line x1="75" y1="70" x2="125" y2="70" stroke="white" stroke-width="2" opacity="0.4"/>
+  <!-- Seat -->
+  <rect x="45" y="100" width="110" height="22" rx="10" fill="#4f46e5"/>
+  <!-- Legs -->
+  <line x1="65" y1="122" x2="50" y2="165" stroke="#4f46e5" stroke-width="9" stroke-linecap="round"/>
+  <line x1="135" y1="122" x2="150" y2="165" stroke="#4f46e5" stroke-width="9" stroke-linecap="round"/>
+  <!-- Foot rest -->
+  <line x1="50" y1="160" x2="150" y2="160" stroke="#4f46e5" stroke-width="7" stroke-linecap="round"/>
+</svg>

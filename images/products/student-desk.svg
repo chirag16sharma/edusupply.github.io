@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Desk top -->
+  <rect x="20" y="60" width="160" height="18" rx="4" fill="#c8a46e"/>
+  <rect x="20" y="60" width="160" height="6" rx="3" fill="#d4b483"/>
+  <!-- Left leg -->
+  <rect x="30" y="78" width="12" height="80" rx="4" fill="#a0784a"/>
+  <!-- Right leg -->
+  <rect x="158" y="78" width="12" height="80" rx="4" fill="#a0784a"/>
+  <!-- Cross bar -->
+  <rect x="30" y="130" width="140" height="10" rx="4" fill="#b8935a"/>
+  <!-- Shelf -->
+  <rect x="30" y="108" width="140" height="10" rx="3" fill="#c8a46e"/>
+  <!-- Book on desk -->
+  <rect x="120" y="45" width="28" height="18" rx="2" fill="#6366f1"/>
+  <rect x="122" y="47" width="24" height="14" rx="1" fill="#818cf8"/>
+  <line x1="124" y1="50" x2="144" y2="50" stroke="white" stroke-width="1.5"/>
+  <line x1="124" y1="54" x2="144" y2="54" stroke="white" stroke-width="1.5"/>
+  <line x1="124" y1="58" x2="135" y2="58" stroke="white" stroke-width="1.5"/>
+  <!-- Pencil -->
+  <rect x="60" y="48" width="5" height="16" rx="1" fill="#f4b942" transform="rotate(-15 63 56)"/>
+  <polygon points="60,62 65,62 62.5,68" fill="#fcd34d" transform="rotate(-15 63 56)"/>
+</svg>

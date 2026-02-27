@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Base/body -->
+  <rect x="25" y="95" width="150" height="70" rx="10" fill="#1e293b"/>
+  <rect x="30" y="100" width="140" height="60" rx="8" fill="#0f172a"/>
+  <!-- Display -->
+  <rect x="40" y="108" width="85" height="32" rx="6" fill="#064e3b"/>
+  <rect x="43" y="111" width="79" height="26" rx="4" fill="#065f46"/>
+  <text x="50" y="130" font-size="18" fill="#34d399" font-family="monospace" font-weight="bold">124.35</text>
+  <text x="120" y="126" font-size="8" fill="#6ee7b7" font-family="Arial">g</text>
+  <!-- Buttons -->
+  <rect x="138" y="108" width="22" height="10" rx="3" fill="#374151"/>
+  <text x="142" y="117" font-size="7" fill="white" font-family="Arial">TARE</text>
+  <rect x="138" y="122" width="22" height="10" rx="3" fill="#374151"/>
+  <text x="141" y="131" font-size="7" fill="white" font-family="Arial">MODE</text>
+  <rect x="138" y="136" width="22" height="10" rx="3" fill="#16a34a"/>
+  <text x="142" y="145" font-size="7" fill="white" font-family="Arial">ON</text>
+  <!-- Weighing pan -->
+  <ellipse cx="100" cy="93" rx="60" ry="8" fill="#94a3b8"/>
+  <ellipse cx="100" cy="90" rx="58" ry="7" fill="#cbd5e1"/>
+  <!-- Pan pole -->
+  <rect x="97" y="68" width="6" height="26" rx="2" fill="#64748b"/>
+  <!-- Wind shield -->
+  <rect x="25" y="30" width="150" height="65" rx="6" fill="#bfdbfe" opacity="0.3"/>
+  <rect x="25" y="30" width="150" height="65" rx="6" stroke="#93c5fd" stroke-width="2" fill="none"/>
+  <!-- Item on pan -->
+  <rect x="78" y="72" width="44" height="18" rx="3" fill="#f97316" opacity="0.85"/>
+  <text x="86" y="85" font-size="9" fill="white" font-family="Arial" font-weight="bold">100g</text>
+</svg>
