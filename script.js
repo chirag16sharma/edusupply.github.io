@@ -11,23 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupForms();
   setMinDeliveryDate();
   fixFilterTabs();
-  wireCartButton();
+  // NOTE: Cart button is wired by products.js wireCartIcon() — do NOT add another listener here
 });
-
-// ===== WIRE CART BUTTON =====
-// products.js builds #edu-cart-sidebar dynamically, so we wire
-// the existing #cartBtn to toggle it on click.
-function wireCartButton() {
-  const cartBtn = document.getElementById('cartBtn');
-  if (!cartBtn) return;
-  cartBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const sidebar = document.getElementById('edu-cart-sidebar');
-    if (sidebar) {
-      sidebar.classList.toggle('open');
-    }
-  });
-}
 
 // ===== FIX FILTER TABS =====
 // HTML uses class "filter-tab" but products.js looks for "edu-filter-tab".
