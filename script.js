@@ -10,7 +10,39 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNavbar();
   setupForms();
   setMinDeliveryDate();
+  fixFilterTabs();
+  wireCartButton();
 });
+
+// ===== WIRE CART BUTTON =====
+// products.js builds #edu-cart-sidebar dynamically, so we wire
+// the existing #cartBtn to toggle it on click.
+function wireCartButton() {
+  const cartBtn = document.getElementById('cartBtn');
+  if (!cartBtn) return;
+  cartBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const sidebar = document.getElementById('edu-cart-sidebar');
+    if (sidebar) {
+      sidebar.classList.toggle('open');
+    }
+  });
+}
+
+// ===== FIX FILTER TABS =====
+// HTML uses class "filter-tab" but products.js looks for "edu-filter-tab".
+// This bridges the gap so clicking tabs actually filters products.
+function fixFilterTabs() {
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      if (typeof renderProducts === 'function') {
+        renderProducts(tab.dataset.filter);
+      }
+    });
+  });
+}
 
 // ===== SCROLL EFFECTS =====
 function setupScrollEffects() {
@@ -38,13 +70,7 @@ function setupNavbar() {
       navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
   }
-// Wire cart button to products.js sidebar
-const cartBtn = document.getElementById('cartBtn');
-if (cartBtn) {
-  cartBtn.addEventListener('click', () => {
-    document.getElementById('edu-cart-sidebar')?.classList.toggle('open');
-  });
-}
+
   // Hamburger menu
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
