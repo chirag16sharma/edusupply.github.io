@@ -38,7 +38,13 @@ function setupNavbar() {
       navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
   }
-
+// Wire cart button to products.js sidebar
+const cartBtn = document.getElementById('cartBtn');
+if (cartBtn) {
+  cartBtn.addEventListener('click', () => {
+    document.getElementById('edu-cart-sidebar')?.classList.toggle('open');
+  });
+}
   // Hamburger menu
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
