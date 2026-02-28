@@ -891,3 +891,10 @@ em { color: var(--amber); font-style: italic; }
   border-color: #6366f1;
   color: white;
 }
+/* ===== FIX: Prevent hero cards from blocking navbar clicks ===== */
+.floating-card {
+  pointer-events: none;
+}
+.hero-visual {
+  pointer-events: none;
+}
