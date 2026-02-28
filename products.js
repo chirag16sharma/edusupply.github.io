@@ -258,7 +258,10 @@ function renderProducts(filter = "All") {
           <span class="edu-original">₹${p.originalPrice.toLocaleString("en-IN")}</span>
           <span class="edu-discount">${disc}% off</span>
         </div>
-        <button class="edu-atc-btn" onclick="addToCart(${p.id})">🛒 Add to Cart</button>
+       <div style="display:flex; gap:0.5rem; margin-top:auto;">
+  <button class="edu-atc-btn" onclick="addToCart(${p.id})" style="flex:1">🛒 Add to Cart</button>
+  <button class="edu-atc-btn" onclick="addToCart(${p.id}); document.getElementById('orderModal').classList.add('open')" style="flex:1; background:#16a34a;">Order Now</button>
+</div>
       </div>`;
   }).join("");
 }
