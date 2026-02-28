@@ -106,3 +106,11 @@ function setMinDeliveryDate() {
     dateInput.value = tomorrow.toISOString().split('T')[0];
   }
 }
+function toggleEduCart() {
+  const sidebar = document.getElementById('edu-cart-sidebar');
+  if (sidebar) {
+    sidebar.classList.toggle('open');
+  } else {
+    alert('sidebar not found');
+  }
+}
