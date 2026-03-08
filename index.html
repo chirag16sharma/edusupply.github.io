@@ -25,12 +25,20 @@
       <li><a href="login.html" style="background:#1a73e8; color:white; padding:8px 18px; border-radius:20px; text-decoration:none; font-weight:600;">🔐 Login</a></li>
     </ul>
     <div class="nav-actions">
-<button class="btn-cart" id="cartBtn" aria-label="Cart" onclick="toggleEduCart()" data-cart-wired="1">
-  <img src="images/cart-icon.png" alt="cart" style="pointer-events:none;" />
-  <span class="cart-badge" id="cartBadge" style="pointer-events:none;">0</span>
-</button>
+      <!-- FIX 3: Added missing hamburger button for mobile menu -->
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <button class="btn-cart" id="cartBtn" aria-label="Cart" onclick="toggleEduCart()" data-cart-wired="1">
+        <img src="images/cart-icon.png" alt="cart" style="pointer-events:none;" />
+        <span class="cart-badge" id="cartBadge" style="pointer-events:none;">0</span>
+      </button>
+    </div><!-- FIX 2: Added missing closing </div> for .nav-actions -->
   </nav>
-   <!-- ========== HERO ========== -->
+
+  <!-- ========== HERO ========== -->
   <section class="hero" id="home">
     <div class="hero-bg-grid"></div>
     <div class="hero-content">
@@ -78,22 +86,22 @@
       <h2>What do you need today?</h2>
     </div>
     <div class="categories-grid">
-      <div class="cat-card" onclick="filterProducts('furniture')">
+      <div class="cat-card" onclick="filterProducts('Furniture')">
         <div class="cat-icon"><img src="images/cat-furniture.png" alt="Furniture" /></div>
         <h3>Furniture</h3>
         <p>Benches, desks, chairs, teacher cabins & tables</p>
       </div>
-      <div class="cat-card" onclick="filterProducts('lab')">
+      <div class="cat-card" onclick="filterProducts('Lab')">
         <div class="cat-icon"><img src="images/cat-lab.png" alt="Lab" /></div>
         <h3>Lab Supplies</h3>
         <p>Chemistry chemicals, physics instruments & lab ware</p>
       </div>
-      <div class="cat-card" onclick="filterProducts('boards')">
+      <div class="cat-card" onclick="filterProducts('Boards')">
         <div class="cat-icon"><img src="images/cat-board.png" alt="Boards" /></div>
         <h3>Boards & Displays</h3>
         <p>Chalkboards, whiteboards & smart boards</p>
       </div>
-      <div class="cat-card" onclick="filterProducts('stationery')">
+      <div class="cat-card" onclick="filterProducts('Stationery')">
         <div class="cat-icon"><img src="images/cat-stationery.png" alt="Stationery" /></div>
         <h3>Stationery & Accessories</h3>
         <p>Dusters, chalk, markers, projectors & more</p>
@@ -102,22 +110,24 @@
   </section>
 
   <!-- ========== PRODUCTS ========== -->
-<section id="products" style="padding: 4rem 2rem; max-width: 1200px; margin: 0 auto;">
-  <p style="text-align:center; font-weight:600; color:#6366f1; text-transform:uppercase; letter-spacing:0.08em; font-size:0.85rem;">Our Catalogue</p>
-  <h2 style="text-align:center; font-size:2rem; font-weight:800; color:#1e293b; margin-bottom:1.5rem;">Top School Appliances</h2>
+  <!-- Uses edu-filter-tab class so initFilterTabs() in products.js wires them up correctly.
+       buildProductsSection() will skip rewriting innerHTML since edu-products-grid already exists. -->
+  <section id="products" style="padding: 4rem 2rem; background: #f8fafc;">
+    <p class="edu-section-label">Our Catalogue</p>
+    <h2 class="edu-section-title">Top School Appliances</h2>
 
-  <!-- Filter Tabs -->
-  <div style="display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem;">
-    <button class="filter-tab active" data-filter="All">All</button>
-    <button class="filter-tab" data-filter="Furniture">Furniture</button>
-    <button class="filter-tab" data-filter="Lab">Lab</button>
-    <button class="filter-tab" data-filter="Boards">Boards</button>
-    <button class="filter-tab" data-filter="Stationery">Stationery</button>
-  </div>
+    <!-- Filter Tabs -->
+    <div class="edu-filter-bar">
+      <button class="edu-filter-tab active" data-filter="All">All</button>
+      <button class="edu-filter-tab" data-filter="Furniture">Furniture</button>
+      <button class="edu-filter-tab" data-filter="Lab">Lab</button>
+      <button class="edu-filter-tab" data-filter="Boards">Boards</button>
+      <button class="edu-filter-tab" data-filter="Stationery">Stationery</button>
+    </div>
 
-  <!-- Products render here -->
-  <div id="products-grid"></div>
-</section>
+    <!-- Products rendered here by products.js renderProducts() -->
+    <div class="edu-products-grid" id="edu-products-grid"></div>
+  </section>
 
   <!-- ========== HOW IT WORKS ========== -->
   <section class="how-it-works" id="how-it-works">
@@ -182,7 +192,7 @@
         <h2>Get a Custom Quote</h2>
         <p>Need bulk orders or a custom supply list for your institution? Reach out and we'll provide a tailored quote within 24 hours.</p>
         <div class="contact-detail"><img src="images/icon-phone.png" alt="phone" /><span>+91 98765 43210</span></div>
-        <div class="contact-detail"><img src="images/icon-email.png" alt="email" /><span>orders@edusupply.in</span></div>
+        <div class="contact-detail"><img src="images/icon-email.png" alt="email" /><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="533c213736212013363726202623233f2a7d3a3d">[email&#160;protected]</a></span></div>
         <div class="contact-detail"><img src="images/icon-location.png" alt="location" /><span>Serving all states across India</span></div>
       </div>
       <form class="contact-form" id="contactForm">
@@ -225,7 +235,8 @@
       <div class="footer-links">
         <h4>Support</h4>
         <ul>
-<a href="track-order.html">Track Order</a>
+          <!-- FIX 4: Wrapped <a> in <li> — was directly inside <ul> which is invalid HTML -->
+          <li><a href="track-order.html" style="color:inherit; text-decoration:none;">Track Order</a></li>
           <li>Return Policy</li>
           <li>FAQs</li>
           <li>Contact Us</li>
@@ -238,13 +249,13 @@
     </div>
   </footer>
 
-  
   <!-- ========== ORDER MODAL ========== -->
   <div class="modal" id="orderModal">
     <div class="modal-box">
       <button class="close-btn" onclick="document.getElementById('orderModal').classList.remove('open')">✕</button>
       <h2>Place Your Order</h2>
       <p class="modal-sub">Fill in your details and we'll process your order right away.</p>
+      <!-- FIX 6: orderForm submit is handled in script.js setupForms() -->
       <form id="orderForm">
         <div class="form-row">
           <input type="text" placeholder="School / Institution Name" required />
@@ -266,22 +277,16 @@
   <div class="toast" id="toast"></div>
 
   <div class="wa-float">
-  <div class="wa-tooltip">
-    <strong>Need help with an order?</strong>
-    We reply within minutes on WhatsApp!
-  </div>
-  <a class="wa-btn" href="https://wa.me/9322128609?text=Hi%20EduSupply%2C%20I%20have%20a%20query%20about%20your%20products." target="_blank" rel="noopener noreferrer" aria-label="Chat with EduSupply on WhatsApp">
-    <span class="wa-dot"></span>
-    <span class="wa-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" width="16" height="16">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.534 5.857L.054 23.05a.75.75 0 0 0 .916.916l5.24-1.476A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-4.99-1.368l-.356-.212-3.712 1.045 1.058-3.63-.232-.373A9.802 9.802 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12S17.43 21.818 12 21.818z"/>
-      </svg>
-    </span>
-    <span>Chat on WhatsApp</span>
-  </a>
-</div>
-<script src="products.js"></script>
-<script src="script.js"></script>
-</body>
-</html>
+    <div class="wa-tooltip">
+      <strong>Need help with an order?</strong>
+      We reply within minutes on WhatsApp!
+    </div>
+    <a class="wa-btn" href="https://wa.me/9322128609?text=Hi%20EduSupply%2C%20I%20have%20a%20query%20about%20your%20products." target="_blank" rel="noopener noreferrer" aria-label="Chat with EduSupply on WhatsApp">
+      <span class="wa-dot"></span>
+      <span class="wa-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" width="16" height="16">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.534 5.857L.054 23.05a.75.75 0 0 0 .916.916l5.24-1.476A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-4.99-1.368l-.356-.212-3.712 1.045 1.058-3.63-.232-.373A9.802 9.802 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12S17.43 21.818 12 21.818z"/>
+        </svg>
+      </span>
+      <span>Chat on Wha
