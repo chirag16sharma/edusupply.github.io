@@ -266,9 +266,10 @@ function renderProducts(filter = "All") {
           <span class="edu-original">₹${p.originalPrice.toLocaleString("en-IN")}</span>
           <span class="edu-discount">${disc}% off</span>
         </div>
-        <div style="display:flex; gap:0.5rem; margin-top:auto;">
+        <div style="display:flex; gap:0.5rem; margin-top:auto; flex-wrap:wrap;">
           <button class="edu-atc-btn" onclick="addToCart(${p.id})" style="flex:1">🛒 Add to Cart</button>
           <button class="edu-atc-btn" onclick="addToCart(${p.id}); document.getElementById('orderModal').classList.add('open')" style="flex:1; background:#16a34a;">Order Now</button>
+          <a class="edu-atc-btn" href="product.html?id=${p.id}&name=${encodeURIComponent(p.name)}&price=${p.price}&originalPrice=${p.originalPrice}&category=${encodeURIComponent(p.category)}&desc=${encodeURIComponent(p.description)}&emoji=${encodeURIComponent(p.emoji)}&badge=${encodeURIComponent(p.badge||'')}&stock=50" style="flex:1; background:#f0f4ff; color:#1a73e8; border:2px solid #1a73e8; text-decoration:none; display:flex; align-items:center; justify-content:center;">🔍 View Details</a>
         </div>
       </div>`;
   }).join("");
