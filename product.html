@@ -166,7 +166,33 @@
         '<div style="text-align:center;padding:60px;color:#aaa;">No product specified. <a href="index.html" style="color:#1a73e8;">Browse all products</a></div>';
       return;
     }
-    // FIX 5: Wrapped in try/catch so network/permission errors show a friendly message
+
+    // --- Try to load from URL params first (passed by products.js card links) ---
+    const urlName  = params.get('name');
+    const urlPrice = params.get('price');
+    if (urlName && urlPrice) {
+      product = {
+        id:            productId,
+        name:          decodeURIComponent(urlName),
+        price:         parseInt(urlPrice, 10),
+        originalPrice: parseInt(params.get('originalPrice') || urlPrice, 10),
+        category:      decodeURIComponent(params.get('category') || ''),
+        description:   decodeURIComponent(params.get('desc') || ''),
+        emoji:         decodeURIComponent(params.get('emoji') || '📦'),
+        badge:         decodeURIComponent(params.get('badge') || ''),
+        stock:         parseInt(params.get('stock') || '50', 10),
+        image:         null
+      };
+      renderProduct();
+      // Still attempt a background Firestore enrichment (e.g. for real stock levels)
+      try {
+        const snap = await getDoc(doc(db, 'products', productId));
+        if (snap.exists()) { product = { ...product, ...snap.data(), id: snap.id }; renderProduct(); }
+      } catch(_) { /* silently ignore — URL-param render already shown */ }
+      return;
+    }
+
+    // --- Fallback: pure Firestore lookup (for future admin-added products) ---
     try {
       const snap = await getDoc(doc(db, 'products', productId));
       if (!snap.exists()) {
