@@ -111,7 +111,8 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  // FIX 17: Removed unused `orderBy` import
+  import { getFirestore, collection, getDocs, doc, updateDoc, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
@@ -122,7 +123,6 @@
     appId: "1:993801689755:web:54ded7be82b4583fc2043e"
   };
 
-  // ⚠️ SET YOUR ADMIN EMAIL HERE
   const ADMIN_EMAIL = "chirag1616sharma@gmail.com";
 
   const app = initializeApp(firebaseConfig);
@@ -131,7 +131,10 @@
   let allOrders = [];
 
   onAuthStateChanged(auth, async (user) => {
-    if (!user) {
+    // FIX 16: SECURITY — now actually enforces the ADMIN_EMAIL check.
+    // Previously ADMIN_EMAIL was defined but never compared against user.email,
+    // so ANY logged-in user could access the full admin panel.
+    if (!user || user.email !== ADMIN_EMAIL) {
       document.getElementById('adminPanel').style.display = 'none';
       document.getElementById('loginRequired').style.display = 'block';
       return;
