@@ -12,6 +12,7 @@
     input { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
     button { margin-top: 16px; width: 100%; padding: 13px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
     button:hover { background: #1558b0; }
+    .error-msg { margin-top: 10px; color: #c62828; font-size: 14px; display: none; }
     .status-box { margin-top: 30px; display: none; }
     .step { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid #eee; }
     .dot { width: 16px; height: 16px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
@@ -26,7 +27,9 @@
   <div class="container">
     <h1>📦 Track Your Order</h1>
     <p>Enter your Order ID to see the current delivery status.</p>
-    <input type="text" id="orderId" placeholder="e.g. EDU-20251234" />
+    <input type="text" id="orderId" placeholder="e.g. EDU-20AB1F" />
+    <!-- FIX 18: Added error message element for invalid format feedback -->
+    <div class="error-msg" id="errorMsg">❌ Please enter a valid Order ID (format: EDU-XXXXXX)</div>
     <button onclick="trackOrder()">Track Order</button>
 
     <div class="status-box" id="statusBox">
@@ -43,10 +46,28 @@
 
   <script>
     function trackOrder() {
-      const id = document.getElementById('orderId').value.trim();
-      if (id.length < 4) { alert('Please enter a valid Order ID'); return; }
-      document.getElementById('statusBox').style.display = 'block';
+      const raw = document.getElementById('orderId').value.trim().toUpperCase();
+      const errorEl = document.getElementById('errorMsg');
+      const statusBox = document.getElementById('statusBox');
+
+      // FIX 18: Validate that input matches EDU-XXXXXX format (6 alphanumeric chars after hyphen)
+      // Previously any string ≥ 4 chars was accepted — "abcd", "1234", etc.
+      const validFormat = /^EDU-[A-Z0-9]{6}$/.test(raw);
+
+      if (!validFormat) {
+        errorEl.style.display = 'block';
+        statusBox.style.display = 'none';
+        return;
+      }
+
+      errorEl.style.display = 'none';
+      statusBox.style.display = 'block';
     }
+
+    // Hide error on input change
+    document.getElementById('orderId').addEventListener('input', () => {
+      document.getElementById('errorMsg').style.display = 'none';
+    });
   </script>
 </body>
 </html>
