@@ -29,6 +29,30 @@ function fixFilterTabs() {
   });
 }
 
+// ===== FILTER PRODUCTS FROM CATEGORY CARDS =====
+// FIX 1: Added missing filterProducts() — was called from category card onclicks but never defined
+function filterProducts(category) {
+  // Scroll to products section first
+  scrollToSection('products');
+
+  // Wait briefly for smooth scroll to settle, then apply filter
+  setTimeout(() => {
+    if (typeof renderProducts === 'function') {
+      renderProducts(category);
+    }
+
+    // Update active state on edu-filter-tab buttons (products.js tabs)
+    document.querySelectorAll('.edu-filter-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.filter === category);
+    });
+
+    // Also update .filter-tab buttons (HTML static tabs, if still present)
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.filter === category);
+    });
+  }, 400);
+}
+
 // ===== SCROLL EFFECTS =====
 function setupScrollEffects() {
   const revealEls = document.querySelectorAll(
@@ -77,14 +101,42 @@ function setupNavbar() {
 
 // ===== FORM HANDLERS =====
 function setupForms() {
+  // Contact enquiry form
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      // Use products.js showToast if available, else fallback
       if (typeof showToast === 'function') {
         showToast('✓ Enquiry sent! We\'ll get back within 24 hours.', 'success');
       }
+      e.target.reset();
+    });
+  }
+
+  // FIX 2: Order modal form — was missing a submit handler entirely
+  const orderForm = document.getElementById('orderForm');
+  if (orderForm) {
+    orderForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Show confirmation toast
+      if (typeof showToast === 'function') {
+        const total = typeof cartTotal === 'function' ? cartTotal() : 0;
+        const msg = total > 0
+          ? `🎉 Order of ₹${total.toLocaleString('en-IN')} placed! We'll confirm within 2 hours.`
+          : '🎉 Order placed! We\'ll confirm within 2 hours.';
+        showToast(msg, 'success', 5000);
+      }
+
+      // Clear cart after order
+      if (typeof cart !== 'undefined') {
+        cart.length = 0; // mutate in place so products.js reference stays valid
+        if (typeof saveCart === 'function') saveCart();
+        if (typeof renderCart === 'function') renderCart();
+      }
+
+      // Close modal and reset form
+      document.getElementById('orderModal')?.classList.remove('open');
       e.target.reset();
     });
   }
@@ -106,11 +158,17 @@ function setMinDeliveryDate() {
     dateInput.value = tomorrow.toISOString().split('T')[0];
   }
 }
+
+// ===== TOGGLE CART SIDEBAR =====
 function toggleEduCart() {
   const sidebar = document.getElementById('edu-cart-sidebar');
   if (sidebar) {
     sidebar.classList.toggle('open');
   } else {
-    alert('sidebar not found');
+    // Sidebar not yet built — wait a tick and try once
+    setTimeout(() => {
+      const s = document.getElementById('edu-cart-sidebar');
+      if (s) s.classList.toggle('open');
+    }, 100);
   }
 }
