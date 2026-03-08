@@ -199,8 +199,16 @@ function injectStyles() {
 
 /* ── 4. BUILD PRODUCTS SECTION ── */
 function buildProductsSection() {
-  // Try to find existing products section
   let section = document.getElementById("products");
+
+  // FIX: If edu-products-grid already exists inside the section (set up in static HTML),
+  // skip the innerHTML rewrite entirely — just ensure section styling is applied.
+  // Previously this always overwrote innerHTML, wiping out the grid before renderProducts() could fill it.
+  if (section && document.getElementById("edu-products-grid")) {
+    section.style.padding = "4rem 1.5rem";
+    section.style.background = "#f8fafc";
+    return;
+  }
 
   // Fallback: find by heading text
   if (!section) {
@@ -258,10 +266,10 @@ function renderProducts(filter = "All") {
           <span class="edu-original">₹${p.originalPrice.toLocaleString("en-IN")}</span>
           <span class="edu-discount">${disc}% off</span>
         </div>
-       <div style="display:flex; gap:0.5rem; margin-top:auto;">
-  <button class="edu-atc-btn" onclick="addToCart(${p.id})" style="flex:1">🛒 Add to Cart</button>
-  <button class="edu-atc-btn" onclick="addToCart(${p.id}); document.getElementById('orderModal').classList.add('open')" style="flex:1; background:#16a34a;">Order Now</button>
-</div>
+        <div style="display:flex; gap:0.5rem; margin-top:auto;">
+          <button class="edu-atc-btn" onclick="addToCart(${p.id})" style="flex:1">🛒 Add to Cart</button>
+          <button class="edu-atc-btn" onclick="addToCart(${p.id}); document.getElementById('orderModal').classList.add('open')" style="flex:1; background:#16a34a;">Order Now</button>
+        </div>
       </div>`;
   }).join("");
 }
@@ -313,13 +321,9 @@ function buildCartSidebar() {
 
 /* ── 8. WIRE CART ICON ── */
 function wireCartIcon() {
-  // Look for any element near a cart image or with cart text
   const allEls = document.querySelectorAll("header *, nav *");
   allEls.forEach(el => {
-    const text = el.textContent.trim();
     const isCartLike = el.tagName === "IMG" && el.alt?.toLowerCase().includes("cart");
-    const isCountEl = (text === "0" || text === "") && el.children.length === 0;
-
     if (isCartLike) {
       const parent = el.closest("a, button, div") || el.parentElement;
       if (!parent.dataset.cartWired) {
@@ -333,10 +337,8 @@ function wireCartIcon() {
     }
   });
 
-  // Also attach to any existing cart count number shown in nav
   document.querySelectorAll("nav").forEach(nav => {
-    const txt = nav.querySelectorAll("*");
-    txt.forEach(el => {
+    nav.querySelectorAll("*").forEach(el => {
       if (el.children.length === 0 && el.textContent.trim() === "0") {
         el.id = "edu-cart-count";
       }
@@ -350,7 +352,7 @@ function renderCart() {
   const totalEl = document.getElementById("edu-cart-total");
 
   // Update all count badges
-  document.querySelectorAll("#edu-cart-count").forEach(el => el.textContent = cartCount());
+  document.querySelectorAll("#edu-cart-count, #cartBadge").forEach(el => el.textContent = cartCount());
 
   if (!itemsEl) return;
   itemsEl.innerHTML = cart.length === 0
