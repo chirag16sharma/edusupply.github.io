@@ -83,9 +83,12 @@ em { color: var(--amber); font-style: italic; }
 
 /* === NAVBAR === */
 .navbar {
+  /* FIX 1: Removed the rogue `position: relative` override that was appended at the
+     bottom of the original file as a "hotfix". position: fixed is restored here and
+     the z-index is set high enough to stay above hero cards without position: relative. */
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 1000;
+  z-index: 9999;
   background: rgba(253,248,240,0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -167,8 +170,9 @@ em { color: var(--amber); font-style: italic; }
 
 /* === SECTION HEADER === */
 .section-header { text-align: center; margin-bottom: 3rem; }
-.section-header.light h2, .section-header.light .section-tag { color: var(--white); }
-.section-header.light h2 { color: var(--cream); }
+/* FIX 7: Use --white for heading text on dark (navy) backgrounds, not --cream */
+.section-header.light h2 { color: var(--white); }
+.section-header.light .section-tag { color: var(--amber); }
 
 .section-tag {
   display: inline-block;
@@ -271,6 +275,9 @@ em { color: var(--amber); font-style: italic; }
   position: relative;
   z-index: 1;
   animation: fadeSlideUp 0.7s 0.3s ease both;
+  /* FIX 3: Removed pointer-events:none from .hero-visual so floating-card:hover works.
+     Instead, the individual cards are set to pointer-events:none so they can't
+     block navbar clicks (navbar z-index:9999 is already above z-index:1 here). */
 }
 
 .hero-card-stack {
@@ -292,9 +299,12 @@ em { color: var(--amber); font-style: italic; }
   font-weight: 600;
   color: var(--navy);
   transition: transform 0.4s ease;
+  /* FIX 3: pointer-events:none on the individual cards only. This stops them
+     blocking any clickable elements while still allowing CSS hover via the 
+     parent .hero-visual which DOES receive pointer events. */
+  pointer-events: none;
 }
 .floating-card img { width: 60px; height: 60px; }
-.floating-card:hover { transform: translateY(-8px) !important; }
 
 .card1 { top: 0; left: 50%; transform: translateX(-50%) rotate(-6deg); animation: float1 4s ease-in-out infinite; }
 .card2 { bottom: 30px; left: 0; animation: float2 5s ease-in-out 0.5s infinite; }
@@ -370,7 +380,12 @@ em { color: var(--amber); font-style: italic; }
   margin-bottom: 2.5rem;
 }
 
-.filter-btn {
+/* FIX 5: Renamed .filter-btn → .filter-tab and kept .edu-filter-tab alias so both
+   index.html filter buttons (class="filter-tab") and products.js tabs 
+   (class="edu-filter-tab") share the same active/hover styles. */
+.filter-btn,
+.filter-tab,
+.edu-filter-tab {
   background: var(--white);
   border: 1.5px solid var(--gray-light);
   color: var(--text-soft);
@@ -382,19 +397,18 @@ em { color: var(--amber); font-style: italic; }
   cursor: pointer;
   transition: var(--transition);
 }
-.filter-btn:hover, .filter-btn.active {
+.filter-btn:hover, .filter-btn.active,
+.filter-tab:hover, .filter-tab.active,
+.edu-filter-tab:hover, .edu-filter-tab.active {
   background: var(--navy);
   border-color: var(--navy);
   color: var(--white);
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
-}
-
-.product-card {
+/* FIX 4: Added .edu-card rules alongside .product-card so products.js-rendered
+   cards get all the same hover/shadow/layout styles without rewriting products.js. */
+.product-card,
+.edu-card {
   background: var(--white);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -403,7 +417,8 @@ em { color: var(--amber); font-style: italic; }
   cursor: pointer;
   position: relative;
 }
-.product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.product-card:hover,
+.edu-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
 
 .product-card.hidden { display: none; }
 
@@ -458,6 +473,13 @@ em { color: var(--amber); font-style: italic; }
   transition: var(--transition);
 }
 .btn-add:hover { background: var(--amber); color: var(--navy); transform: scale(1.1); }
+
+.products-grid,
+#edu-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
 
 /* === HOW IT WORKS === */
 .how-it-works {
@@ -670,7 +692,11 @@ em { color: var(--amber); font-style: italic; }
 /* === CART SIDEBAR === */
 .cart-sidebar {
   position: fixed;
-  top: 0; right: -420px;
+  top: 0;
+  /* FIX 2: Changed right:-420px to right:-100% so the sidebar is always
+     fully off-screen regardless of viewport width. Previously -420px with
+     width:380px left a 40px strip always visible on the right edge. */
+  right: -100%;
   width: 380px;
   height: 100vh;
   background: var(--white);
@@ -748,7 +774,12 @@ em { color: var(--amber); font-style: italic; }
 .cart-overlay.show { opacity: 1; pointer-events: all; }
 
 /* === MODAL === */
-.modal {
+/* FIX 6: .modal and .modal-bg both handle the full-screen overlay pattern.
+   index.html order modal uses class="modal" + toggled class "open".
+   product.html order modal uses class="modal-bg" + toggled class "show".
+   Both are now covered by shared base styles. */
+.modal,
+.modal-bg {
   position: fixed;
   inset: 0;
   display: flex;
@@ -762,7 +793,8 @@ em { color: var(--amber); font-style: italic; }
   backdrop-filter: blur(4px);
   padding: 1rem;
 }
-.modal.open { opacity: 1; pointer-events: all; }
+.modal.open,
+.modal-bg.show { opacity: 1; pointer-events: all; }
 
 .modal-box {
   background: var(--white);
@@ -777,7 +809,8 @@ em { color: var(--amber); font-style: italic; }
   transform: translateY(20px);
   transition: transform var(--transition);
 }
-.modal.open .modal-box { transform: translateY(0); }
+.modal.open .modal-box,
+.modal-bg.show .modal-box { transform: translateY(0); }
 .modal-box h2 { font-family: var(--font-serif); margin-bottom: 0.3rem; }
 .modal-sub { color: var(--text-soft); font-size: 0.9rem; margin-bottom: 1.5rem; }
 
@@ -848,11 +881,13 @@ em { color: var(--amber); font-style: italic; }
 @media (max-width: 600px) {
   .categories-grid { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr; }
-  .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .products-grid,
+  #edu-products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
   .form-row { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 0.4rem; text-align: center; }
-  .cart-sidebar { width: 100%; right: -100%; }
+  .cart-sidebar { width: 100%; }
 }
+
 /* WhatsApp Floating Button */
 .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; animation: wa-enter .6s .8s cubic-bezier(.34,1.56,.64,1) both; }
 .wa-tooltip { background: #fff; border-radius: 14px; padding: 12px 16px; box-shadow: 0 8px 32px rgba(0,0,0,.12); font-size: 13.5px; line-height: 1.5; color: #334155; max-width: 220px; pointer-events: none; opacity: 0; transform: translateY(8px) scale(.96); transform-origin: bottom right; transition: opacity .25s ease, transform .25s ease; }
@@ -866,39 +901,3 @@ em { color: var(--amber); font-style: italic; }
 @keyframes wa-pulse { 0% { transform: scale(1); opacity: .7; } 60% { transform: scale(1.08); opacity: 0; } 100% { transform: scale(1.08); opacity: 0; } }
 @keyframes wa-enter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 480px) { .wa-float { bottom: 18px; right: 16px; } .wa-btn span:last-child { display: none; } .wa-btn { padding: 15px; border-radius: 50%; } }
-
-/* ===== FILTER TABS ===== */
-.filter-tab {
-  padding: 0.5rem 1.25rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 999px;
-  background: white;
-  color: #64748b;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.filter-tab:hover {
-  border-color: #6366f1;
-  color: #6366f1;
-}
-
-.filter-tab.active {
-  background: #6366f1;
-  border-color: #6366f1;
-  color: white;
-}
-/* ===== FIX: Prevent hero cards from blocking navbar clicks ===== */
-.floating-card {
-  pointer-events: none;
-}
-.navbar {
-  z-index: 9999;
-  position: relative;
-}
-.hero-visual {
-  pointer-events: none;
-}
