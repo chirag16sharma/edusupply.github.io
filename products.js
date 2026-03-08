@@ -311,9 +311,15 @@ function buildCartSidebar() {
     sidebar.classList.remove("open");
   };
 
-  // Close on outside click
+  // Close on outside click — exclude the cart toggle button itself
   document.addEventListener("click", e => {
-    if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && !e.target.closest("[data-open-cart]")) {
+    if (
+      sidebar.classList.contains("open") &&
+      !sidebar.contains(e.target) &&
+      !e.target.closest("[data-open-cart]") &&
+      e.target.id !== "cartBtn" &&
+      !e.target.closest("#cartBtn")
+    ) {
       sidebar.classList.remove("open");
     }
   });
