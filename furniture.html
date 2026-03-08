@@ -15,7 +15,6 @@
     .nav-link.active { background: #e3f2fd; color: #1565c0; }
     .btn-login { background: #1a73e8; color: white !important; border-radius: 20px !important; }
 
-    /* HERO */
     .hero { background: linear-gradient(135deg, #0d47a1, #1565c0, #1976d2); color: white; padding: 60px 32px; text-align: center; }
     .hero-icon { font-size: 56px; margin-bottom: 16px; }
     .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 10px; }
@@ -24,14 +23,11 @@
     .hero-badge { background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
-
-    /* HOW IT WORKS */
     .how-bar { background: white; border-radius: 16px; padding: 24px 32px; margin-bottom: 32px; display: flex; gap: 32px; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.07); flex-wrap: wrap; }
     .how-step { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #555; }
     .how-step .num { background: #2e7d32; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
     .how-arrow { color: #ccc; font-size: 20px; }
 
-    /* PRODUCTS GRID */
     .section-title { font-size: 22px; font-weight: 800; color: #222; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
     .product-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); border: 2px solid transparent; transition: all 0.2s; }
@@ -53,7 +49,6 @@
     .add-btn:hover { background: #1b5e20; }
     .add-btn.added { background: #43a047; }
 
-    /* ORDER SUMMARY */
     .order-section { background: white; border-radius: 20px; padding: 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 40px; }
     .order-section h2 { font-size: 22px; font-weight: 800; color: #222; margin-bottom: 8px; }
     .order-section .subtitle { color: #888; font-size: 14px; margin-bottom: 28px; }
@@ -81,7 +76,6 @@
     .info-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
     .info-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #888; }
 
-    /* SUCCESS */
     .success-screen { display: none; text-align: center; padding: 60px 20px; }
     .success-screen .big-icon { font-size: 72px; margin-bottom: 20px; }
     .success-screen h2 { font-size: 28px; font-weight: 800; color: #1565c0; margin-bottom: 10px; }
@@ -137,7 +131,6 @@
     <div style="text-align:center;padding:40px;color:#aaa;grid-column:1/-1;">Loading products...</div>
   </div>
 
-  <!-- ORDER FORM -->
   <div class="order-section" id="orderSection">
     <h2>📋 Your Furniture Order</h2>
     <div class="subtitle">Review selected items and fill in your delivery details below.</div>
@@ -179,11 +172,12 @@
       </div>
       <div class="form-group">
         <label>Special Instructions</label>
-        <input type="text" id="specialNote" placeholder="e.g. fragile items, lab room delivery" />
+        <input type="text" id="specialNote" placeholder="e.g. assembly required, ground floor only" />
       </div>
     </div>
 
-    <button class="submit-btn" onclick="submitOrder()" id="submitBtn">🪑 Submit Lab Order</button>
+    <!-- FIX 11+12: Was "🪑 Submit Lab Order" — corrected to Furniture Order -->
+    <button class="submit-btn" onclick="submitOrder()" id="submitBtn">🪑 Submit Furniture Order</button>
     <div class="info-row">
       <div class="info-item">🧾 GST invoice will be emailed to you</div>
       <div class="info-item">📞 We'll call to confirm within 2 hours</div>
@@ -191,7 +185,6 @@
     </div>
   </div>
 
-  <!-- SUCCESS -->
   <div class="success-screen" id="successScreen">
     <div class="big-icon">🎉</div>
     <h2>Order Submitted!</h2>
@@ -224,7 +217,15 @@
   const db = getFirestore(app);
 
   const CATEGORY = "Furniture";
-  const EMOJI_MAP = { "Lab Chemical Kit": "🪑", "Beaker Set": "🫙", "Bunsen Burner": "🔥", "Microscope": "🔬", "Physics Kit": "⚡", "Biology Kit": "🌿" };
+
+  // FIX 15: EMOJI_MAP now uses actual furniture product names matching products.js
+  const EMOJI_MAP = {
+    "Student Dual Desk": "🪑",
+    "Teacher's Cabin Table": "🗂️",
+    "Plastic Moulded Chair": "🪑",
+    "Library Bookshelf (6-Tier)": "📚",
+    "Storage Locker (12-Door)": "🗄️"
+  };
   const DEFAULT_EMOJI = "🪑";
 
   let products = [];
@@ -252,8 +253,9 @@
         document.getElementById('productsGrid').innerHTML = `
           <div style="text-align:center;padding:40px;color:#aaa;grid-column:1/-1;">
             <div style="font-size:40px;margin-bottom:12px;">🪑</div>
-            <p>No lab products added yet.</p>
-            <p style="font-size:13px;margin-top:8px;">Add products with category "Lab" in your Firebase Firestore.</p>
+            <!-- FIX 13+14: Was "No lab products" / category "Lab" — corrected to Furniture -->
+            <p>No furniture products added yet.</p>
+            <p style="font-size:13px;margin-top:8px;">Add products with category "Furniture" in your Firebase Firestore.</p>
           </div>`;
       } else {
         renderProducts();
@@ -381,7 +383,8 @@
     } catch(e) {
       alert('Error submitting order: ' + e.message);
       btn.disabled = false;
-      btn.innerText = '🪑 Submit Lab Order';
+      // FIX 12: Was "🪑 Submit Lab Order" on error recovery
+      btn.innerText = '🪑 Submit Furniture Order';
     }
   }
 
