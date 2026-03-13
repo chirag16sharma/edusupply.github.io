@@ -41,9 +41,9 @@
   /* ════════════════════════════════════════════════════════════
      ① ANNOUNCEMENT BAR
      ════════════════════════════════════════════════════════════ */
-  function setupAnnouncementBar() {
+ /* function setupAnnouncementBar() {
     /* Don't add twice */
-    if (document.getElementById('p-announce')) return;
+   /* if (document.getElementById('p-announce')) return;
 
     const bar = document.createElement('div');
     bar.id = 'p-announce';
@@ -56,21 +56,21 @@
     `;
 
     /* Insert before navbar */
-    const navbar = document.querySelector('.navbar') || document.querySelector('nav');
+  /*  const navbar = document.querySelector('.navbar') || document.querySelector('nav');
     if (!navbar) return;
     navbar.parentNode.insertBefore(bar, navbar);
 
     /* Push navbar down */
-    const barHeight = bar.offsetHeight || 40;
+  /*  const barHeight = bar.offsetHeight || 40;
     navbar.style.top = barHeight + 'px';
 
     /* Slide in after a tick */
-    requestAnimationFrame(() => {
+  /*  requestAnimationFrame(() => {
       requestAnimationFrame(() => bar.classList.add('visible'));
     });
 
     /* Close button */
-    document.getElementById('p-announce-close').addEventListener('click', () => {
+  /*  document.getElementById('p-announce-close').addEventListener('click', () => {
       bar.style.transition = 'height .3s ease, opacity .3s ease';
       bar.style.opacity = '0';
       bar.style.height  = '0';
@@ -80,7 +80,7 @@
         if (navbar) navbar.style.top = '0';
       }, 300);
     });
-  }
+  } 
 
   /* ════════════════════════════════════════════════════════════
      ② SCROLL PROGRESS BAR
