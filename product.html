@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <!-- FIX 7: Title updated dynamically by renderProduct() -->
   <title>Product — EduSupply</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,7 +17,6 @@
     .product-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
     @media(max-width:700px) { .product-card { grid-template-columns: 1fr; } }
     .product-image { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #f0f4ff; border-radius: 16px; font-size: 80px; overflow: hidden; }
-    /* FIX 3: img styling for real product image */
     .product-image img { width: 80%; height: 80%; object-fit: contain; }
     .category-badge { background: #e8f0fe; color: #1a73e8; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
     .product-name { font-size: 28px; font-weight: 800; color: #222; margin-bottom: 12px; }
@@ -38,7 +36,6 @@
     .btn { padding: 14px 28px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
     .btn:hover { opacity: 0.9; }
     .btn-order { background: #1a73e8; color: white; flex: 1; }
-    /* FIX 2: .btn-cart is now actually used in btn-row */
     .btn-cart { background: #f0f4ff; color: #1a73e8; border: 2px solid #1a73e8; flex: 1; }
     .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: white; padding: 14px 28px; border-radius: 30px; font-size: 15px; font-weight: 600; z-index: 999; transition: transform 0.3s; pointer-events: none; }
     .toast.show { transform: translateX(-50%) translateY(0); }
@@ -85,8 +82,6 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ORDER MODAL -->
-<!-- FIX 6: clicking backdrop (modal-bg) closes modal -->
 <div class="modal-bg" id="orderModal" onclick="handleBackdropClick(event)">
   <div class="modal">
     <div id="orderForm">
@@ -100,6 +95,9 @@
       <input type="text" id="contactName" placeholder="e.g. Mr. Sharma" />
       <label>Phone Number *</label>
       <input type="tel" id="contactPhone" placeholder="e.g. 9876543210" />
+      <!-- Fixed: added School Name field so it's saved to Firestore -->
+      <label>School / Institution Name *</label>
+      <input type="text" id="schoolName" placeholder="e.g. Sunrise Public School" />
       <label>Delivery Address *</label>
       <textarea id="deliveryAddress" placeholder="Full school address with city and PIN code"></textarea>
       <label>Preferred Delivery Date</label>
@@ -125,30 +123,17 @@
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { auth, db } from "./firebase-config.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { doc, getDoc, collection, addDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
-    authDomain: "edusupply-b92ad.firebaseapp.com",
-    projectId: "edusupply-b92ad",
-    storageBucket: "edusupply-b92ad.firebasestorage.app",
-    messagingSenderId: "993801689755",
-    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  const params = new URLSearchParams(window.location.search);
+  const params    = new URLSearchParams(window.location.search);
   const productId = params.get('id');
-  let product = null;
-  let qty = 1;
+  let product     = null;
+  let qty         = 1;
   let currentUser = null;
 
-  // Local cart stored in localStorage (shared with products.js on index.html)
   let cart = JSON.parse(localStorage.getItem("eduSupplyCart") || "[]");
   function saveCart() { localStorage.setItem("eduSupplyCart", JSON.stringify(cart)); }
 
@@ -167,7 +152,6 @@
       return;
     }
 
-    // --- Try to load from URL params first (passed by products.js card links) ---
     const urlName  = params.get('name');
     const urlPrice = params.get('price');
     if (urlName && urlPrice) {
@@ -184,15 +168,13 @@
         image:         null
       };
       renderProduct();
-      // Still attempt a background Firestore enrichment (e.g. for real stock levels)
       try {
         const snap = await getDoc(doc(db, 'products', productId));
         if (snap.exists()) { product = { ...product, ...snap.data(), id: snap.id }; renderProduct(); }
-      } catch(_) { /* silently ignore — URL-param render already shown */ }
+      } catch(_) {}
       return;
     }
 
-    // --- Fallback: pure Firestore lookup (for future admin-added products) ---
     try {
       const snap = await getDoc(doc(db, 'products', productId));
       if (!snap.exists()) {
@@ -204,33 +186,26 @@
       renderProduct();
     } catch(e) {
       document.getElementById('productContent').innerHTML =
-        `<div style="text-align:center;padding:60px;color:#f44336;">Failed to load product. Please check your connection and try again.<br/><small>${e.message}</small></div>`;
+        `<div style="text-align:center;padding:60px;color:#f44336;">Failed to load product.<br/><small>${e.message}</small></div>`;
     }
   }
 
   function renderProduct() {
-    // FIX 7: Update page title to actual product name
     document.title = `${product.name} — EduSupply`;
-
     const emojiMap = { Boards:'📺', Lab:'🧪', Furniture:'🪑', Stationery:'✏️' };
-    const emoji = emojiMap[product.category] || '📦';
-
-    // FIX 3: Show real image if available, fall back to emoji
+    const emoji    = emojiMap[product.category] || '📦';
     const imageHtml = product.image
-      ? `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"  />
+      ? `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
          <span style="display:none;font-size:80px;">${emoji}</span>`
       : `<span style="font-size:80px;">${emoji}</span>`;
-
-    // FIX 4: Use ?? instead of || so stock:0 correctly shows 0, not 99
-    const maxStock = product.stock ?? 99;
+    const maxStock  = product.stock ?? 99;
     const stockHtml = maxStock > 0
       ? `<div class="stock-info in-stock">✅ ${maxStock} units in stock</div>`
       : `<div class="stock-info out-of-stock">❌ Out of stock</div>`;
-
     const originalPrice = product.originalPrice || product.price || 0;
-    const discount = product.originalPrice
+    const discount      = product.originalPrice
       ? `<span>₹${originalPrice.toLocaleString('en-IN')}</span>` : '';
-    const discBadge = product.originalPrice
+    const discBadge     = product.originalPrice
       ? `<span style="font-size:13px;font-weight:700;color:#ef4444;background:#fef2f2;padding:3px 10px;border-radius:20px;margin-left:8px;">
            ${Math.round(((originalPrice - product.price) / originalPrice) * 100)}% off
          </span>` : '';
@@ -241,10 +216,7 @@
         <div>
           <div class="category-badge">${product.category || 'Product'}</div>
           <div class="product-name">${product.name}</div>
-          <div class="product-price">
-            ₹${(product.price || 0).toLocaleString('en-IN')}
-            ${discount}${discBadge}
-          </div>
+          <div class="product-price">₹${(product.price || 0).toLocaleString('en-IN')}${discount}${discBadge}</div>
           <div class="product-desc">${product.description || ''}</div>
           ${stockHtml}
           <div class="qty-row">
@@ -256,7 +228,6 @@
             </div>
           </div>
           <div class="btn-row">
-            <!-- FIX 2: Added missing Add to Cart button -->
             <button class="btn btn-cart" onclick="addToCartLocal()" ${maxStock === 0 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>🛒 Add to Cart</button>
             <button class="btn btn-order" onclick="openOrderModal()" ${maxStock === 0 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>⚡ Order Now</button>
           </div>
@@ -265,14 +236,12 @@
       </div>`;
   }
 
-  // FIX 4: Use ?? so stock:0 doesn't fall back to 99
   window.changeQty = function(delta) {
     const maxStock = product.stock ?? 99;
     qty = Math.max(1, Math.min(maxStock, qty + delta));
     document.getElementById('qtyDisplay').innerText = qty;
   }
 
-  // FIX 2: Add to Cart writes to the shared localStorage cart
   window.addToCartLocal = function() {
     const existing = cart.find(i => i.id === product.id);
     if (existing) {
@@ -287,11 +256,11 @@
 
   window.openOrderModal = function() {
     if (!currentUser) { window.location.href = 'login.html'; return; }
-    document.getElementById('summaryName').innerText = product.name;
-    document.getElementById('summaryQty').innerText = qty;
+    document.getElementById('summaryName').innerText  = product.name;
+    document.getElementById('summaryQty').innerText   = qty;
     document.getElementById('summaryTotal').innerText = '₹' + ((product.price || 0) * qty).toLocaleString('en-IN');
     document.getElementById('orderModal').classList.add('show');
-    document.getElementById('orderForm').style.display = 'block';
+    document.getElementById('orderForm').style.display    = 'block';
     document.getElementById('orderLoading').style.display = 'none';
     document.getElementById('orderSuccess').style.display = 'none';
   }
@@ -300,40 +269,47 @@
     document.getElementById('orderModal').classList.remove('show');
   }
 
-  // FIX 6: Close modal when clicking the dark backdrop (not the modal box itself)
   window.handleBackdropClick = function(e) {
     if (e.target === document.getElementById('orderModal')) closeModal();
   }
 
   window.confirmOrder = async function() {
-    const name = document.getElementById('contactName').value.trim();
-    const phone = document.getElementById('contactPhone').value.trim();
+    const name    = document.getElementById('contactName').value.trim();
+    const phone   = document.getElementById('contactPhone').value.trim();
+    const school  = document.getElementById('schoolName').value.trim();
     const address = document.getElementById('deliveryAddress').value.trim();
-    const date = document.getElementById('deliveryDate').value;
-    if (!name || !phone || !address) { alert('Please fill in all required fields.'); return; }
+    const date    = document.getElementById('deliveryDate').value;
+    if (!name || !phone || !school || !address) {
+      alert('Please fill in all required fields.');
+      return;
+    }
 
-    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('orderForm').style.display    = 'none';
     document.getElementById('orderLoading').style.display = 'block';
 
     try {
       const orderRef = await addDoc(collection(db, 'orders'), {
-        userId: currentUser.uid,
-        userEmail: currentUser.email,
-        items: [{ productId: product.id, name: product.name, price: product.price, qty }],
-        total: product.price * qty,
-        contactName: name,
-        contactPhone: phone,
+        userId:          currentUser.uid,
+        userEmail:       currentUser.email,
+        // Fixed: category and schoolName now saved so admin panel shows them correctly
+        category:        product.category || 'General',
+        schoolName:      school,
+        items:           [{ productId: product.id, name: product.name, price: product.price, qty }],
+        total:           product.price * qty,
+        contactName:     name,
+        contactPhone:    phone,
         deliveryAddress: address,
-        deliveryDate: date,
-        status: 'Pending',
-        createdAt: new Date().toISOString()
+        deliveryDate:    date,
+        status:          'Pending',
+        createdAt:       new Date().toISOString()
       });
       document.getElementById('orderLoading').style.display = 'none';
       document.getElementById('orderSuccess').style.display = 'block';
-      document.getElementById('orderIdDisplay').innerText = `Order ID: #EDU-${orderRef.id.substring(0,6).toUpperCase()}`;
+      document.getElementById('orderIdDisplay').innerText =
+        `Order ID: #EDU-${orderRef.id.substring(0,6).toUpperCase()}`;
     } catch(e) {
       alert('Error placing order: ' + e.message);
-      document.getElementById('orderForm').style.display = 'block';
+      document.getElementById('orderForm').style.display    = 'block';
       document.getElementById('orderLoading').style.display = 'none';
     }
   }
