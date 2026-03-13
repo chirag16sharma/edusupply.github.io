@@ -9,15 +9,15 @@
 
 /* ── Tokens ─────────────────────────────────────────────────── */
 :root {
-  --p-bg:      #FFFCE8;
-  --p-surface: #FFF9F0;
+  --p-bg:      #F6F5F1;
+  --p-surface: #FDFCFA;
   --p-ink:     #0E0818;
   --p-ink2:    #2C1C50;
   --p-ink3:    #685890;
   --p-gold:    #F5D020;
   --p-gold-lt: #FFF8C0;
   --p-gold-dk: #B89800;
-  --p-line:    #E8E0A0;
+  --p-line:    #E2DDD0;
   --p-navy:    #1A1030;
   --p-ease:    cubic-bezier(.4,0,.2,1);
   --p-spring:  cubic-bezier(.34,1.56,.64,1);
