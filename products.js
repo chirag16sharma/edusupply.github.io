@@ -395,6 +395,19 @@ function showToast(msg, type = "success", duration = 3000) {
 }
 
 /* ── 11. INIT ── */
+/* ── WINDOW EXPORTS ──
+   products.js runs as type="module" (isolated scope).
+   script.js is a plain script and calls these via typeof guards.
+   Exposing them on window bridges the two scopes. */
+window.showToast      = showToast;
+window.cartTotal      = cartTotal;
+window.saveCart       = saveCart;
+window.renderCart     = renderCart;
+window.addToCart      = addToCart;
+window.removeFromCart = removeFromCart;
+window.changeQty      = changeQty;
+window.renderProducts = renderProducts;
+
 document.addEventListener("DOMContentLoaded", () => {
   injectStyles();
   buildProductsSection();
