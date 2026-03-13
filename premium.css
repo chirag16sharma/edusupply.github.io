@@ -577,11 +577,55 @@ footer .copyright {
   background: #25D366 !important;
   box-shadow: 0 6px 24px rgba(37, 211, 102, 0.35) !important;
   transition: transform var(--transition), box-shadow var(--transition) !important;
+  /* Fix: never stretch full width */
+  width: auto !important;
+  max-width: 220px !important;
+  min-width: unset !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 12px 20px !important;
+  border-radius: 100px !important;
 }
 
 .wa-float:hover {
-  transform: scale(1.08) translateY(-3px) !important;
+  transform: scale(1.05) translateY(-2px) !important;
   box-shadow: 0 12px 36px rgba(37, 211, 102, 0.45) !important;
+}
+
+/* ── Contact Form Inputs ──────────────────────────────────── */
+/* Restore visible inputs inside the dark contact section */
+#contact input,
+#contact textarea,
+#contact select {
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  color: #fff !important;
+  font-family: 'Outfit', sans-serif !important;
+  padding: 12px 16px !important;
+  width: 100% !important;
+  font-size: 15px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: border-color var(--transition) !important;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+  outline: none !important;
+  border-color: var(--gold) !important;
+  background: rgba(255,255,255,0.12) !important;
+}
+
+#contact input::placeholder,
+#contact textarea::placeholder {
+  color: rgba(255,255,255,0.4) !important;
+}
+
+#contact label {
+  color: rgba(255,255,255,0.7) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  display: block !important;
+  margin-bottom: 6px !important;
 }
 
 /* ── Scrollbar ────────────────────────────────────────────── */
