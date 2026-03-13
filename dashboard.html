@@ -26,10 +26,14 @@
     .orders-table table { width: 100%; border-collapse: collapse; }
     .orders-table th { background: #f8f9ff; padding: 14px 20px; text-align: left; font-size: 13px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .orders-table td { padding: 16px 20px; border-top: 1px solid #f0f0f0; font-size: 14px; color: #333; }
+
+    /* ── All status badges including Cancelled ── */
     .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    .badge-pending { background: #fff3e0; color: #e65100; }
+    .badge-pending   { background: #fff3e0; color: #e65100; }
     .badge-confirmed { background: #e8f5e9; color: #2e7d32; }
     .badge-delivered { background: #e3f2fd; color: #1565c0; }
+    .badge-cancelled { background: #fce4ec; color: #c62828; }
+
     .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
     .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
     .empty-state p { font-size: 16px; margin-bottom: 20px; }
@@ -77,48 +81,31 @@
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
-    authDomain: "edusupply-b92ad.firebaseapp.com",
-    projectId: "edusupply-b92ad",
-    storageBucket: "edusupply-b92ad.firebasestorage.app",
-    messagingSenderId: "993801689755",
-    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  import { auth, db } from "./firebase-config.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { doc, getDoc, collection, query, where, getDocs }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) { window.location.href = 'login.html'; return; }
 
-    // Load user info
-    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    const userDoc  = await getDoc(doc(db, 'users', user.uid));
     const userData = userDoc.exists() ? userDoc.data() : { schoolName: user.email };
-    document.getElementById('schoolName').innerText = userData.schoolName || user.email;
-    document.getElementById('welcomeText').innerText = `Welcome, ${userData.schoolName || 'School'}! 👋`;
+    document.getElementById('schoolName').innerText   = userData.schoolName || user.email;
+    document.getElementById('welcomeText').innerText  = `Welcome, ${userData.schoolName || 'School'}! 👋`;
 
-    // Load orders
     try {
-      const q = query(collection(db, 'orders'), where('userId', '==', user.uid));
+      const q        = query(collection(db, 'orders'), where('userId', '==', user.uid));
       const snapshot = await getDocs(q);
-      const orders = [];
+      const orders   = [];
       snapshot.forEach(d => orders.push({ id: d.id, ...d.data() }));
       orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-      // Update stats
       document.getElementById('totalOrders').innerText = orders.length;
       const totalSpent = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-      document.getElementById('totalSpent').innerText = '₹' + totalSpent.toLocaleString('en-IN');
-      const pending = orders.filter(o => o.status === 'Pending').length;
-      document.getElementById('pendingOrders').innerText = pending;
+      document.getElementById('totalSpent').innerText  = '₹' + totalSpent.toLocaleString('en-IN');
+      document.getElementById('pendingOrders').innerText = orders.filter(o => o.status === 'Pending').length;
 
-      // Render table
       if (orders.length === 0) {
         document.getElementById('ordersContent').innerHTML = `
           <div class="empty-state">
@@ -130,22 +117,24 @@
         document.getElementById('ordersContent').innerHTML = `
           <table>
             <thead><tr>
-              <th>Order ID</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th>
+              <th>Order ID</th><th>Category</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th>
             </tr></thead>
             <tbody>
               ${orders.map(o => `
                 <tr>
                   <td><strong>#EDU-${o.id.substring(0,6).toUpperCase()}</strong></td>
+                  <td>${o.category || '—'}</td>
                   <td>${o.items ? o.items.map(i => i.name).join(', ') : 'N/A'}</td>
                   <td>₹${(o.total || 0).toLocaleString('en-IN')}</td>
                   <td>${o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN') : 'N/A'}</td>
-                  <td><span class="badge badge-${(o.status||'pending').toLowerCase()}">${o.status || 'Pending'}</span></td>
+                  <td><span class="badge badge-${(o.status || 'pending').toLowerCase()}">${o.status || 'Pending'}</span></td>
                 </tr>`).join('')}
             </tbody>
           </table>`;
       }
     } catch(e) {
-      document.getElementById('ordersContent').innerHTML = '<div class="empty-state"><p>Could not load orders.</p></div>';
+      document.getElementById('ordersContent').innerHTML =
+        '<div class="empty-state"><p>Could not load orders. Please try again.</p></div>';
     }
   });
 
