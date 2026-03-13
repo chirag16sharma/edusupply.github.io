@@ -26,7 +26,6 @@
   }
 
   function init() {
-    setupAnnouncementBar();
     setupScrollProgress();
     setupCursorGlow();
     setupHeroWordReveal();
@@ -38,49 +37,6 @@
     setupScrollRevealEnhanced();
   }
 
-  /* ════════════════════════════════════════════════════════════
-     ① ANNOUNCEMENT BAR
-     ════════════════════════════════════════════════════════════ */
-  function setupAnnouncementBar() {
-    /* Don't add twice */
-    if (document.getElementById('p-announce')) return;
-
-    const bar = document.createElement('div');
-    bar.id = 'p-announce';
-    bar.innerHTML = `
-      🚚 <em>Free delivery</em> on orders above ₹5,000 &nbsp;·&nbsp;
-      Serving Bengaluru &nbsp;·&nbsp;
-      GST invoices provided &nbsp;·&nbsp;
-      <em>Bulk discounts available</em>
-      <button id="p-announce-close" aria-label="Close">✕</button>
-    `;
-
-    /* Insert before navbar */
-    const navbar = document.querySelector('.navbar') || document.querySelector('nav');
-    if (!navbar) return;
-    navbar.parentNode.insertBefore(bar, navbar);
-
-    /* Push navbar down */
-    const barHeight = bar.offsetHeight || 40;
-    navbar.style.top = barHeight + 'px';
-
-    /* Slide in after a tick */
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => bar.classList.add('visible'));
-    });
-
-    /* Close button */
-    document.getElementById('p-announce-close').addEventListener('click', () => {
-      bar.style.transition = 'height .3s ease, opacity .3s ease';
-      bar.style.opacity = '0';
-      bar.style.height  = '0';
-      bar.style.overflow = 'hidden';
-      bar.style.padding = '0';
-      setTimeout(() => {
-        if (navbar) navbar.style.top = '0';
-      }, 300);
-    });
-  }
 
   /* ════════════════════════════════════════════════════════════
      ② SCROLL PROGRESS BAR
@@ -137,7 +93,7 @@
     document.addEventListener('mouseover', e => {
       const t = e.target;
       if (t.matches('button, a, .cat-card, .edu-card, .testimonial-card')) {
-        glow.style.background = 'radial-gradient(circle, rgba(224,123,32,.14) 0%, transparent 65%)';
+        glow.style.background = 'radial-gradient(circle, rgba(245,208,32,.14) 0%, transparent 65%)';
         glow.style.width  = '600px';
         glow.style.height = '600px';
       }
@@ -146,7 +102,7 @@
     document.addEventListener('mouseout', e => {
       const t = e.target;
       if (t.matches('button, a, .cat-card, .edu-card, .testimonial-card')) {
-        glow.style.background = 'radial-gradient(circle, rgba(224,123,32,.08) 0%, transparent 65%)';
+        glow.style.background = 'radial-gradient(circle, rgba(245,208,32,.08) 0%, transparent 65%)';
         glow.style.width  = '500px';
         glow.style.height = '500px';
       }
@@ -297,8 +253,8 @@
         const rotX = -y * INTENSITY;
         const rotY =  x * INTENSITY;
         card.style.transform    = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-6px)`;
-        card.style.boxShadow    = `${-rotY * 2}px ${rotX * 2 + 10}px 40px rgba(26,21,12,.15)`;
-        card.style.borderColor  = 'rgba(224,123,32,.4)';
+        card.style.boxShadow    = `${-rotY * 2}px ${rotX * 2 + 10}px 40px rgba(14,8,24,.15)`;
+        card.style.borderColor  = 'rgba(245,208,32,.4)';
         card.style.transition   = 'box-shadow .1s, border-color .1s';
       });
 
