@@ -1,7 +1,7 @@
 /* ================================================================
    EduSupply — premium.css  v6  "Deep Plum + Vivid Yellow"
    Link AFTER style.css. All selectors verified against source.
-   wow.js handles: announcement bar, cursor glow, counters,
+   wow.js handles: cursor glow, counters,
    scroll progress, magnetic buttons, mobile nav panel.
    ================================================================ */
 
@@ -46,64 +46,6 @@ h1, h2, h3, h4 {
 ::-webkit-scrollbar-track { background: var(--p-bg); }
 ::-webkit-scrollbar-thumb { background: var(--p-line); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--p-gold); }
-
-/* ════════════════════════════════════
-   ANNOUNCEMENT BAR (injected by wow.js)
-   ════════════════════════════════════ */
-#p-announce {
-  width: 100%;
-  background: var(--p-ink);
-  color: rgba(255,255,255,.7);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 10px 48px;
-  position: relative;
-  z-index: 10001;
-  overflow: hidden;
-  transform: translateY(-100%);
-  opacity: 0;
-  transition: transform .5s var(--p-ease), opacity .5s var(--p-ease);
-}
-#p-announce.visible {
-  transform: translateY(0);
-  opacity: 1;
-}
-#p-announce em {
-  color: var(--p-gold) !important;
-  font-style: normal !important;
-  font-weight: 600;
-}
-#p-announce-close {
-  position: absolute;
-  right: 16px; top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: rgba(255,255,255,.4);
-  font-size: 16px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 4px;
-  transition: color .2s;
-}
-#p-announce-close:hover { color: rgba(255,255,255,.8); }
-
-/* Shimmer sweep on bar */
-#p-announce::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(245,208,32,.12) 50%, transparent 100%);
-  animation: p-shimmer-bar 4s ease infinite;
-}
-@keyframes p-shimmer-bar {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
 
 /* ════════════════════════════════════
    SCROLL PROGRESS BAR (injected by wow.js)
