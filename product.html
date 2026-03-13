@@ -1,327 +1,1344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Product — EduSupply</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
-    nav { background: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .nav-logo { font-size: 20px; font-weight: 800; color: #1a73e8; text-decoration: none; }
-    .nav-right { display: flex; gap: 12px; align-items: center; }
-    .nav-link { color: #1a73e8; text-decoration: none; font-weight: 600; font-size: 14px; }
-    .container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
-    .back-link { color: #1a73e8; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block; margin-bottom: 24px; }
-    .back-link:hover { text-decoration: underline; }
-    .product-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-    @media(max-width:700px) { .product-card { grid-template-columns: 1fr; } }
-    .product-image { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #f0f4ff; border-radius: 16px; font-size: 80px; overflow: hidden; }
-    .product-image img { width: 80%; height: 80%; object-fit: contain; }
-    .category-badge { background: #e8f0fe; color: #1a73e8; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .product-name { font-size: 28px; font-weight: 800; color: #222; margin-bottom: 12px; }
-    .product-price { font-size: 32px; font-weight: 800; color: #1a73e8; margin-bottom: 8px; }
-    .product-price span { font-size: 16px; color: #aaa; font-weight: 400; text-decoration: line-through; margin-left: 8px; }
-    .product-desc { color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
-    .stock-info { font-size: 14px; font-weight: 600; margin-bottom: 24px; }
-    .stock-info.in-stock { color: #34a853; }
-    .stock-info.out-of-stock { color: #f44336; }
-    .qty-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-    .qty-label { font-size: 14px; font-weight: 600; color: #555; }
-    .qty-control { display: flex; align-items: center; border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
-    .qty-btn { width: 40px; height: 40px; border: none; background: #f5f7fa; font-size: 20px; cursor: pointer; font-weight: 700; color: #1a73e8; }
-    .qty-btn:hover { background: #e8f0fe; }
-    .qty-display { width: 50px; text-align: center; font-size: 16px; font-weight: 700; color: #222; border: none; background: white; }
-    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn { padding: 14px 28px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-    .btn:hover { opacity: 0.9; }
-    .btn-order { background: #1a73e8; color: white; flex: 1; }
-    .btn-cart { background: #f0f4ff; color: #1a73e8; border: 2px solid #1a73e8; flex: 1; }
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: white; padding: 14px 28px; border-radius: 30px; font-size: 15px; font-weight: 600; z-index: 999; transition: transform 0.3s; pointer-events: none; }
-    .toast.show { transform: translateX(-50%) translateY(0); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details — EduSupply</title>
 
-    /* ORDER MODAL */
-    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-    .modal-bg.show { display: flex; }
-    .modal { background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; z-index: 1; }
-    .modal h2 { font-size: 22px; font-weight: 800; margin-bottom: 24px; color: #222; }
-    .modal label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
-    .modal input, .modal textarea { width: 100%; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
-    .modal input:focus, .modal textarea:focus { outline: none; border-color: #1a73e8; }
-    .modal textarea { resize: vertical; min-height: 80px; }
-    .order-summary { background: #f8f9ff; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-    .order-summary .row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #555; }
-    .order-summary .total { font-weight: 800; color: #222; font-size: 16px; border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 4px; }
-    .modal-btns { display: flex; gap: 12px; }
-    .btn-confirm { background: #34a853; color: white; flex: 1; }
-    .btn-cancel { background: #f5f5f5; color: #555; flex: 1; }
-    .success-screen { display: none; text-align: center; padding: 20px; }
-    .success-screen .icon { font-size: 60px; margin-bottom: 16px; }
-    .success-screen h3 { font-size: 22px; font-weight: 800; color: #34a853; margin-bottom: 8px; }
-    .success-screen p { color: #666; margin-bottom: 24px; }
-    .loading-state { display: none; text-align: center; padding: 40px; color: #888; }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Tokens ───────────────────────────────────────────────── */
+    :root {
+      --bg:      #F5F1EA;
+      --surface: #FDFAF5;
+      --ink:     #18150F;
+      --ink2:    #534E45;
+      --ink3:    #9E9990;
+      --gold:    #B8925A;
+      --gold-lt: #EFE2CC;
+      --gold-dk: #8A6A34;
+      --line:    #E0D9CD;
+      --navy:    #0d1f3c;
+      --ease:    cubic-bezier(.4,0,.2,1);
+      --spring:  cubic-bezier(.34,1.56,.64,1);
+      --t:       .3s;
+      --r:       16px;
+      --r-sm:    10px;
+      --sh-sm:   0 2px 14px rgba(24,21,15,.06);
+      --sh-md:   0 8px 40px rgba(24,21,15,.11);
+      --sh-lg:   0 20px 72px rgba(24,21,15,.16);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    h1,h2,h3,h4 { font-family: 'Playfair Display', Georgia, serif; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ─── NAV ─────────────────────────────────────────────────── */
+    nav {
+      background: rgba(253,250,245,.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 0 2.5rem;
+      height: 66px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      transition: box-shadow var(--t);
+    }
+    nav.scrolled { box-shadow: 0 2px 24px rgba(24,21,15,.08); }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-right { display: flex; gap: 6px; align-items: center; }
+
+    .nav-link {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink2);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 100px;
+      transition: color var(--t), background var(--t);
+    }
+    .nav-link:hover { color: var(--ink); background: rgba(24,21,15,.05); }
+
+    .btn-nav-cta {
+      background: var(--ink);
+      color: #fff;
+      border-radius: 100px;
+      padding: 9px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background var(--t), transform var(--t);
+    }
+    .btn-nav-cta:hover { background: var(--gold-dk); transform: translateY(-1px); }
+
+    /* ─── BREADCRUMB ──────────────────────────────────────────── */
+    .breadcrumb {
+      padding: 16px 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink3);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .breadcrumb a {
+      color: var(--ink3);
+      text-decoration: none;
+      transition: color var(--t);
+    }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb .sep { color: var(--line); }
+    .breadcrumb .current { color: var(--ink); font-weight: 600; }
+
+    /* ─── MAIN LAYOUT ─────────────────────────────────────────── */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ─── PRODUCT HERO ────────────────────────────────────────── */
+    .product-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      margin-bottom: 72px;
+    }
+
+    @media (max-width: 760px) {
+      .product-hero { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    /* Visual panel */
+    .product-visual {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--sh-md);
+    }
+
+    .product-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 30%, var(--gold-lt) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 70%, rgba(13,31,60,.04) 0%, transparent 60%);
+    }
+
+    .product-emoji-large {
+      font-size: 120px;
+      filter: drop-shadow(0 12px 40px rgba(24,21,15,.18));
+      position: relative;
+      z-index: 1;
+      animation: floatEmoji 4s ease-in-out infinite;
+    }
+
+    @keyframes floatEmoji {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      box-shadow: 0 4px 12px rgba(184,146,90,.4);
+    }
+
+    /* Info panel */
+    .product-info { padding-top: 8px; }
+
+    .product-category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gold-lt);
+      color: var(--gold-dk);
+      border: 1px solid rgba(184,146,90,.25);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .product-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+      margin-bottom: 14px;
+    }
+
+    .product-tagline {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink2);
+      line-height: 1.75;
+      margin-bottom: 26px;
+      max-width: 440px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .price-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -.03em;
+    }
+
+    .price-unit {
+      font-size: 13px;
+      color: var(--ink3);
+      font-weight: 500;
+    }
+
+    .price-gst {
+      font-size: 11px;
+      color: var(--ink3);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 3px 10px;
+    }
+
+    /* Feature pills */
+    .feature-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink2);
+      background: var(--surface);
+    }
+
+    /* Qty + CTA */
+    .order-controls {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 22px 22px 22px;
+      box-shadow: var(--sh-sm);
+    }
+
+    .qty-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--line);
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .qty-btn {
+      width: 42px;
+      height: 42px;
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+      transition: background var(--t), color var(--t);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qty-btn:hover { background: var(--ink); color: #fff; }
+
+    .qty-num {
+      width: 52px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    .qty-num:focus { outline: none; }
+
+    .qty-total {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold-dk);
+    }
+
+    .btn-order {
+      width: 100%;
+      padding: 16px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background var(--t), transform var(--t), box-shadow var(--t);
+      margin-bottom: 10px;
+    }
+    .btn-order::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.12) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform .5s;
+    }
+    .btn-order:hover::after { transform: translateX(100%); }
+    .btn-order:hover {
+      background: var(--gold-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(138,106,52,.3);
+    }
+
+    .wa-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      padding: 13px;
+      border: 1.5px solid var(--line);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--ink2);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color var(--t), color var(--t), background var(--t);
+    }
+    .wa-link:hover {
+      border-color: #25d366;
+      color: #1a8f44;
+      background: #f0fff5;
+    }
+
+    .trust-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--ink3);
+    }
+
+    /* ─── SPECS / DETAILS ─────────────────────────────────────── */
+    .details-section {
+      margin-bottom: 64px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 28px;
+      letter-spacing: -.02em;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .spec-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 20px;
+      transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+    }
+    .spec-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sh-sm);
+      border-color: var(--gold);
+    }
+
+    .spec-icon { font-size: 24px; margin-bottom: 10px; }
+    .spec-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 4px;
+    }
+    .spec-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ─── MODAL ───────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(24,21,15,.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s var(--ease), visibility .3s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--sh-lg);
+      transform: translateY(32px) scale(.97);
+      transition: transform .35s var(--spring);
+      border: 1px solid var(--line);
+    }
+    .modal-overlay.open .modal {
+      transform: none;
+    }
+
+    .modal-header {
+      padding: 28px 32px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -.02em;
+    }
+    .modal-subtitle {
+      font-size: 13px;
+      color: var(--ink3);
+      margin-top: 3px;
+    }
+
+    .modal-close {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 17px;
+      cursor: pointer;
+      color: var(--ink2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--t), color var(--t);
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--ink); color: #fff; }
+
+    .modal-body { padding: 22px 32px 32px; }
+
+    .modal-product-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 14px 18px;
+      margin-bottom: 22px;
+    }
+    .modal-product-emoji { font-size: 30px; }
+    .modal-product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .modal-product-qty { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+    .modal-product-price {
+      margin-left: auto;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold-dk);
+    }
+
+    /* Form */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184,146,90,.12);
+      background: var(--surface);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--ink3); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: background var(--t), transform var(--t), box-shadow var(--t);
+    }
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.12) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform .5s;
+    }
+    .btn-submit:hover::after { transform: translateX(100%); }
+    .btn-submit:hover {
+      background: var(--gold-dk);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 30px rgba(138,106,52,.3);
+    }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* Login note in modal */
+    .modal-login-note {
+      background: var(--gold-lt);
+      border: 1px solid rgba(184,146,90,.3);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--gold-dk);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .modal-login-note a {
+      color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: background var(--t);
+    }
+    .modal-login-note a:hover { background: var(--gold-dk); }
+
+    /* Success state */
+    .modal-success {
+      text-align: center;
+      padding: 48px 24px;
+      display: none;
+    }
+    .success-ring {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 32px rgba(184,146,90,.35);
+      animation: p-pop .5s var(--spring) both;
+    }
+    .modal-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -.02em;
+    }
+    .modal-success p { color: var(--ink2); font-size: 14px; margin-bottom: 4px; }
+    .order-ref {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold-dk);
+      background: var(--gold-lt);
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: 100px;
+      margin: 14px 0 28px;
+    }
+    .success-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-track {
+      background: var(--ink);
+      color: #fff;
+      padding: 13px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: background var(--t);
+    }
+    .btn-track:hover { background: var(--gold-dk); }
+    .btn-close-modal {
+      background: transparent;
+      color: var(--ink);
+      padding: 12px 28px;
+      border-radius: 100px;
+      border: 1.5px solid var(--line);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color var(--t);
+    }
+    .btn-close-modal:hover { border-color: var(--ink); }
+
+    /* ─── RELATED ─────────────────────────────────────────────── */
+    .related-section { margin-bottom: 40px; }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .related-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+      display: block;
+    }
+    .related-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--sh-md);
+      border-color: var(--gold);
+    }
+    .related-card-emoji { font-size: 36px; margin-bottom: 12px; display: block; }
+    .related-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .related-card-cat { font-size: 11px; color: var(--ink3); }
+
+    /* ─── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    /* ─── ANIMATIONS ──────────────────────────────────────────── */
+    @keyframes p-fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes p-pop {
+      from { transform: scale(.5); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+
+    .anim-up { animation: p-fadeUp .6s var(--ease) both; }
+
+    /* ─── LOADING STATE ───────────────────────────────────────── */
+    .loading-screen {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      color: var(--ink3);
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--line);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── MOBILE ──────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 0 1.2rem; }
+      .breadcrumb { padding: 12px 1.2rem; }
+      .page-wrap { padding: 28px 16px 60px; }
+      .product-emoji-large { font-size: 80px; }
+      .modal-body { padding: 18px 20px 24px; }
+      .modal-header { padding: 22px 20px 0; }
+      .form-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
+
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo">🏫 EduSupply</a>
-  <div class="nav-right">
-    <a href="index.html" class="nav-link">← Back to Products</a>
-    <a href="dashboard.html" class="nav-link" id="dashLink" style="display:none;">My Dashboard</a>
-    <a href="login.html" class="nav-link" id="loginLink">Login</a>
-  </div>
-</nav>
-
-<div class="container">
-  <a href="index.html" class="back-link">← All Products</a>
-  <div id="productContent">
-    <div style="text-align:center; padding:60px; color:#aaa;">Loading product...</div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<div class="modal-bg" id="orderModal" onclick="handleBackdropClick(event)">
-  <div class="modal">
-    <div id="orderForm">
-      <h2>📦 Place Your Order</h2>
-      <div class="order-summary">
-        <div class="row"><span id="summaryName">Product</span><span></span></div>
-        <div class="row"><span>Quantity</span><span id="summaryQty">1</span></div>
-        <div class="row total"><span>Total</span><span id="summaryTotal">₹0</span></div>
-      </div>
-      <label>Contact Person Name *</label>
-      <input type="text" id="contactName" placeholder="e.g. Mr. Sharma" />
-      <label>Phone Number *</label>
-      <input type="tel" id="contactPhone" placeholder="e.g. 9876543210" />
-      <!-- Fixed: added School Name field so it's saved to Firestore -->
-      <label>School / Institution Name *</label>
-      <input type="text" id="schoolName" placeholder="e.g. Sunrise Public School" />
-      <label>Delivery Address *</label>
-      <textarea id="deliveryAddress" placeholder="Full school address with city and PIN code"></textarea>
-      <label>Preferred Delivery Date</label>
-      <input type="date" id="deliveryDate" />
-      <div class="modal-btns">
-        <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-confirm" onclick="confirmOrder()">✅ Confirm Order</button>
-      </div>
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Edu<span>Supply</span></a>
+    <div class="nav-right">
+      <a href="index.html#categories" class="nav-link">Categories</a>
+      <a href="index.html#products"   class="nav-link">Products</a>
+      <a href="index.html#contact"    class="nav-link">Contact</a>
+      <a id="dashLinkNav"  href="dashboard.html" class="nav-link" style="display:none">Dashboard</a>
+      <a id="loginLinkNav" href="login.html"      class="btn-nav-cta">Login</a>
     </div>
-    <div class="loading-state" id="orderLoading">
-      <div style="font-size:40px">⏳</div>
-      <p>Placing your order...</p>
-    </div>
-    <div class="success-screen" id="orderSuccess">
-      <div class="icon">🎉</div>
-      <h3>Order Placed!</h3>
-      <p>Your order has been received. We'll confirm within 2 hours!</p>
-      <p style="font-size:13px; color:#aaa;" id="orderIdDisplay"></p>
-      <br/>
-      <button class="btn btn-order" onclick="window.location.href='dashboard.html'" style="width:100%">View My Orders</button>
-    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">›</span>
+    <a href="index.html#categories" id="breadCat">Products</a>
+    <span class="sep">›</span>
+    <span class="current" id="breadName">Loading…</span>
   </div>
-</div>
 
-<script type="module">
-  import { auth, db } from "./firebase-config.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { doc, getDoc, collection, addDoc }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <!-- PAGE -->
+  <div class="page-wrap">
 
-  const params    = new URLSearchParams(window.location.search);
-  const productId = params.get('id');
-  let product     = null;
-  let qty         = 1;
-  let currentUser = null;
+    <!-- LOADING -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="spinner"></div>
+      <p>Loading product…</p>
+    </div>
 
-  let cart = JSON.parse(localStorage.getItem("eduSupplyCart") || "[]");
-  function saveCart() { localStorage.setItem("eduSupplyCart", JSON.stringify(cart)); }
+    <!-- PRODUCT CONTENT (hidden until loaded) -->
+    <div id="pageContent" style="display:none">
 
-  onAuthStateChanged(auth, user => {
-    currentUser = user;
-    if (user) {
-      document.getElementById('dashLink').style.display = 'inline';
-      document.getElementById('loginLink').style.display = 'none';
-    }
-  });
+      <!-- HERO ROW -->
+      <section class="product-hero">
 
-  async function loadProduct() {
-    if (!productId) {
-      document.getElementById('productContent').innerHTML =
-        '<div style="text-align:center;padding:60px;color:#aaa;">No product specified. <a href="index.html" style="color:#1a73e8;">Browse all products</a></div>';
-      return;
-    }
+        <!-- Visual -->
+        <div class="product-visual">
+          <div class="product-emoji-large" id="heroEmoji">📦</div>
+          <div class="product-badge" id="heroBadge">In Stock</div>
+        </div>
 
-    const urlName  = params.get('name');
-    const urlPrice = params.get('price');
-    if (urlName && urlPrice) {
-      product = {
-        id:            productId,
-        name:          decodeURIComponent(urlName),
-        price:         parseInt(urlPrice, 10),
-        originalPrice: parseInt(params.get('originalPrice') || urlPrice, 10),
-        category:      decodeURIComponent(params.get('category') || ''),
-        description:   decodeURIComponent(params.get('desc') || ''),
-        emoji:         decodeURIComponent(params.get('emoji') || '📦'),
-        badge:         decodeURIComponent(params.get('badge') || ''),
-        stock:         parseInt(params.get('stock') || '50', 10),
-        image:         null
-      };
-      renderProduct();
-      try {
-        const snap = await getDoc(doc(db, 'products', productId));
-        if (snap.exists()) { product = { ...product, ...snap.data(), id: snap.id }; renderProduct(); }
-      } catch(_) {}
-      return;
-    }
+        <!-- Info -->
+        <div class="product-info">
+          <div class="product-category-pill" id="catPill">🏫 Category</div>
 
-    try {
-      const snap = await getDoc(doc(db, 'products', productId));
-      if (!snap.exists()) {
-        document.getElementById('productContent').innerHTML =
-          '<div style="text-align:center;padding:60px;color:#aaa;">Product not found. <a href="index.html" style="color:#1a73e8;">Browse all products</a></div>';
-        return;
-      }
-      product = { id: snap.id, ...snap.data() };
-      renderProduct();
-    } catch(e) {
-      document.getElementById('productContent').innerHTML =
-        `<div style="text-align:center;padding:60px;color:#f44336;">Failed to load product.<br/><small>${e.message}</small></div>`;
-    }
-  }
+          <h1 class="product-title anim-up" id="productTitle">Product Name</h1>
+          <p class="product-tagline" id="productTagline">
+            High-quality supply crafted for schools across Bengaluru. Bulk pricing available.
+          </p>
 
-  function renderProduct() {
-    document.title = `${product.name} — EduSupply`;
-    const emojiMap = { Boards:'📺', Lab:'🧪', Furniture:'🪑', Stationery:'✏️' };
-    const emoji    = emojiMap[product.category] || '📦';
-    const imageHtml = product.image
-      ? `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-         <span style="display:none;font-size:80px;">${emoji}</span>`
-      : `<span style="font-size:80px;">${emoji}</span>`;
-    const maxStock  = product.stock ?? 99;
-    const stockHtml = maxStock > 0
-      ? `<div class="stock-info in-stock">✅ ${maxStock} units in stock</div>`
-      : `<div class="stock-info out-of-stock">❌ Out of stock</div>`;
-    const originalPrice = product.originalPrice || product.price || 0;
-    const discount      = product.originalPrice
-      ? `<span>₹${originalPrice.toLocaleString('en-IN')}</span>` : '';
-    const discBadge     = product.originalPrice
-      ? `<span style="font-size:13px;font-weight:700;color:#ef4444;background:#fef2f2;padding:3px 10px;border-radius:20px;margin-left:8px;">
-           ${Math.round(((originalPrice - product.price) / originalPrice) * 100)}% off
-         </span>` : '';
+          <div class="price-row">
+            <div class="price-main" id="priceMain">₹0</div>
+            <div class="price-unit" id="priceUnit">per unit</div>
+            <div class="price-gst">GST incl.</div>
+          </div>
 
-    document.getElementById('productContent').innerHTML = `
-      <div class="product-card">
-        <div class="product-image">${imageHtml}</div>
-        <div>
-          <div class="category-badge">${product.category || 'Product'}</div>
-          <div class="product-name">${product.name}</div>
-          <div class="product-price">₹${(product.price || 0).toLocaleString('en-IN')}${discount}${discBadge}</div>
-          <div class="product-desc">${product.description || ''}</div>
-          ${stockHtml}
-          <div class="qty-row">
-            <span class="qty-label">Quantity:</span>
-            <div class="qty-control">
-              <button class="qty-btn" onclick="changeQty(-1)">−</button>
-              <div class="qty-display" id="qtyDisplay">1</div>
-              <button class="qty-btn" onclick="changeQty(1)">+</button>
+          <div class="feature-pills">
+            <div class="feature-pill">✅ GST Invoice</div>
+            <div class="feature-pill">🚚 Free above ₹5k</div>
+            <div class="feature-pill">📦 Bulk discounts</div>
+            <div class="feature-pill">⚡ 24 hr dispatch</div>
+          </div>
+
+          <!-- ORDER CONTROLS -->
+          <div class="order-controls">
+            <span class="qty-label">Quantity</span>
+            <div class="qty-row">
+              <div class="qty-stepper">
+                <button class="qty-btn" id="qtyMinus">−</button>
+                <input class="qty-num" id="qtyInput" type="number" value="1" min="1" max="9999" />
+                <button class="qty-btn" id="qtyPlus">+</button>
+              </div>
+              <div class="qty-total" id="qtyTotal">₹0</div>
+            </div>
+
+            <button class="btn-order" id="btnOrder">Place Order</button>
+            <a  class="wa-link" id="waLink" href="#" target="_blank">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.134.559 4.133 1.535 5.87L.057 23.996l6.334-1.476A11.928 11.928 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.036-1.393l-.361-.214-3.741.873.939-3.618-.235-.373A9.797 9.797 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+              Enquire on WhatsApp
+            </a>
+
+            <div class="trust-row">
+              <div class="trust-item">🔒 Secure checkout</div>
+              <div class="trust-item">📄 Instant confirmation</div>
+              <div class="trust-item">🏫 School-verified</div>
             </div>
           </div>
-          <div class="btn-row">
-            <button class="btn btn-cart" onclick="addToCartLocal()" ${maxStock === 0 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>🛒 Add to Cart</button>
-            <button class="btn btn-order" onclick="openOrderModal()" ${maxStock === 0 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>⚡ Order Now</button>
-          </div>
-          <p style="font-size:12px; color:#aaa; margin-top:16px;">🧾 GST invoice provided &nbsp;|&nbsp; 🚚 Delivered in 24hrs &nbsp;|&nbsp; 📞 Support: +91 98765 43210</p>
         </div>
-      </div>`;
-  }
+      </section>
 
-  window.changeQty = function(delta) {
-    const maxStock = product.stock ?? 99;
-    qty = Math.max(1, Math.min(maxStock, qty + delta));
-    document.getElementById('qtyDisplay').innerText = qty;
-  }
+      <!-- SPECS -->
+      <section class="details-section">
+        <div class="section-eyebrow">Product Details</div>
+        <h2 class="section-heading">Specifications</h2>
+        <div class="specs-grid" id="specsGrid">
+          <!-- populated by JS -->
+        </div>
+      </section>
 
-  window.addToCartLocal = function() {
-    const existing = cart.find(i => i.id === product.id);
-    if (existing) {
-      existing.qty = Math.min((product.stock ?? 99), existing.qty + qty);
-    } else {
-      const emojiMap = { Boards:'📺', Lab:'🧪', Furniture:'🪑', Stationery:'✏️' };
-      cart.push({ ...product, emoji: emojiMap[product.category] || '📦', qty });
+      <!-- RELATED -->
+      <section class="related-section" id="relatedSection" style="display:none">
+        <div class="section-eyebrow">More Products</div>
+        <h2 class="section-heading">From the same category</h2>
+        <div class="related-grid" id="relatedGrid"></div>
+      </section>
+
+    </div><!-- /pageContent -->
+  </div><!-- /page-wrap -->
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 EduSupply · Bengaluru ·
+    <a href="index.html#contact">Contact us</a>
+  </footer>
+
+  <!-- ════════════════════════════════
+       ORDER MODAL
+       ════════════════════════════════ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+      <!-- Form state -->
+      <div id="modalForm">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title" id="modalTitle">Place Your Order</h2>
+            <p class="modal-subtitle">We'll confirm within 24 hours</p>
+          </div>
+          <button class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Product summary row -->
+          <div class="modal-product-row">
+            <span class="modal-product-emoji" id="modalEmoji">📦</span>
+            <div>
+              <div class="modal-product-name" id="modalProdName">Product</div>
+              <div class="modal-product-qty" id="modalQtyLabel">Qty: 1</div>
+            </div>
+            <div class="modal-product-price" id="modalTotal">₹0</div>
+          </div>
+
+          <!-- Login note (shown if not logged in) -->
+          <div class="modal-login-note" id="modalLoginNote" style="display:none">
+            ✨ Log in to save your order history
+            <a href="login.html">Log In</a>
+          </div>
+
+          <!-- Form -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" id="fName" placeholder="Rajesh Kumar" required />
+            </div>
+            <div class="form-group">
+              <label>Phone *</label>
+              <input type="tel" id="fPhone" placeholder="9876543210" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>School Name *</label>
+            <input type="text" id="fSchool" placeholder="Delhi Public School, Bangalore" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Delivery Area</label>
+              <input type="text" id="fArea" placeholder="Indiranagar, Bengaluru" />
+            </div>
+            <div class="form-group">
+              <label>Preferred Date</label>
+              <input type="date" id="fDate" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Additional Notes</label>
+            <textarea id="fNotes" placeholder="Any specific requirements, alternate contacts, or delivery instructions…"></textarea>
+          </div>
+
+          <button class="btn-submit" id="btnSubmit">Confirm Order</button>
+        </div>
+      </div>
+
+      <!-- Success state -->
+      <div class="modal-success" id="modalSuccess">
+        <div class="success-ring">✓</div>
+        <h3>Order Confirmed!</h3>
+        <p>Your order has been received.</p>
+        <p>We'll call you within 24 hours to confirm delivery.</p>
+        <div class="order-ref" id="successRef">Order #—</div>
+        <div class="success-actions">
+          <a href="track-order.html" class="btn-track">Track Order</a>
+          <button class="btn-close-modal" id="btnSuccessClose">Continue Shopping</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       FIREBASE + LOGIC
+       ════════════════════════════════ -->
+  <script type="module">
+    import { auth, db }  from './firebase-config.js';
+    import { onAuthStateChanged }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import {
+      doc, getDoc, getDocs, addDoc, collection, query, where, orderBy, limit
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    /* ── Helpers ──────────────────────────────────────────────── */
+    const $ = id => document.getElementById(id);
+    const fmtPrice = n => '₹' + Number(n).toLocaleString('en-IN');
+
+    /* Category meta */
+    const CAT_META = {
+      'Boards':      { emoji: '📺', color: '#6a1b9a', icon: '🖼️' },
+      'Furniture':   { emoji: '🪑', color: '#1565c0', icon: '🏫' },
+      'Lab':         { emoji: '🔬', color: '#2e7d32', icon: '⚗️' },
+      'Stationery':  { emoji: '✏️', color: '#e65100', icon: '📝' },
+    };
+
+    const SPEC_FALLBACK = [
+      { icon: '📦', label: 'Availability', value: 'In Stock' },
+      { icon: '🚚', label: 'Dispatch',     value: 'Within 24 hrs' },
+      { icon: '🏷️', label: 'Billing',      value: 'GST Invoice' },
+      { icon: '📏', label: 'Min. Order',   value: '1 unit' },
+      { icon: '💼', label: 'Bulk Pricing', value: 'Available' },
+      { icon: '🔄', label: 'Returns',      value: '7-day window' },
+    ];
+
+    /* ── Parse product from URL params ───────────────────────── */
+    const params  = new URLSearchParams(location.search);
+    const prodId  = params.get('id');
+    const prodName= params.get('name');    // fallback
+    const prodCat = params.get('category');
+
+    let product   = null;
+    let unitPrice = 0;
+    let currentUser = null;
+
+    /* ── Auth ─────────────────────────────────────────────────── */
+    onAuthStateChanged(auth, user => {
+      currentUser = user;
+      $('dashLinkNav').style.display  = user ? 'inline' : 'none';
+      $('loginLinkNav').style.display = user ? 'none'   : 'inline';
+      $('modalLoginNote').style.display = user ? 'none' : 'flex';
+    });
+
+    /* ── Load product ─────────────────────────────────────────── */
+    async function loadProduct() {
+      try {
+        if (prodId) {
+          const snap = await getDoc(doc(db, 'products', prodId));
+          if (snap.exists()) product = { id: snap.id, ...snap.data() };
+        }
+
+        // Fallback: build from URL params if no Firestore doc
+        if (!product && prodName) {
+          product = {
+            id:       null,
+            name:     decodeURIComponent(prodName),
+            category: prodCat ? decodeURIComponent(prodCat) : 'General',
+            price:    params.get('price') || 0,
+            description: params.get('desc') || '',
+          };
+        }
+
+        if (!product) throw new Error('Product not found');
+        renderProduct();
+        loadRelated();
+      } catch (e) {
+        $('loadingScreen').innerHTML =
+          `<p style="color:var(--ink3)">Could not load product. <a href="index.html" style="color:var(--gold)">Go home →</a></p>`;
+      }
     }
-    saveCart();
-    showToast(`"${product.name}" added to cart 🛒`);
-  }
 
-  window.openOrderModal = function() {
-    if (!currentUser) { window.location.href = 'login.html'; return; }
-    document.getElementById('summaryName').innerText  = product.name;
-    document.getElementById('summaryQty').innerText   = qty;
-    document.getElementById('summaryTotal').innerText = '₹' + ((product.price || 0) * qty).toLocaleString('en-IN');
-    document.getElementById('orderModal').classList.add('show');
-    document.getElementById('orderForm').style.display    = 'block';
-    document.getElementById('orderLoading').style.display = 'none';
-    document.getElementById('orderSuccess').style.display = 'none';
-  }
+    /* ── Render ───────────────────────────────────────────────── */
+    function renderProduct() {
+      const p   = product;
+      const cat = p.category || 'General';
+      const meta= CAT_META[cat] || { emoji: '📦', icon: '🏫' };
+      unitPrice = parseFloat(p.price) || 0;
 
-  window.closeModal = function() {
-    document.getElementById('orderModal').classList.remove('show');
-  }
+      // Page title
+      document.title = `${p.name} — EduSupply`;
 
-  window.handleBackdropClick = function(e) {
-    if (e.target === document.getElementById('orderModal')) closeModal();
-  }
+      // Breadcrumb
+      $('breadCat').textContent  = cat;
+      $('breadName').textContent = p.name;
 
-  window.confirmOrder = async function() {
-    const name    = document.getElementById('contactName').value.trim();
-    const phone   = document.getElementById('contactPhone').value.trim();
-    const school  = document.getElementById('schoolName').value.trim();
-    const address = document.getElementById('deliveryAddress').value.trim();
-    const date    = document.getElementById('deliveryDate').value;
-    if (!name || !phone || !school || !address) {
-      alert('Please fill in all required fields.');
-      return;
+      // Hero
+      $('heroEmoji').textContent   = p.emoji || meta.emoji;
+      $('catPill').textContent     = `${meta.icon} ${cat}`;
+      $('productTitle').textContent= p.name;
+      $('productTagline').textContent = p.description ||
+        `Premium ${cat.toLowerCase()} supply for schools across Bengaluru. Bulk pricing and GST invoices available.`;
+
+      $('priceMain').textContent = unitPrice ? fmtPrice(unitPrice) : 'Contact us';
+      $('priceUnit').textContent = `per ${p.unit || 'unit'}`;
+
+      // Qty total
+      updateQtyDisplay();
+
+      // WhatsApp link
+      const waMsg = encodeURIComponent(
+        `Hi, I'm interested in ordering ${p.name} (${cat}) from EduSupply. Please share more details.`
+      );
+      $('waLink').href = `https://wa.me/918197739697?text=${waMsg}`;
+
+      // Specs grid
+      const specs = p.specs || SPEC_FALLBACK;
+      $('specsGrid').innerHTML = specs.map(s => `
+        <div class="spec-card">
+          <div class="spec-icon">${s.icon}</div>
+          <div class="spec-label">${s.label}</div>
+          <div class="spec-value">${s.value}</div>
+        </div>
+      `).join('');
+
+      // Show page
+      $('loadingScreen').style.display  = 'none';
+      $('pageContent').style.display    = 'block';
     }
 
-    document.getElementById('orderForm').style.display    = 'none';
-    document.getElementById('orderLoading').style.display = 'block';
+    /* ── Qty logic ────────────────────────────────────────────── */
+    function getQty() { return Math.max(1, parseInt($('qtyInput').value) || 1); }
 
-    try {
-      const orderRef = await addDoc(collection(db, 'orders'), {
-        userId:          currentUser.uid,
-        userEmail:       currentUser.email,
-        // Fixed: category and schoolName now saved so admin panel shows them correctly
-        category:        product.category || 'General',
-        schoolName:      school,
-        items:           [{ productId: product.id, name: product.name, price: product.price, qty }],
-        total:           product.price * qty,
-        contactName:     name,
-        contactPhone:    phone,
-        deliveryAddress: address,
-        deliveryDate:    date,
-        status:          'Pending',
-        createdAt:       new Date().toISOString()
-      });
-      document.getElementById('orderLoading').style.display = 'none';
-      document.getElementById('orderSuccess').style.display = 'block';
-      document.getElementById('orderIdDisplay').innerText =
-        `Order ID: #EDU-${orderRef.id.substring(0,6).toUpperCase()}`;
-    } catch(e) {
-      alert('Error placing order: ' + e.message);
-      document.getElementById('orderForm').style.display    = 'block';
-      document.getElementById('orderLoading').style.display = 'none';
+    function updateQtyDisplay() {
+      const qty   = getQty();
+      const total = unitPrice * qty;
+      $('qtyTotal').textContent = unitPrice ? fmtPrice(total) : '—';
     }
-  }
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.innerText = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+    $('qtyMinus').addEventListener('click', () => {
+      $('qtyInput').value = Math.max(1, getQty() - 1);
+      updateQtyDisplay();
+    });
+    $('qtyPlus').addEventListener('click', () => {
+      $('qtyInput').value = getQty() + 1;
+      updateQtyDisplay();
+    });
+    $('qtyInput').addEventListener('input', updateQtyDisplay);
 
-  loadProduct();
-</script>
+    /* ── Open modal ───────────────────────────────────────────── */
+    $('btnOrder').addEventListener('click', openModal);
+
+    function openModal() {
+      if (!product) return;
+      const qty   = getQty();
+      const total = unitPrice * qty;
+      const meta  = CAT_META[product.category] || { emoji: '📦' };
+
+      $('modalEmoji').textContent   = product.emoji || meta.emoji;
+      $('modalProdName').textContent= product.name;
+      $('modalQtyLabel').textContent= `Qty: ${qty}`;
+      $('modalTotal').textContent   = unitPrice ? fmtPrice(total) : '—';
+
+      $('modalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => $('fName').focus(), 350);
+    }
+
+    function closeModal() {
+      $('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    $('modalCloseBtn').addEventListener('click', closeModal);
+    $('modalOverlay').addEventListener('click', e => {
+      if (e.target === $('modalOverlay')) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+    $('btnSuccessClose').addEventListener('click', closeModal);
+
+    /* ── Submit order ─────────────────────────────────────────── */
+    $('btnSubmit').addEventListener('click', async () => {
+      const name   = $('fName').value.trim();
+      const phone  = $('fPhone').value.trim();
+      const school = $('fSchool').value.trim();
+
+      if (!name || !phone || !school) {
+        [$('fName'), $('fPhone'), $('fSchool')].forEach(el => {
+          if (!el.value.trim()) el.style.borderColor = '#c62828';
+        });
+        return;
+      }
+
+      const btn = $('btnSubmit');
+      btn.disabled    = true;
+      btn.textContent = 'Placing order…';
+
+      try {
+        const qty   = getQty();
+        const total = unitPrice * qty;
+
+        const orderData = {
+          productId:   product.id || null,
+          productName: product.name,
+          category:    product.category,
+          qty,
+          unitPrice,
+          totalPrice:  total,
+          customerName: name,
+          phone,
+          schoolName:  school,
+          area:    $('fArea').value.trim()  || '',
+          date:    $('fDate').value         || '',
+          notes:   $('fNotes').value.trim() || '',
+          userId:  currentUser ? currentUser.uid   : null,
+          userEmail: currentUser ? currentUser.email : null,
+          status:  'Pending',
+          createdAt: new Date().toISOString(),
+        };
+
+        const ref = await addDoc(collection(db, 'orders'), orderData);
+        const shortId = ref.id.slice(-6).toUpperCase();
+
+        $('successRef').textContent   = `Order #${shortId}`;
+        $('modalForm').style.display  = 'none';
+        $('modalSuccess').style.display = 'block';
+
+      } catch (e) {
+        btn.disabled    = false;
+        btn.textContent = 'Confirm Order';
+        alert('Error placing order. Please try again or contact us on WhatsApp.');
+      }
+    });
+
+    /* Remove red border on re-focus */
+    ['fName','fPhone','fSchool'].forEach(id => {
+      $(id).addEventListener('input', () => $(id).style.borderColor = '');
+    });
+
+    /* ── Load related products ────────────────────────────────── */
+    async function loadRelated() {
+      try {
+        if (!product?.category) return;
+        const q    = query(
+          collection(db, 'products'),
+          where('category', '==', product.category),
+          limit(5)
+        );
+        const snap = await getDocs(q);
+        const related = [];
+        snap.forEach(d => {
+          if (d.id !== product.id) related.push({ id: d.id, ...d.data() });
+        });
+
+        if (related.length < 2) return;
+
+        const meta = CAT_META[product.category] || { emoji: '📦' };
+        $('relatedGrid').innerHTML = related.slice(0, 4).map(p => `
+          <a class="related-card" href="product.html?id=${p.id}">
+            <span class="related-card-emoji">${p.emoji || meta.emoji}</span>
+            <div class="related-card-name">${p.name}</div>
+            <div class="related-card-cat">${p.category} · ${p.price ? fmtPrice(p.price) : 'Contact'}</div>
+          </a>
+        `).join('');
+
+        $('relatedSection').style.display = 'block';
+      } catch (e) { /* silently skip */ }
+    }
+
+    /* ── Nav scroll shadow ────────────────────────────────────── */
+    window.addEventListener('scroll', () => {
+      $('navbar').classList.toggle('scrolled', scrollY > 20);
+    }, { passive: true });
+
+    /* ── Boot ─────────────────────────────────────────────────── */
+    loadProduct();
+  </script>
+
 </body>
 </html>
