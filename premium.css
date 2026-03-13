@@ -1,5 +1,5 @@
 /* ================================================================
-   EduSupply — premium.css  v5  "Saffron + Deep Ink"
+   EduSupply — premium.css  v6  "Deep Plum + Vivid Yellow"
    Link AFTER style.css. All selectors verified against source.
    wow.js handles: announcement bar, cursor glow, counters,
    scroll progress, magnetic buttons, mobile nav panel.
@@ -9,22 +9,22 @@
 
 /* ── Tokens ─────────────────────────────────────────────────── */
 :root {
-  --p-bg:      #FBF8F2;
-  --p-surface: #FDFCF8;
-  --p-ink:     #1A150C;
-  --p-ink2:    #4A3E2E;
-  --p-ink3:    #8A7A64;
-  --p-gold:    #E07B20;
-  --p-gold-lt: #FDE8C8;
-  --p-gold-dk: #B85A10;
-  --p-line:    #EDD8B8;
-  --p-navy:    #2E5C8A;
+  --p-bg:      #FFFCE8;
+  --p-surface: #FFF9F0;
+  --p-ink:     #0E0818;
+  --p-ink2:    #2C1C50;
+  --p-ink3:    #685890;
+  --p-gold:    #F5D020;
+  --p-gold-lt: #FFF8C0;
+  --p-gold-dk: #B89800;
+  --p-line:    #E8E0A0;
+  --p-navy:    #1A1030;
   --p-ease:    cubic-bezier(.4,0,.2,1);
   --p-spring:  cubic-bezier(.34,1.56,.64,1);
   --p-t:       0.34s;
-  --p-sh-sm:   0 2px 14px rgba(26,21,12,.06);
-  --p-sh-md:   0 8px 40px rgba(26,21,12,.11);
-  --p-sh-lg:   0 20px 72px rgba(26,21,12,.15);
+  --p-sh-sm:   0 2px 14px rgba(14,8,24,.06);
+  --p-sh-md:   0 8px 40px rgba(14,8,24,.11);
+  --p-sh-lg:   0 20px 72px rgba(14,8,24,.15);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -97,7 +97,7 @@ h1, h2, h3, h4 {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(184,146,90,.12) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(245,208,32,.12) 50%, transparent 100%);
   animation: p-shimmer-bar 4s ease infinite;
 }
 @keyframes p-shimmer-bar {
@@ -132,7 +132,7 @@ h1, h2, h3, h4 {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(184,146,90,.08) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(245,208,32,.08) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
   transform: translate(-50%, -50%);
@@ -204,11 +204,11 @@ h1, h2, h3, h4 {
 #p-mobile-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(26,21,12,0);
+  background: rgba(14,8,24,0);
   transition: background .35s var(--p-ease);
 }
 #p-mobile-nav.open #p-mobile-overlay {
-  background: rgba(26,21,12,.55);
+  background: rgba(14,8,24,.55);
   backdrop-filter: blur(4px);
 }
 
@@ -310,12 +310,12 @@ h1, h2, h3, h4 {
 }
 .hero-bg-grid {
   background-image:
-    linear-gradient(rgba(26,21,12,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26,21,12,.03) 1px, transparent 1px) !important;
+    linear-gradient(rgba(14,8,24,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,8,24,.03) 1px, transparent 1px) !important;
   background-size: 52px 52px !important;
 }
 .hero::before {
-  background: radial-gradient(circle, rgba(184,146,90,.16) 0%, transparent 65%) !important;
+  background: radial-gradient(circle, rgba(245,208,32,.16) 0%, transparent 65%) !important;
 }
 
 /* Word-reveal spans injected by wow.js */
@@ -747,7 +747,7 @@ a.edu-atc-btn:hover {
   font-family: 'Playfair Display', serif !important;
   font-size: 4.5rem !important;
   font-weight: 900 !important;
-  color: rgba(184,146,90,.22) !important;
+  color: rgba(245,208,32,.22) !important;
   line-height: 1 !important;
   display: block !important;
   margin-bottom: .6rem !important;
@@ -843,7 +843,7 @@ a.edu-atc-btn:hover {
   border-color: var(--p-gold) !important;
   background: var(--p-surface) !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(184,146,90,.12) !important;
+  box-shadow: 0 0 0 3px rgba(245,208,32,.12) !important;
 }
 .contact-form input::placeholder,
 .contact-form textarea::placeholder { color: var(--p-ink3) !important; }
