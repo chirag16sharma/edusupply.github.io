@@ -1,134 +1,619 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — EduSupply</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,600&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f5f7fa, #e8f0fe); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .box { background: white; padding: 44px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); width: 100%; max-width: 440px; }
-    .logo { text-align: center; margin-bottom: 8px; font-size: 24px; font-weight: 800; color: #1a73e8; }
-    .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 32px; }
-    h2 { text-align: center; color: #222; margin-bottom: 24px; font-size: 20px; font-weight: 700; }
-    label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
-    input { width: 100%; padding: 12px 16px; margin-bottom: 18px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 15px; transition: border 0.2s; }
-    input:focus { outline: none; border-color: #1a73e8; }
-    .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-bottom: 12px; font-weight: 700; transition: opacity 0.2s; }
-    .btn:hover { opacity: 0.9; }
-    .btn-login { background: #1a73e8; color: white; }
-    .btn-signup { background: #34a853; color: white; }
-    .msg { font-size: 13px; margin: -8px 0 14px; text-align: center; min-height: 18px; padding: 8px; border-radius: 8px; display: none; }
-    .msg.error { background: #fdecea; color: #c62828; display: block; }
-    .msg.success { background: #e6f4ea; color: #2e7d32; display: block; }
-    .back { display: block; text-align: center; margin-top: 20px; color: #1a73e8; font-size: 14px; text-decoration: none; }
-    .back:hover { text-decoration: underline; }
-    .toggle { text-align: center; font-size: 14px; margin-top: 12px; color: #666; }
-    .toggle span { color: #1a73e8; cursor: pointer; font-weight: 600; }
-    .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+    :root {
+      --bg:      #F6F5F1;
+      --surface: #FDFCFA;
+      --ink:     #0E0818;
+      --ink2:    #2C1C50;
+      --ink3:    #685890;
+      --yellow:  #F5D020;
+      --ylt:     #FFF8C0;
+      --ydk:     #B89800;
+      --line:    #E2DDD0;
+      --navy:    #1A1030;
+      --ease:    cubic-bezier(.4,0,.2,1);
+      --spring:  cubic-bezier(.34,1.56,.64,1);
+      --t:       .3s;
+      --sh:      0 8px 40px rgba(14,8,24,.13);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── LEFT PANEL ─────────────────────────────────────────── */
+    .left {
+      flex: 0 0 46%;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 52px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dot grid */
+    .left::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,208,32,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,208,32,.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    /* Radial glow */
+    .left::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -20%;
+      width: 60%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, rgba(245,208,32,.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .left > * { position: relative; z-index: 1; }
+
+    .left-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -.02em;
+    }
+    .left-logo span { color: var(--yellow); }
+
+    .left-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    .left-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+
+    .left-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
+    .left-heading em {
+      color: var(--yellow);
+      font-style: italic;
+    }
+
+    .left-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(255,255,255,.55);
+      line-height: 1.75;
+      max-width: 320px;
+      margin-bottom: 40px;
+    }
+
+    .left-perks { display: flex; flex-direction: column; gap: 14px; }
+    .perk {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,.7);
+    }
+    .perk-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(245,208,32,.15);
+      border: 1px solid rgba(245,208,32,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .left-footer {
+      font-size: 11px;
+      color: rgba(255,255,255,.25);
+      letter-spacing: .04em;
+    }
+
+    /* ── RIGHT PANEL ────────────────────────────────────────── */
+    .right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      background: var(--bg);
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp .6s var(--ease) both;
+    }
+
+    .form-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -.03em;
+      margin-bottom: 6px;
+    }
+    .form-sub {
+      font-size: 13px;
+      color: var(--ink3);
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 28px;
+      gap: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--t), color var(--t);
+      background: transparent;
+      color: var(--ink3);
+    }
+    .tab-btn.active {
+      background: var(--ink);
+      color: var(--yellow);
+    }
+
+    /* Form panels */
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+    .form-group input {
+      padding: 13px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--yellow);
+      box-shadow: 0 0 0 3px rgba(245,208,32,.18);
+    }
+    .form-group input::placeholder { color: var(--ink3); }
+
+    .forgot {
+      text-align: right;
+      margin-top: -8px;
+      margin-bottom: 16px;
+    }
+    .forgot a {
+      font-size: 11px;
+      color: var(--ink3);
+      text-decoration: none;
+      transition: color var(--t);
+    }
+    .forgot a:hover { color: var(--ydk); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--ink);
+      color: var(--yellow);
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background var(--t), transform var(--t), box-shadow var(--t);
+      margin-top: 4px;
+    }
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform .5s;
+    }
+    .btn-submit:hover::after { transform: translateX(100%); }
+    .btn-submit:hover {
+      background: var(--ink2);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(14,8,24,.25);
+    }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px 0;
+      color: var(--ink3);
+      font-size: 11px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 13px;
+      background: var(--surface);
+      border: 1.5px solid var(--line);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .btn-google:hover {
+      border-color: var(--ink2);
+      box-shadow: var(--sh);
+    }
+    .google-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Error / success messages */
+    .msg {
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .msg.error   { background: #fff0f0; border: 1px solid #fcc; color: #c00; }
+    .msg.success { background: var(--ylt); border: 1px solid var(--line); color: var(--ydk); }
+    .msg.show    { display: block; }
+
+    /* Back to site link */
+    .back-link {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--ink3);
+    }
+    .back-link a {
+      color: var(--ink2);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color var(--t);
+    }
+    .back-link a:hover { color: var(--ydk); }
+
+    /* ── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      .left {
+        flex: none;
+        padding: 36px 28px 40px;
+        min-height: auto;
+      }
+      .left-heading { font-size: 2rem; }
+      .left-perks { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+      .left-body { margin: 28px 0; }
+      .right { padding: 32px 20px 48px; }
+    }
+    @media (max-width: 480px) {
+      .left { padding: 28px 20px 32px; }
+      .left-heading { font-size: 1.7rem; }
+    }
   </style>
 </head>
 <body>
-<div class="box">
-  <div class="logo">🏫 EduSupply</div>
-  <div class="subtitle">India's trusted school appliances platform</div>
 
-  <!-- LOGIN FORM -->
-  <div id="loginForm">
-    <h2>Welcome Back</h2>
-    <label>Email</label>
-    <input type="email" id="loginEmail" placeholder="school@example.com" />
-    <label>Password</label>
-    <input type="password" id="loginPassword" placeholder="Enter your password" />
-    <div class="msg" id="loginMsg"></div>
-    <button class="btn btn-login" onclick="login()">🔐 Login</button>
-    <div class="toggle">Don't have an account? <span onclick="showSignup()">Sign Up Free</span></div>
+  <!-- LEFT PANEL -->
+  <div class="left">
+    <a href="index.html" class="left-logo">Edu<span>Supply</span></a>
+
+    <div class="left-body">
+      <div class="left-eyebrow">Welcome back</div>
+      <h1 class="left-heading">
+        Your School's<br />
+        <em>Supply Partner,</em><br />
+        Bengaluru
+      </h1>
+      <p class="left-sub">
+        Log in to track orders, manage deliveries, and reorder your school essentials in seconds.
+      </p>
+      <div class="left-perks">
+        <div class="perk">
+          <div class="perk-dot">📦</div>
+          Track all orders in real time
+        </div>
+        <div class="perk">
+          <div class="perk-dot">🧾</div>
+          GST invoices on every order
+        </div>
+        <div class="perk">
+          <div class="perk-dot">⚡</div>
+          24 hr dispatch guarantee
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">© 2025 EduSupply · Bengaluru</div>
   </div>
 
-  <!-- SIGNUP FORM -->
-  <div id="signupForm" style="display:none;">
-    <h2>Create School Account</h2>
-    <label>School Name</label>
-    <input type="text" id="signupName" placeholder="e.g. Sunrise Public School" />
-    <label>Email</label>
-    <input type="email" id="signupEmail" placeholder="school@example.com" />
-    <label>Password</label>
-    <input type="password" id="signupPassword" placeholder="Minimum 6 characters" />
-    <div class="msg" id="signupMsg"></div>
-    <button class="btn btn-signup" onclick="signup()">✅ Create Account</button>
-    <div class="toggle">Already have an account? <span onclick="showLogin()">Login</span></div>
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="form-card">
+      <h2 class="form-heading">Sign In</h2>
+      <p class="form-sub">Access your school dashboard</p>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" id="tabLogin"    onclick="switchTab('login')">Login</button>
+        <button class="tab-btn"        id="tabRegister" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Messages -->
+      <div class="msg" id="msgBox"></div>
+
+      <!-- LOGIN FORM -->
+      <div class="form-panel active" id="panelLogin">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="principal@school.edu" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" />
+        </div>
+        <div class="forgot"><a href="#" id="forgotLink">Forgot password?</a></div>
+        <button class="btn-submit" id="btnLogin">Sign In</button>
+
+        <div class="divider">or</div>
+        <button class="btn-google" id="btnGoogle">
+          <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="form-panel" id="panelRegister">
+        <div class="form-group">
+          <label>School Name</label>
+          <input type="text" id="regSchool" placeholder="Delhi Public School, Indiranagar" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="principal@school.edu" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" placeholder="Minimum 6 characters" />
+        </div>
+        <button class="btn-submit" id="btnRegister">Create Account</button>
+
+        <div class="divider">or</div>
+        <button class="btn-google" id="btnGoogleReg">
+          <svg class="google-icon" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign up with Google
+        </button>
+      </div>
+
+      <div class="back-link">
+        <a href="index.html">← Back to EduSupply</a>
+      </div>
+    </div>
   </div>
 
-  <hr class="divider"/>
-  <a href="index.html" class="back">← Back to EduSupply</a>
-</div>
+  <script type="module">
+    import { auth, db } from './firebase-config.js';
+    import {
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signInWithPopup,
+      GoogleAuthProvider,
+      sendPasswordResetEmail,
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { doc, setDoc, getDoc }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    const $ = id => document.getElementById(id);
+    const provider = new GoogleAuthProvider();
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
-    authDomain: "edusupply-b92ad.firebaseapp.com",
-    projectId: "edusupply-b92ad",
-    storageBucket: "edusupply-b92ad.firebasestorage.app",
-    messagingSenderId: "993801689755",
-    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  window.login = async function() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const msg = document.getElementById('loginMsg');
-    msg.className = 'msg';
-    if (!email || !password) { msg.className = 'msg error'; msg.innerText = 'Please fill in all fields.'; return; }
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = 'dashboard.html';
-    } catch(err) {
-      msg.className = 'msg error';
-      if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg.innerText = '❌ Incorrect email or password.';
-      else if (err.code === 'auth/user-not-found') msg.innerText = '❌ No account found with this email.';
-      else msg.innerText = '❌ ' + err.message;
+    function showMsg(text, type = 'error') {
+      const box = $('msgBox');
+      box.textContent = text;
+      box.className   = `msg ${type} show`;
     }
-  }
-
-  window.signup = async function() {
-    const name = document.getElementById('signupName').value.trim();
-    const email = document.getElementById('signupEmail').value.trim();
-    const password = document.getElementById('signupPassword').value;
-    const msg = document.getElementById('signupMsg');
-    msg.className = 'msg';
-    if (!name || !email || !password) { msg.className = 'msg error'; msg.innerText = 'Please fill in all fields.'; return; }
-    if (password.length < 6) { msg.className = 'msg error'; msg.innerText = 'Password must be at least 6 characters.'; return; }
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await setDoc(doc(db, 'users', cred.user.uid), {
-        schoolName: name, email: email, createdAt: new Date().toISOString(), role: 'school'
-      });
-      msg.className = 'msg success';
-      msg.innerText = '✅ Account created! Redirecting...';
-      setTimeout(() => window.location.href = 'dashboard.html', 1500);
-    } catch(err) {
-      msg.className = 'msg error';
-      if (err.code === 'auth/email-already-in-use') msg.innerText = '❌ This email is already registered. Try logging in.';
-      else msg.innerText = '❌ ' + err.message;
+    function clearMsg() {
+      $('msgBox').className = 'msg';
     }
-  }
 
-  window.showSignup = function() {
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('signupForm').style.display = 'block';
-  }
-  window.showLogin = function() {
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('loginForm').style.display = 'block';
-  }
+    // Tab switching
+    window.switchTab = (tab) => {
+      clearMsg();
+      $('tabLogin').classList.toggle('active',    tab === 'login');
+      $('tabRegister').classList.toggle('active', tab === 'register');
+      $('panelLogin').classList.toggle('active',    tab === 'login');
+      $('panelRegister').classList.toggle('active', tab === 'register');
+    };
+
+    // Email login
+    $('btnLogin').addEventListener('click', async () => {
+      const email    = $('loginEmail').value.trim();
+      const password = $('loginPassword').value;
+      if (!email || !password) { showMsg('Please fill in both fields.'); return; }
+      $('btnLogin').disabled    = true;
+      $('btnLogin').textContent = 'Signing in…';
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = 'dashboard.html';
+      } catch (e) {
+        showMsg(e.code === 'auth/invalid-credential'
+          ? 'Incorrect email or password.'
+          : 'Login failed. Please try again.');
+        $('btnLogin').disabled    = false;
+        $('btnLogin').textContent = 'Sign In';
+      }
+    });
+
+    // Email register
+    $('btnRegister').addEventListener('click', async () => {
+      const school   = $('regSchool').value.trim();
+      const email    = $('regEmail').value.trim();
+      const password = $('regPassword').value;
+      if (!school || !email || !password) { showMsg('All fields are required.'); return; }
+      if (password.length < 6) { showMsg('Password must be at least 6 characters.'); return; }
+      $('btnRegister').disabled    = true;
+      $('btnRegister').textContent = 'Creating account…';
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          schoolName: school,
+          email,
+          createdAt: new Date().toISOString(),
+        });
+        window.location.href = 'dashboard.html';
+      } catch (e) {
+        showMsg(e.code === 'auth/email-already-in-use'
+          ? 'An account with this email already exists.'
+          : 'Registration failed. Please try again.');
+        $('btnRegister').disabled    = false;
+        $('btnRegister').textContent = 'Create Account';
+      }
+    });
+
+    // Google sign-in (both panels)
+    async function googleSignIn() {
+      try {
+        const cred = await signInWithPopup(auth, provider);
+        const ref  = doc(db, 'users', cred.user.uid);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          await setDoc(ref, {
+            schoolName: cred.user.displayName || cred.user.email,
+            email:      cred.user.email,
+            createdAt:  new Date().toISOString(),
+          });
+        }
+        window.location.href = 'dashboard.html';
+      } catch (e) {
+        if (e.code !== 'auth/popup-closed-by-user') {
+          showMsg('Google sign-in failed. Please try again.');
+        }
+      }
+    }
+    $('btnGoogle').addEventListener('click', googleSignIn);
+    $('btnGoogleReg').addEventListener('click', googleSignIn);
+
+    // Forgot password
+    $('forgotLink').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = $('loginEmail').value.trim();
+      if (!email) { showMsg('Enter your email above first.'); return; }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMsg('Reset email sent! Check your inbox.', 'success');
+      } catch {
+        showMsg('Could not send reset email.');
+      }
+    });
+
+    // Enter key support
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if ($('panelLogin').classList.contains('active'))    $('btnLogin').click();
+      else $('btnRegister').click();
+    });
+  </script>
+</body>
+</html>
 </script>
 </body>
 </html>
