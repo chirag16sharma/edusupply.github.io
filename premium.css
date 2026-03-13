@@ -640,10 +640,18 @@ h1, h2, h3, h4 {
   font-size: 11px !important;
   font-weight: 600 !important;
   letter-spacing: .06em !important;
-  border: none !important;
+  border: 1.5px solid transparent !important;
   cursor: pointer !important;
   text-decoration: none !important;
   text-align: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 11px 16px !important;
+  height: 42px !important;
+  flex: 1 !important;
+  white-space: nowrap !important;
   position: relative !important;
   overflow: hidden !important;
   transition: background var(--p-t), transform var(--p-t) !important;
@@ -662,6 +670,16 @@ h1, h2, h3, h4 {
   transform: translateY(-1px) !important;
   color: #fff !important;
 }
+/* Button row — force equal-width flex children */
+.edu-card-actions,
+.edu-card .edu-btn-row,
+.edu-card > div:last-child:has(.edu-atc-btn) {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+}
+
+/* View Details — same dimensions, yellow tint */
 a.edu-atc-btn {
   background: var(--p-gold-lt) !important;
   color: var(--p-gold-dk) !important;
