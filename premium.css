@@ -1,643 +1,774 @@
 /* ============================================================
-   EduSupply — premium.css
-   Drop this AFTER your existing style.css link in index.html.
-   It overrides colors, typography, cards, and animations only.
+   EduSupply — premium.css  v2
+   Link AFTER style.css in index.html
    ============================================================ */
 
-/* ── Google Fonts ─────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-/* ── Design Tokens ────────────────────────────────────────── */
+/* ─── Tokens ──────────────────────────────────────────────── */
 :root {
-  --bg:          #F9F8F5;
-  --surface:     #FFFFFF;
-  --ink:         #1A1A18;
-  --ink-2:       #5C5C58;
-  --ink-3:       #9A9A94;
-  --gold:        #C8A96E;
-  --gold-light:  #F5EDD6;
-  --gold-dark:   #A0843E;
-  --border:      #E8E3D8;
-  --shadow-sm:   0 2px 8px rgba(26,26,24,0.06);
-  --shadow-md:   0 8px 32px rgba(26,26,24,0.10);
-  --shadow-lg:   0 20px 60px rgba(26,26,24,0.13);
-  --radius:      14px;
-  --radius-sm:   8px;
-  --transition:  0.35s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* override any existing brand color vars */
-  --cream:       var(--bg);
-  --primary:     var(--ink);
+  --bg:         #F7F5F0;
+  --bg-2:       #EFECE4;
+  --surface:    #FFFFFF;
+  --ink:        #1C1B18;
+  --ink-2:      #5A5850;
+  --ink-3:      #9C9A92;
+  --gold:       #B8965A;
+  --gold-lt:    #F2E8D5;
+  --gold-dk:    #8C6E38;
+  --line:       #E2DDD4;
+  --r:          16px;
+  --r-sm:       10px;
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --t:          0.38s;
+  --sh-sm:      0 2px 12px rgba(28,27,24,.06);
+  --sh-md:      0 8px 40px rgba(28,27,24,.10);
+  --sh-lg:      0 24px 72px rgba(28,27,24,.14);
 }
 
-/* ── Base ─────────────────────────────────────────────────── */
+/* ─── Reset / Base ────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg);
   color: var(--ink);
-  font-size: 16px;
-  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Playfair Display', Georgia, serif;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: -.02em;
+  line-height: 1.15;
   color: var(--ink);
 }
 
 p { color: var(--ink-2); }
+a { text-decoration: none; }
 
-/* ── Navbar ───────────────────────────────────────────────── */
+/* ─── Navbar ──────────────────────────────────────────────── */
 #navbar, nav {
-  background: rgba(249, 248, 245, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: none;
-  transition: background var(--transition), box-shadow var(--transition);
+  background: rgba(247,245,240,.90) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid var(--line) !important;
+  box-shadow: none !important;
+  transition: background var(--t) var(--ease), box-shadow var(--t) var(--ease) !important;
 }
 
 #navbar.scrolled {
-  background: rgba(249, 248, 245, 0.97);
-  box-shadow: var(--shadow-sm);
+  background: rgba(247,245,240,.98) !important;
+  box-shadow: var(--sh-sm) !important;
 }
 
-.nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 700;
+.nav-logo, .logo {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
   color: var(--ink) !important;
-  letter-spacing: -0.03em;
+  letter-spacing: -.03em !important;
 }
 
 .nav-links a, #navLinks a {
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink-2);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: color var(--transition);
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: .05em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-2) !important;
+  transition: color var(--t) !important;
 }
 
-.nav-links a:hover, #navLinks a:hover { color: var(--ink); }
+.nav-links a:hover, #navLinks a:hover { color: var(--ink) !important; }
 
-.nav-login, .btn-login, a.btn-login {
+/* Login button */
+a[href*="login"], .btn-login, .nav-login {
   background: var(--ink) !important;
   color: #fff !important;
   border-radius: 100px !important;
-  padding: 8px 22px !important;
-  font-size: 13px !important;
+  padding: 9px 24px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.04em !important;
-  transition: background var(--transition), transform var(--transition) !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
+  transition: background var(--t), transform var(--t) !important;
   border: none !important;
 }
 
-.nav-login:hover, .btn-login:hover {
-  background: var(--gold-dark) !important;
+a[href*="login"]:hover, .btn-login:hover {
+  background: var(--gold-dk) !important;
   transform: translateY(-1px) !important;
 }
 
-/* ── Hero ─────────────────────────────────────────────────── */
-#home, .hero {
-  background: var(--bg);
+/* ─── Announcement Bar ────────────────────────────────────── */
+.announcement-bar, .promo-bar {
+  background: var(--ink) !important;
+  color: rgba(255,255,255,.75) !important;
+  font-size: 12px !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* ─── Hero ────────────────────────────────────────────────── */
+#home, .hero-section {
+  background: var(--bg) !important;
+  padding: 80px 0 60px !important;
   position: relative;
   overflow: hidden;
 }
 
-/* Subtle grain overlay for premium texture */
-#home::before, .hero::before {
+/* Decorative circle */
+#home::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
+  right: -120px; top: -120px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-lt) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.4;
 }
 
-.hero-title, .hero h1, #home h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.6rem, 5vw, 4rem);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  color: var(--ink);
+.hero-content, #home .container { position: relative; z-index: 1; }
+
+#home h1, .hero-title {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: clamp(3rem, 5.5vw, 5rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -.03em !important;
+  color: var(--ink) !important;
 }
 
-.hero-title em, .hero h1 em, #home h1 em,
-.hero-title span.highlight {
-  font-style: italic;
-  color: var(--gold-dark);
+#home h1 em, .hero-title em, .hero-title span {
+  font-style: italic !important;
+  color: var(--gold) !important;
 }
 
-.hero-sub, .hero p, #home > .container > p {
-  font-size: 1.05rem;
-  color: var(--ink-2);
-  font-weight: 300;
-  max-width: 480px;
-  line-height: 1.75;
+.hero-sub, #home > .container > p, .hero-desc {
+  font-size: 1.05rem !important;
+  color: var(--ink-2) !important;
+  font-weight: 300 !important;
+  line-height: 1.8 !important;
+  max-width: 440px !important;
+  margin-top: 1.2rem !important;
 }
 
-/* ── Buttons ──────────────────────────────────────────────── */
-.btn-primary, .btn, button.btn,
-.cta-btn, a.cta-btn {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border-radius: 100px;
-  padding: 13px 32px;
-  transition: all var(--transition);
-  cursor: pointer;
-  border: none;
-  display: inline-block;
-  text-decoration: none;
+/* Stat numbers */
+.stat-num, .hero-stat-num {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  line-height: 1 !important;
 }
 
-.btn-primary, .cta-btn:first-of-type {
-  background: var(--ink);
-  color: #fff;
+.stat-label, .hero-stat-label {
+  font-size: 11px !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-3) !important;
+  font-weight: 500 !important;
 }
 
-.btn-primary:hover, .cta-btn:first-of-type:hover {
-  background: var(--gold-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(200,169,110,0.35);
+/* ─── Buttons ─────────────────────────────────────────────── */
+.btn-primary, .cta-btn, button.btn-primary {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  border-radius: 100px !important;
+  padding: 14px 36px !important;
+  cursor: pointer !important;
+  transition: all var(--t) var(--ease) !important;
+  border: none !important;
+  display: inline-block !important;
 }
 
-.btn-secondary, .cta-btn:last-of-type {
-  background: transparent;
-  color: var(--ink);
-  border: 1.5px solid var(--border) !important;
+.btn-primary {
+  background: var(--ink) !important;
+  color: #fff !important;
 }
 
-.btn-secondary:hover, .cta-btn:last-of-type:hover {
+.btn-primary:hover {
+  background: var(--gold-dk) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(140,110,56,.3) !important;
+}
+
+.btn-secondary {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: 1.5px solid var(--line) !important;
+  border-radius: 100px !important;
+  padding: 13px 36px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  transition: all var(--t) !important;
+}
+
+.btn-secondary:hover {
   border-color: var(--ink) !important;
-  transform: translateY(-2px);
+  transform: translateY(-2px) !important;
 }
 
-/* ── Section Headers ──────────────────────────────────────── */
-.section-header, .section-title {
-  text-align: center;
-  margin-bottom: 3rem;
+/* ─── Section Labels & Headers ────────────────────────────── */
+.section-label, .section-tag {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: .2em !important;
+  text-transform: uppercase !important;
+  color: var(--gold) !important;
+  display: block !important;
+  margin-bottom: 12px !important;
 }
 
-.section-label, .section-header span:first-child {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold-dark);
-  display: block;
-  margin-bottom: 10px;
+.section-header, .section-title { text-align: center; margin-bottom: 3.5rem; }
+
+.section-header h2, .section-title h2, section h2 {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: clamp(2rem, 3.5vw, 3rem) !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  margin: 0 !important;
 }
 
-.section-header h2, .section-title h2 {
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0;
-}
-
-.section-header p, .section-title p {
-  font-size: 1rem;
-  color: var(--ink-2);
-  margin-top: 12px;
-  font-weight: 300;
-}
-
-/* ── Category Cards ───────────────────────────────────────── */
-.cat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem 1.5rem;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-}
-
-.cat-card::before {
+/* Gold underline on section headings */
+.section-header h2::after, section h2::after {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--gold-light) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity var(--transition);
-  z-index: 0;
+  display: block;
+  width: 36px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-dk));
+  margin: 14px auto 0;
+  border-radius: 2px;
+}
+
+/* ─── Category Cards ──────────────────────────────────────── */
+.categories-grid, .cat-grid {
+  gap: 20px !important;
+}
+
+.cat-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r) !important;
+  padding: 2.2rem 1.8rem !important;
+  cursor: pointer !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: transform var(--t) var(--ease),
+              box-shadow var(--t) var(--ease),
+              border-color var(--t) !important;
+}
+
+/* Shimmer overlay */
+.cat-card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(135deg, var(--gold-lt) 0%, transparent 55%) !important;
+  opacity: 0 !important;
+  transition: opacity var(--t) var(--ease) !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Bottom gold bar */
+.cat-card::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0; left: 0; right: 0 !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, var(--gold), var(--gold-dk)) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left !important;
+  transition: transform var(--t) var(--ease) !important;
 }
 
 .cat-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--gold);
+  transform: translateY(-8px) !important;
+  box-shadow: var(--sh-lg) !important;
+  border-color: transparent !important;
 }
 
-.cat-card:hover::before { opacity: 1; }
+.cat-card:hover::before { opacity: 1 !important; }
+.cat-card:hover::after  { transform: scaleX(1) !important; }
 
 .cat-card > * { position: relative; z-index: 1; }
 
 .cat-card img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  margin-bottom: 1rem;
-  transition: transform var(--transition);
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  margin-bottom: 1.2rem !important;
+  transition: transform var(--t) var(--ease) !important;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.14)) !important;
 }
 
-.cat-card:hover img { transform: scale(1.08) translateY(-3px); }
+.cat-card:hover img { transform: scale(1.1) translateY(-4px) !important; }
 
 .cat-card h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 6px;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  margin-bottom: 6px !important;
 }
 
 .cat-card p {
-  font-size: 0.85rem;
-  color: var(--ink-3);
-  line-height: 1.55;
-  font-weight: 300;
+  font-size: 0.82rem !important;
+  color: var(--ink-3) !important;
+  line-height: 1.55 !important;
+  font-weight: 400 !important;
 }
 
-/* Gold accent line on hover */
-.cat-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-  transform: scaleX(0);
-  transition: transform var(--transition);
-  transform-origin: left;
+/* ─── Product Cards ───────────────────────────────────────── */
+.product-card, .edu-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r) !important;
+  overflow: hidden !important;
+  transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease) !important;
 }
 
-.cat-card:hover::after { transform: scaleX(1); }
-
-/* ── Filter Tabs ──────────────────────────────────────────── */
-.filter-tab, .edu-filter-tab {
-  font-family: 'Outfit', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  padding: 8px 22px;
-  border-radius: 100px;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  color: var(--ink-2);
-  cursor: pointer;
-  transition: all var(--transition);
+.product-card:hover, .edu-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: var(--sh-md) !important;
+  border-color: var(--gold-lt) !important;
 }
 
-.filter-tab:hover, .edu-filter-tab:hover {
-  border-color: var(--ink);
-  color: var(--ink);
+.product-card img, .edu-card img {
+  transition: transform .5s var(--ease) !important;
 }
 
-.filter-tab.active, .edu-filter-tab.active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #fff;
+.product-card:hover img, .edu-card:hover img {
+  transform: scale(1.04) !important;
 }
 
-/* ── Stats Bar ────────────────────────────────────────────── */
-.stats-bar, .hero-stats {
-  display: flex;
-  gap: 2.5rem;
-  margin-top: 2.5rem;
+/* Product name */
+.product-card h3, .edu-card h3,
+.product-card .product-name, .edu-card .product-name {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  line-height: 1.3 !important;
 }
 
-.stat-item .stat-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1;
-}
-
-.stat-item .stat-label {
-  font-size: 12px;
-  color: var(--ink-3);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 500;
-  margin-top: 4px;
-}
-
-/* ── Steps (How It Works) ─────────────────────────────────── */
-.step {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem;
-  position: relative;
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.step:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.step-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--gold-light);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.step h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
-
-.step p {
-  font-size: 0.9rem;
-  color: var(--ink-2);
-  font-weight: 300;
-}
-
-/* ── Testimonial Cards ────────────────────────────────────── */
-.testimonial-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem;
-  position: relative;
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.testimonial-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.testimonial-card::before {
-  content: '\201C';
-  font-family: 'Playfair Display', serif;
-  font-size: 5rem;
-  color: var(--gold-light);
-  line-height: 1;
-  position: absolute;
-  top: 12px; left: 20px;
-  pointer-events: none;
-}
-
-.testimonial-card p {
-  font-size: 0.95rem;
-  color: var(--ink-2);
-  font-style: italic;
-  font-weight: 300;
-  line-height: 1.7;
-  margin-bottom: 1.25rem;
-  padding-top: 1rem;
-}
-
-.testimonial-author strong {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  color: var(--ink);
-  font-size: 14px;
-}
-
-.testimonial-author span {
-  font-size: 12px;
-  color: var(--ink-3);
-}
-
-.avatar {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--gold-light);
-  color: var(--gold-dark);
-  font-weight: 700;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Playfair Display', serif;
-}
-
-/* ── Contact Section ──────────────────────────────────────── */
-.contact-section, #contact {
-  background: var(--ink);
-  color: #fff;
-  border-radius: 24px;
-  margin: 0 2rem 4rem;
-}
-
-#contact h2 { color: #fff; }
-#contact p  { color: rgba(255,255,255,0.6); }
-
-#contact input, #contact textarea, #contact select {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  color: #fff;
-  font-family: 'Outfit', sans-serif;
-  padding: 12px 16px;
-  transition: border-color var(--transition);
-}
-
-#contact input:focus, #contact textarea:focus {
-  outline: none;
-  border-color: var(--gold);
-}
-
-#contact input::placeholder, #contact textarea::placeholder {
-  color: rgba(255,255,255,0.3);
-}
-
-#contact .btn-primary, #contact button[type="submit"] {
-  background: var(--gold) !important;
+/* Price */
+.product-price, .price, .edu-price {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
   color: var(--ink) !important;
 }
 
-#contact .btn-primary:hover, #contact button[type="submit"]:hover {
-  background: var(--gold-dark) !important;
+.original-price, .old-price, strike {
+  font-size: .85rem !important;
+  color: var(--ink-3) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 400 !important;
+  text-decoration: line-through !important;
 }
 
-/* ── Footer ───────────────────────────────────────────────── */
-footer {
-  background: var(--ink);
-  color: rgba(255,255,255,0.5);
-  padding: 3rem 2rem;
-}
-
-footer .footer-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  color: #fff;
-  font-weight: 700;
-}
-
-footer h4 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  margin-bottom: 1rem;
-}
-
-footer a {
-  color: rgba(255,255,255,0.55);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 300;
-  transition: color var(--transition);
-}
-
-footer a:hover { color: var(--gold); }
-
-footer .copyright {
-  font-size: 12px;
-  color: rgba(255,255,255,0.25);
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 1.5rem;
-  margin-top: 2rem;
-}
-
-/* ── Scroll Reveal Animations ─────────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger children inside grid containers */
-.categories-grid .cat-card:nth-child(1) { transition-delay: 0.05s; }
-.categories-grid .cat-card:nth-child(2) { transition-delay: 0.12s; }
-.categories-grid .cat-card:nth-child(3) { transition-delay: 0.19s; }
-.categories-grid .cat-card:nth-child(4) { transition-delay: 0.26s; }
-
-.steps-grid .step:nth-child(1) { transition-delay: 0.05s; }
-.steps-grid .step:nth-child(2) { transition-delay: 0.15s; }
-.steps-grid .step:nth-child(3) { transition-delay: 0.25s; }
-
-.testimonials-grid .testimonial-card:nth-child(1) { transition-delay: 0.05s; }
-.testimonials-grid .testimonial-card:nth-child(2) { transition-delay: 0.13s; }
-.testimonials-grid .testimonial-card:nth-child(3) { transition-delay: 0.21s; }
-.testimonials-grid .testimonial-card:nth-child(4) { transition-delay: 0.29s; }
-
-/* ── Page Load Fade-in ────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.hero-title, #home h1 {
-  animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-.hero-sub, #home > .container > p {
-  animation: fadeUp 0.8s 0.15s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-.hero-ctas, .cta-buttons {
-  animation: fadeUp 0.8s 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/* ── Gold Divider ─────────────────────────────────────────── */
-.section-divider {
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-  margin: 0 auto 1.5rem;
-  border-radius: 2px;
-}
-
-/* ── WhatsApp Float Button ────────────────────────────────── */
-.wa-float {
-  background: #25D366 !important;
-  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.35) !important;
-  transition: transform var(--transition), box-shadow var(--transition) !important;
-  /* Fix: never stretch full width */
-  width: auto !important;
-  max-width: 220px !important;
-  min-width: unset !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  padding: 12px 20px !important;
+/* Discount badge */
+.badge-discount, .off-badge, .discount-badge {
+  background: var(--gold-lt) !important;
+  color: var(--gold-dk) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .04em !important;
   border-radius: 100px !important;
+  padding: 3px 10px !important;
+  border: none !important;
 }
 
-.wa-float:hover {
-  transform: scale(1.05) translateY(-2px) !important;
-  box-shadow: 0 12px 36px rgba(37, 211, 102, 0.45) !important;
+/* Bestseller badge */
+.badge-bestseller, .bestseller-badge {
+  background: var(--ink) !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  border-radius: 100px !important;
+  padding: 4px 12px !important;
 }
 
-/* ── Contact Form Inputs ──────────────────────────────────── */
-/* Restore visible inputs inside the dark contact section */
+/* Add to cart button */
+.btn-add-cart, .add-to-cart, button.add-btn {
+  background: var(--ink) !important;
+  color: #fff !important;
+  border-radius: 100px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  cursor: pointer !important;
+  transition: background var(--t), transform var(--t) !important;
+}
+
+.btn-add-cart:hover, .add-to-cart:hover {
+  background: var(--gold-dk) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Filter tabs */
+.filter-tab, .edu-filter-tab {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
+  padding: 9px 24px !important;
+  border-radius: 100px !important;
+  border: 1.5px solid var(--line) !important;
+  background: transparent !important;
+  color: var(--ink-2) !important;
+  cursor: pointer !important;
+  transition: all var(--t) !important;
+}
+
+.filter-tab:hover, .edu-filter-tab:hover {
+  border-color: var(--ink) !important;
+  color: var(--ink) !important;
+}
+
+.filter-tab.active, .edu-filter-tab.active {
+  background: var(--ink) !important;
+  border-color: var(--ink) !important;
+  color: #fff !important;
+}
+
+/* ─── Steps Section ───────────────────────────────────────── */
+#how-it-works, .steps-section {
+  background: var(--ink) !important;
+  padding: 80px 0 !important;
+}
+
+#how-it-works .section-label,
+#how-it-works .section-tag { color: var(--gold) !important; }
+
+#how-it-works h2, .steps-section h2 {
+  color: #fff !important;
+}
+
+#how-it-works h2::after { background: linear-gradient(90deg, var(--gold), var(--gold-dk)); }
+
+.step {
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: var(--r) !important;
+  padding: 2.5rem 2rem !important;
+  transition: background var(--t), transform var(--t) var(--ease) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,150,90,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.step:hover {
+  background: rgba(255,255,255,.09) !important;
+  transform: translateY(-4px) !important;
+}
+
+.step-num, .step-number {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 4rem !important;
+  font-weight: 700 !important;
+  color: rgba(184,150,90,.25) !important;
+  line-height: 1 !important;
+  display: block !important;
+  margin-bottom: .5rem !important;
+}
+
+.step h3 {
+  color: #fff !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+}
+
+.step p {
+  color: rgba(255,255,255,.5) !important;
+  font-size: .9rem !important;
+  font-weight: 300 !important;
+  line-height: 1.7 !important;
+}
+
+.step img { filter: brightness(0) invert(1) !important; opacity: .7 !important; }
+
+/* ─── Testimonials ────────────────────────────────────────── */
+.testimonial-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r) !important;
+  padding: 2.2rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: transform var(--t) var(--ease), box-shadow var(--t) !important;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: var(--sh-md) !important;
+}
+
+/* Big quote mark */
+.testimonial-card::before {
+  content: '\201C' !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 7rem !important;
+  line-height: 1 !important;
+  color: var(--gold-lt) !important;
+  position: absolute !important;
+  top: 0px; left: 16px !important;
+  pointer-events: none !important;
+}
+
+.testimonial-card p, .testimonial-text {
+  font-size: .95rem !important;
+  color: var(--ink-2) !important;
+  font-style: italic !important;
+  line-height: 1.75 !important;
+  font-weight: 400 !important;
+  padding-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.testimonial-author strong, .author-name {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+.testimonial-author span, .author-title {
+  font-size: 12px !important;
+  color: var(--ink-3) !important;
+}
+
+.avatar {
+  width: 42px !important; height: 42px !important;
+  border-radius: 50% !important;
+  background: var(--gold-lt) !important;
+  color: var(--gold-dk) !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+/* ─── Contact Section ─────────────────────────────────────── */
+#contact {
+  background: var(--ink) !important;
+  border-radius: 24px !important;
+  margin: 0 40px 80px !important;
+  padding: 60px !important;
+}
+
+#contact h2 { color: #fff !important; }
+#contact h2::after { margin: 14px 0 0; }
+#contact p  { color: rgba(255,255,255,.55) !important; }
+
 #contact input,
 #contact textarea,
 #contact select {
-  background: rgba(255,255,255,0.08) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  border-radius: var(--r-sm) !important;
   color: #fff !important;
-  font-family: 'Outfit', sans-serif !important;
-  padding: 12px 16px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  padding: 14px 18px !important;
+  font-size: 14px !important;
   width: 100% !important;
-  font-size: 15px !important;
-  border-radius: var(--radius-sm) !important;
-  transition: border-color var(--transition) !important;
+  transition: border-color var(--t), background var(--t) !important;
 }
 
 #contact input:focus,
 #contact textarea:focus {
   outline: none !important;
   border-color: var(--gold) !important;
-  background: rgba(255,255,255,0.12) !important;
+  background: rgba(255,255,255,.11) !important;
 }
 
 #contact input::placeholder,
-#contact textarea::placeholder {
-  color: rgba(255,255,255,0.4) !important;
-}
+#contact textarea::placeholder { color: rgba(255,255,255,.3) !important; }
 
 #contact label {
-  color: rgba(255,255,255,0.7) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
+  color: rgba(255,255,255,.6) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
   display: block !important;
-  margin-bottom: 6px !important;
+  margin-bottom: 8px !important;
 }
 
-/* ── Scrollbar ────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
+#contact .btn-primary,
+#contact button[type="submit"],
+#contact .submit-btn {
+  background: var(--gold) !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+#contact .btn-primary:hover,
+#contact button[type="submit"]:hover {
+  background: var(--gold-dk) !important;
+  color: #fff !important;
+}
+
+.contact-info-item {
+  color: rgba(255,255,255,.7) !important;
+  font-size: 14px !important;
+}
+
+.contact-info-item strong { color: #fff !important; }
+
+/* ─── Footer ──────────────────────────────────────────────── */
+footer {
+  background: #131210 !important;
+  color: rgba(255,255,255,.4) !important;
+}
+
+footer .footer-logo, footer .nav-logo {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+}
+
+footer h4 {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,.35) !important;
+  margin-bottom: 1.2rem !important;
+}
+
+footer a, footer li {
+  color: rgba(255,255,255,.5) !important;
+  font-size: 14px !important;
+  font-weight: 300 !important;
+  transition: color var(--t) !important;
+  list-style: none !important;
+}
+
+footer a:hover { color: var(--gold) !important; }
+
+footer p {
+  font-size: 13px !important;
+  color: rgba(255,255,255,.35) !important;
+  font-weight: 300 !important;
+}
+
+.footer-bottom, footer .copyright {
+  border-top: 1px solid rgba(255,255,255,.06) !important;
+  padding-top: 1.5rem !important;
+  margin-top: 2.5rem !important;
+  font-size: 12px !important;
+  color: rgba(255,255,255,.2) !important;
+}
+
+/* ─── WhatsApp Button ─────────────────────────────────────── */
+.wa-float, a.wa-float {
+  background: #25D366 !important;
+  width: auto !important;
+  max-width: 210px !important;
+  min-width: unset !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 22px !important;
+  border-radius: 100px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  position: fixed !important;
+  bottom: 28px !important; right: 28px !important;
+  z-index: 9999 !important;
+  box-shadow: 0 8px 28px rgba(37,211,102,.35) !important;
+  transition: transform var(--t), box-shadow var(--t) !important;
+  text-decoration: none !important;
+}
+
+.wa-float:hover {
+  transform: translateY(-3px) scale(1.04) !important;
+  box-shadow: 0 14px 40px rgba(37,211,102,.45) !important;
+}
+
+/* ─── Scroll Reveal ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+.categories-grid .cat-card:nth-child(1) { transition-delay: .04s; }
+.categories-grid .cat-card:nth-child(2) { transition-delay: .10s; }
+.categories-grid .cat-card:nth-child(3) { transition-delay: .16s; }
+.categories-grid .cat-card:nth-child(4) { transition-delay: .22s; }
+
+/* ─── Page Load Animations ────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+#home h1, .hero-title {
+  animation: fadeUp .9s var(--ease) both;
+}
+.hero-sub, #home > .container > p {
+  animation: fadeUp .9s .14s var(--ease) both;
+}
+.hero-ctas, .cta-buttons, .hero-actions {
+  animation: fadeUp .9s .26s var(--ease) both;
+}
+.hero-stats, .stats-bar {
+  animation: fadeUp .9s .38s var(--ease) both;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
 
-/* ── Responsive ───────────────────────────────────────────── */
+/* ─── Mobile ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero-title, #home h1 { font-size: 2.2rem; }
-  .cat-card { padding: 1.5rem 1.2rem; }
-  .step, .testimonial-card { padding: 1.5rem; }
-  #contact, .contact-section { margin: 0 1rem 3rem; border-radius: 16px; }
+  #home h1, .hero-title { font-size: 2.6rem !important; }
+  #contact { margin: 0 16px 60px !important; padding: 36px 24px !important; border-radius: 16px !important; }
+  .cat-card { padding: 1.6rem 1.3rem !important; }
+  .step, .testimonial-card { padding: 1.6rem !important; }
+  section h2::after { margin: 10px auto 0 !important; }
 }
