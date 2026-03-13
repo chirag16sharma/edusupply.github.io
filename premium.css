@@ -1,5 +1,5 @@
 /* ================================================================
-   EduSupply — premium.css  v4  "Wow Factor"
+   EduSupply — premium.css  v5  "Saffron + Deep Ink"
    Link AFTER style.css. All selectors verified against source.
    wow.js handles: announcement bar, cursor glow, counters,
    scroll progress, magnetic buttons, mobile nav panel.
@@ -9,22 +9,22 @@
 
 /* ── Tokens ─────────────────────────────────────────────────── */
 :root {
-  --p-bg:      #F5F1EA;
-  --p-surface: #FDFAF5;
-  --p-ink:     #18150F;
-  --p-ink2:    #534E45;
-  --p-ink3:    #9E9990;
-  --p-gold:    #B8925A;
-  --p-gold-lt: #EFE2CC;
-  --p-gold-dk: #8A6A34;
-  --p-line:    #E0D9CD;
-  --p-navy:    #0d1f3c;
+  --p-bg:      #FBF8F2;
+  --p-surface: #FDFCF8;
+  --p-ink:     #1A150C;
+  --p-ink2:    #4A3E2E;
+  --p-ink3:    #8A7A64;
+  --p-gold:    #E07B20;
+  --p-gold-lt: #FDE8C8;
+  --p-gold-dk: #B85A10;
+  --p-line:    #EDD8B8;
+  --p-navy:    #2E5C8A;
   --p-ease:    cubic-bezier(.4,0,.2,1);
   --p-spring:  cubic-bezier(.34,1.56,.64,1);
   --p-t:       0.34s;
-  --p-sh-sm:   0 2px 14px rgba(24,21,15,.06);
-  --p-sh-md:   0 8px 40px rgba(24,21,15,.11);
-  --p-sh-lg:   0 20px 72px rgba(24,21,15,.15);
+  --p-sh-sm:   0 2px 14px rgba(26,21,12,.06);
+  --p-sh-md:   0 8px 40px rgba(26,21,12,.11);
+  --p-sh-lg:   0 20px 72px rgba(26,21,12,.15);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -204,11 +204,11 @@ h1, h2, h3, h4 {
 #p-mobile-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(24,21,15,0);
+  background: rgba(26,21,12,0);
   transition: background .35s var(--p-ease);
 }
 #p-mobile-nav.open #p-mobile-overlay {
-  background: rgba(24,21,15,.55);
+  background: rgba(26,21,12,.55);
   backdrop-filter: blur(4px);
 }
 
@@ -310,8 +310,8 @@ h1, h2, h3, h4 {
 }
 .hero-bg-grid {
   background-image:
-    linear-gradient(rgba(24,21,15,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(24,21,15,.03) 1px, transparent 1px) !important;
+    linear-gradient(rgba(26,21,12,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,21,12,.03) 1px, transparent 1px) !important;
   background-size: 52px 52px !important;
 }
 .hero::before {
