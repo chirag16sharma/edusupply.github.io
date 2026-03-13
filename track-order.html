@@ -5,69 +5,226 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Track Your Order — EduSupply</title>
   <style>
-    body { font-family: sans-serif; background: #f5f7fa; margin: 0; padding: 40px 20px; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; margin: 0; padding: 40px 20px; }
     .container { max-width: 600px; margin: auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
     h1 { color: #1a73e8; margin-bottom: 8px; }
     p { color: #666; margin-bottom: 24px; }
-    input { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
-    button { margin-top: 16px; width: 100%; padding: 13px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    input { width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; font-family: inherit; transition: border 0.2s; }
+    input:focus { outline: none; border-color: #1a73e8; }
+    button { margin-top: 16px; width: 100%; padding: 13px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
     button:hover { background: #1558b0; }
-    .error-msg { margin-top: 10px; color: #c62828; font-size: 14px; display: none; }
-    .status-box { margin-top: 30px; display: none; }
-    .step { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid #eee; }
-    .dot { width: 16px; height: 16px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
-    .dot.done { background: #34a853; }
-    .dot.active { background: #1a73e8; }
-    .label { font-size: 15px; font-weight: 500; color: #333; }
-    .sublabel { font-size: 13px; color: #888; }
-    .back { display: inline-block; margin-top: 24px; color: #1a73e8; text-decoration: none; font-size: 14px; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+
+    .error-msg { margin-top: 10px; color: #c62828; font-size: 14px; display: none; background: #fdecea; padding: 10px 14px; border-radius: 8px; }
+
+    /* ── Order meta card ── */
+    .order-meta { background: #f8f9ff; border-radius: 12px; padding: 16px 20px; margin: 24px 0; }
+    .order-meta-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; color: #555; }
+    .order-meta-row:last-child { margin-bottom: 0; }
+    .order-meta-row strong { color: #222; }
+
+    /* ── Status pipeline ── */
+    .steps { display: flex; flex-direction: column; }
+    .step { display: flex; align-items: flex-start; gap: 16px; padding: 16px 0; position: relative; }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 7px; top: 36px;
+      width: 2px;
+      height: calc(100% - 20px);
+      background: #e0e0e0;
+    }
+    .step.done::after { background: #34a853; }
+
+    .dot { width: 16px; height: 16px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; margin-top: 2px; position: relative; z-index: 1; }
+    .dot.done      { background: #34a853; }
+    .dot.active    { background: #1a73e8; box-shadow: 0 0 0 4px rgba(26,115,232,0.2); }
+    .dot.cancelled { background: #c62828; }
+
+    .step-label    { font-size: 15px; font-weight: 600; color: #333; }
+    .step-sublabel { font-size: 13px; color: #888; margin-top: 2px; }
+
+    /* ── Badges ── */
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-left: 8px; vertical-align: middle; }
+    .badge-Pending   { background: #fff3e0; color: #e65100; }
+    .badge-Confirmed { background: #e8f5e9; color: #2e7d32; }
+    .badge-Delivered { background: #e3f2fd; color: #1565c0; }
+    .badge-Cancelled { background: #fce4ec; color: #c62828; }
+
+    .not-found  { margin-top: 24px; display: none; background: #fff3e0; border: 1.5px solid #ffb300; border-radius: 12px; padding: 16px 20px; color: #e65100; font-size: 14px; font-weight: 600; }
+    .loading    { margin-top: 20px; text-align: center; color: #888; display: none; font-size: 14px; }
+    .status-box { display: none; }
+    .help       { margin-top: 20px; font-size: 13px; color: #888; text-align: center; }
+    .back       { display: inline-block; margin-top: 24px; color: #1a73e8; text-decoration: none; font-size: 14px; }
+    .back:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>📦 Track Your Order</h1>
-    <p>Enter your Order ID to see the current delivery status.</p>
+    <p>Enter your Order ID (e.g. <strong>EDU-20AB1F</strong>) to see your real-time delivery status.</p>
+
     <input type="text" id="orderId" placeholder="e.g. EDU-20AB1F" />
-    <!-- FIX 18: Added error message element for invalid format feedback -->
-    <div class="error-msg" id="errorMsg">❌ Please enter a valid Order ID (format: EDU-XXXXXX)</div>
-    <button onclick="trackOrder()">Track Order</button>
+    <div class="error-msg" id="errorMsg"></div>
+    <button onclick="trackOrder()" id="trackBtn">Track Order</button>
+
+    <div class="loading"    id="loading">🔍 Looking up your order...</div>
+    <div class="not-found"  id="notFound">❌ No order found with that ID. Please double-check and try again.</div>
 
     <div class="status-box" id="statusBox">
-      <h3 style="color:#333; margin-bottom:16px;">Order Status</h3>
-      <div class="step"><div class="dot done"></div><div><div class="label">✅ Order Confirmed</div><div class="sublabel">Your order has been received</div></div></div>
-      <div class="step"><div class="dot done"></div><div><div class="label">✅ Processing</div><div class="sublabel">Items are being packed</div></div></div>
-      <div class="step"><div class="dot active"></div><div><div class="label">🚚 Out for Delivery</div><div class="sublabel">Expected delivery: within 24 hours</div></div></div>
-      <div class="step"><div class="dot"></div><div><div class="label">📬 Delivered</div><div class="sublabel">Pending</div></div></div>
-      <p style="margin-top:20px; font-size:13px; color:#888;">For real-time updates, call us at <strong>+91 98765 43210</strong> or WhatsApp us.</p>
+      <div class="order-meta" id="orderMeta"></div>
+      <div class="steps"      id="stepsContainer"></div>
+      <p class="help">Need help? Call <strong>+91 98765 43210</strong> or WhatsApp us.</p>
     </div>
 
     <a href="index.html" class="back">← Back to EduSupply</a>
   </div>
 
-  <script>
-    function trackOrder() {
-      const raw = document.getElementById('orderId').value.trim().toUpperCase();
-      const errorEl = document.getElementById('errorMsg');
-      const statusBox = document.getElementById('statusBox');
+<script type="module">
+  import { db } from "./firebase-config.js";
+  import { collection, getDocs }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-      // FIX 18: Validate that input matches EDU-XXXXXX format (6 alphanumeric chars after hyphen)
-      // Previously any string ≥ 4 chars was accepted — "abcd", "1234", etc.
-      const validFormat = /^EDU-[A-Z0-9]{6}$/.test(raw);
+  const PIPELINE = ['Pending', 'Confirmed', 'Delivered'];
 
-      if (!validFormat) {
-        errorEl.style.display = 'block';
-        statusBox.style.display = 'none';
-        return;
-      }
+  const STEP_META = {
+    Pending:   { label: '🕐 Order Received',  sub: 'Your order has been submitted successfully.' },
+    Confirmed: { label: '✅ Order Confirmed',  sub: 'Our team has confirmed your order and is preparing it.' },
+    Delivered: { label: '🚚 Delivered',        sub: 'Your items have been delivered.' },
+  };
 
-      errorEl.style.display = 'none';
-      statusBox.style.display = 'block';
+  window.trackOrder = async function() {
+    const raw       = document.getElementById('orderId').value.trim().toUpperCase();
+    const errorEl   = document.getElementById('errorMsg');
+    const notFound  = document.getElementById('notFound');
+    const loading   = document.getElementById('loading');
+    const statusBox = document.getElementById('statusBox');
+    const btn       = document.getElementById('trackBtn');
+
+    // Reset UI
+    errorEl.style.display   = 'none';
+    notFound.style.display  = 'none';
+    statusBox.style.display = 'none';
+
+    // Validate format
+    if (!/^EDU-[A-Z0-9]{6}$/.test(raw)) {
+      errorEl.innerText     = '❌ Please enter a valid Order ID in the format EDU-XXXXXX.';
+      errorEl.style.display = 'block';
+      return;
     }
 
-    // Hide error on input change
-    document.getElementById('orderId').addEventListener('input', () => {
-      document.getElementById('errorMsg').style.display = 'none';
-    });
-  </script>
+    const suffix      = raw.replace('EDU-', '');
+    btn.disabled      = true;
+    loading.style.display = 'block';
+
+    try {
+      // Firestore IDs are long — we only show the first 6 chars to users.
+      // Fetch all orders and find the one whose ID starts with the suffix.
+      const snap = await getDocs(collection(db, 'orders'));
+      let order  = null;
+      snap.forEach(d => {
+        if (d.id.substring(0, 6).toUpperCase() === suffix) {
+          order = { id: d.id, ...d.data() };
+        }
+      });
+
+      loading.style.display = 'none';
+      btn.disabled          = false;
+
+      if (!order) { notFound.style.display = 'block'; return; }
+      renderOrder(order);
+
+    } catch(e) {
+      loading.style.display = 'none';
+      btn.disabled          = false;
+      errorEl.innerText     = '❌ Could not reach the server. Check your connection and try again.';
+      errorEl.style.display = 'block';
+    }
+  };
+
+  function renderOrder(order) {
+    const status      = order.status || 'Pending';
+    const isCancelled = status === 'Cancelled';
+    const currentIdx  = PIPELINE.indexOf(status);
+
+    // ── Meta card ────────────────────────────────────────────────────────
+    document.getElementById('orderMeta').innerHTML = `
+      <div class="order-meta-row">
+        <span>Order ID</span>
+        <strong>
+          #EDU-${order.id.substring(0,6).toUpperCase()}
+          <span class="badge badge-${status}">${status}</span>
+        </strong>
+      </div>
+      <div class="order-meta-row">
+        <span>Placed on</span>
+        <strong>${order.createdAt
+          ? new Date(order.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })
+          : 'N/A'}</strong>
+      </div>
+      <div class="order-meta-row">
+        <span>Items</span>
+        <strong>${order.items ? order.items.map(i => `${i.name} ×${i.qty}`).join(', ') : 'N/A'}</strong>
+      </div>
+      <div class="order-meta-row">
+        <span>Order Total</span>
+        <strong>₹${(order.total || 0).toLocaleString('en-IN')}</strong>
+      </div>
+      ${order.deliveryDate ? `
+      <div class="order-meta-row">
+        <span>Expected Delivery</span>
+        <strong>${new Date(order.deliveryDate).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })}</strong>
+      </div>` : ''}
+    `;
+
+    // ── Pipeline steps ────────────────────────────────────────────────────
+    const container = document.getElementById('stepsContainer');
+
+    if (isCancelled) {
+      container.innerHTML = `
+        <div class="step done">
+          <div class="dot done"></div>
+          <div>
+            <div class="step-label">🕐 Order Received</div>
+            <div class="step-sublabel">Your order was submitted.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot cancelled"></div>
+          <div>
+            <div class="step-label" style="color:#c62828;">❌ Order Cancelled</div>
+            <div class="step-sublabel">This order was cancelled. Contact us if you have questions.</div>
+          </div>
+        </div>`;
+    } else {
+      container.innerHTML = PIPELINE.map((step, i) => {
+        const isDone    = i < currentIdx;
+        const isActive  = i === currentIdx;
+        const dotClass  = isDone ? 'done' : isActive ? 'active' : '';
+        const stepClass = isDone ? 'done' : '';
+        return `
+          <div class="step ${stepClass}">
+            <div class="dot ${dotClass}"></div>
+            <div>
+              <div class="step-label">${STEP_META[step].label}</div>
+              <div class="step-sublabel">${isDone || isActive ? STEP_META[step].sub : 'Not yet reached.'}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    document.getElementById('statusBox').style.display = 'block';
+  }
+
+  // Enter key triggers search
+  document.getElementById('orderId').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.trackOrder();
+  });
+
+  // Clear error while typing
+  document.getElementById('orderId').addEventListener('input', () => {
+    document.getElementById('errorMsg').style.display = 'none';
+  });
+</script>
 </body>
 </html>
