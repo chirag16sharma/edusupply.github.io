@@ -101,7 +101,7 @@
 
   <div class="login-required" id="loginRequired">
     <h2>🔒 Admin Access Only</h2>
-    <p>You need to be logged in as an admin to view this page.</p>
+    <p>You don't have permission to view this page.</p>
     <a href="login.html" class="btn-link">Go to Login</a>
   </div>
 </div>
@@ -109,40 +109,46 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  // FIX 17: Removed unused `orderBy` import
-  import { getFirestore, collection, getDocs, doc, updateDoc, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  // ── Shared config ──────────────────────────────────────────────────────────
+  // All Firebase setup lives in firebase-config.js — no credentials here.
+  import { auth, db } from "./firebase-config.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, query }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDHhI7-MyJS3LpHuNZWhGcp0_heKMAxQpo",
-    authDomain: "edusupply-b92ad.firebaseapp.com",
-    projectId: "edusupply-b92ad",
-    storageBucket: "edusupply-b92ad.firebasestorage.app",
-    messagingSenderId: "993801689755",
-    appId: "1:993801689755:web:54ded7be82b4583fc2043e"
-  };
-
-  const ADMIN_EMAIL = "chirag1616sharma@gmail.com";
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
   let allOrders = [];
 
+  // ── Auth + role check ──────────────────────────────────────────────────────
+  // Admin status comes from Firestore (users/{uid}.role === 'admin'),
+  // NOT from a hardcoded email in client-side code.
   onAuthStateChanged(auth, async (user) => {
-    // FIX 16: SECURITY — now actually enforces the ADMIN_EMAIL check.
-    // Previously ADMIN_EMAIL was defined but never compared against user.email,
-    // so ANY logged-in user could access the full admin panel.
-    if (!user || user.email !== ADMIN_EMAIL) {
-      document.getElementById('adminPanel').style.display = 'none';
-      document.getElementById('loginRequired').style.display = 'block';
+    if (!user) {
+      showAccessDenied();
       return;
     }
-    document.getElementById('adminEmail').innerText = `Logged in as: ${user.email}`;
-    await loadOrders();
+
+    try {
+      const userSnap = await getDoc(doc(db, 'users', user.uid));
+      const role = userSnap.exists() ? userSnap.data().role : null;
+
+      if (role !== 'admin') {
+        showAccessDenied();
+        return;
+      }
+
+      document.getElementById('adminEmail').innerText = `Logged in as: ${user.email}`;
+      await loadOrders();
+    } catch (e) {
+      showAccessDenied();
+    }
   });
 
+  function showAccessDenied() {
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('loginRequired').style.display = 'block';
+  }
+
+  // ── Orders ─────────────────────────────────────────────────────────────────
   async function loadOrders() {
     try {
       const snapshot = await getDocs(collection(db, 'orders'));
@@ -152,7 +158,8 @@
       updateStats();
       renderOrders(allOrders);
     } catch(e) {
-      document.getElementById('ordersList').innerHTML = '<div class="empty">Could not load orders. Check Firestore rules.</div>';
+      document.getElementById('ordersList').innerHTML =
+        '<div class="empty">Could not load orders. Check Firestore rules.</div>';
     }
   }
 
@@ -177,36 +184,18 @@
           <span class="badge badge-${o.status || 'Pending'}">${o.status || 'Pending'}</span>
         </div>
         <div class="order-body">
-          <div class="info-group">
-            <label>School / Contact</label>
-            <span>${o.contactName || 'N/A'}</span>
-          </div>
-          <div class="info-group">
-            <label>Phone</label>
-            <span>${o.contactPhone || 'N/A'}</span>
-          </div>
-          <div class="info-group">
-            <label>Items</label>
-            <span>${o.items ? o.items.map(i => `${i.name} x${i.qty}`).join(', ') : 'N/A'}</span>
-          </div>
-          <div class="info-group">
-            <label>Delivery Address</label>
-            <span>${o.deliveryAddress || 'N/A'}</span>
-          </div>
-          <div class="info-group">
-            <label>Delivery Date</label>
-            <span>${o.deliveryDate || 'Not specified'}</span>
-          </div>
-          <div class="info-group">
-            <label>Customer Email</label>
-            <span>${o.userEmail || 'N/A'}</span>
-          </div>
+          <div class="info-group"><label>School / Contact</label><span>${o.contactName || 'N/A'}</span></div>
+          <div class="info-group"><label>Phone</label><span>${o.contactPhone || 'N/A'}</span></div>
+          <div class="info-group"><label>Items</label><span>${o.items ? o.items.map(i => `${i.name} x${i.qty}`).join(', ') : 'N/A'}</span></div>
+          <div class="info-group"><label>Delivery Address</label><span>${o.deliveryAddress || 'N/A'}</span></div>
+          <div class="info-group"><label>Delivery Date</label><span>${o.deliveryDate || 'Not specified'}</span></div>
+          <div class="info-group"><label>Customer Email</label><span>${o.userEmail || 'N/A'}</span></div>
         </div>
         <div class="order-footer">
           <div class="order-total">₹${(o.total || 0).toLocaleString('en-IN')}</div>
           <div class="status-controls">
             <select class="status-select" id="status-${o.id}">
-              <option ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option ${o.status === 'Pending'   ? 'selected' : ''}>Pending</option>
               <option ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
               <option ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
               <option ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
