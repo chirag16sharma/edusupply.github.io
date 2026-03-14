@@ -109,14 +109,23 @@ function injectStyles() {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      
     }
     .edu-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(0,0,0,0.12); }
     .edu-card-badge {
-      position: absolute; top: 1rem; right: 1rem;
-      background: #f4b942; color: #fff;
-      font-size: 0.68rem; font-weight: 700;
-      padding: 3px 10px; border-radius: 20px;
-      text-transform: uppercase; letter-spacing: 0.05em;
+      position: absolute; 
+      top: 1rem; 
+      right: 1rem;
+      background: #f4b942; 
+      color: #fff;
+      font-size: 0.68rem; 
+      font-weight: 700;
+      padding: 3px 10px; 
+      border-radius: 20px;
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
+      z-index: 10;
+      pointer-events: none;
     }
     .edu-card-img { width: 100%; height: 130px; object-fit: contain; margin-bottom: 0.4rem; }
     .edu-card-img-fallback {
@@ -253,11 +262,13 @@ function renderProducts(filter = "All") {
   grid.innerHTML = list.map(p => {
     const disc = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
     return `
-      <div class="edu-card">
-        ${p.badge ? `<span class="edu-card-badge">${p.badge}</span>` : ""}
-        <img class="edu-card-img" src="${p.image}" alt="${p.name}"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="edu-card-img-fallback" style="display:none">${p.emoji}</div>
+    <div class="edu-card">
+    ${p.badge ? `<span class="edu-card-badge">${p.badge}</span>` : ""}
+    <div style="width:100%;height:160px;overflow:hidden;flex-shrink:0;">
+      <img class="edu-card-img" src="${p.image}" alt="${p.name}"
+        style="width:100%;height:100%;object-fit:cover;display:block;"
+        onerror="this.parentElement.innerHTML='<div style=\'height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;\'>${p.emoji}</div>'">
+    </div>
         <span class="edu-card-cat">${p.category}</span>
         <h3 class="edu-card-name">${p.name}</h3>
         <p class="edu-card-desc">${p.description}</p>
