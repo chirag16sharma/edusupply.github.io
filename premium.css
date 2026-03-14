@@ -579,19 +579,52 @@ h1, h2, h3, h4 {
   box-shadow: var(--p-sh-md) !important;
   border-color: var(--p-gold-lt) !important;
 }
-.edu-card-img { transition: transform .5s var(--p-ease) !important; }
-.edu-card:hover .edu-card-img { transform: scale(1.05) !important; }
-
-/* Per-category gradient background when image is missing */
-.edu-card-img-fallback {
-  background: var(--card-fallback-bg, var(--p-gold-lt)) !important;
+/* ── Product card image — polished aspect-ratio box ── */
+.edu-card-img-wrap,
+.edu-card > div:first-child:has(img),
+.edu-card > a:first-child:has(img) {
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
   border-radius: 10px !important;
-  margin-bottom: .5rem !important;
+  margin-bottom: .75rem !important;
+  background: var(--card-fallback-bg, var(--p-bg)) !important;
+  position: relative !important;
 }
-.edu-card[data-cat="Furniture"] { --card-fallback-bg: #E8EAED; }
-.edu-card[data-cat="Lab"]       { --card-fallback-bg: #E8F5E9; }
-.edu-card[data-cat="Boards"]    { --card-fallback-bg: #EDE7F6; }
-.edu-card[data-cat="Stationery"]{ --card-fallback-bg: #FFF3E0; }
+
+/* Skeleton shimmer while loading */
+.edu-card-img-wrap::before,
+.edu-card > div:first-child:has(img)::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(90deg,
+    var(--p-bg) 0%, var(--p-line) 50%, var(--p-bg) 100%) !important;
+  background-size: 200% 100% !important;
+  animation: p-shimmer 1.4s ease infinite !important;
+  z-index: 0 !important;
+}
+@keyframes p-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.edu-card-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  transition: transform .5s var(--p-ease), opacity .3s !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.edu-card:hover .edu-card-img { transform: scale(1.06) !important; }
+
+/* Per-category tint backgrounds (fallback when image missing) */
+.edu-card[data-cat="Furniture"] { --card-fallback-bg: #EEF0F4; }
+.edu-card[data-cat="Lab"]       { --card-fallback-bg: #EEF6EE; }
+.edu-card[data-cat="Boards"]    { --card-fallback-bg: #F0EEF8; }
+.edu-card[data-cat="Stationery"]{ --card-fallback-bg: #FFF8EE; }
 
 .edu-card-badge {
   background: var(--p-ink) !important;
