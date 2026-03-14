@@ -93,8 +93,7 @@ function applyImage(img, url, alt) {
   img.alt   = alt || img.alt;
   img.style.objectFit = 'cover'; 
   img.style.filter    = 'none';
-  img.dataset.realImg = '1';
-   
+  img.dataset.realImg = '1';   
 }
 
 /* ── Replace static site images ───────────────────────────── */
