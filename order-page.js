@@ -209,10 +209,12 @@ export function initOrderPage(CONFIG) {
     btn.innerText   = '⏳ Submitting...';
 
     try {
-      const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
-      const ref   = await addDoc(collection(db, 'orders'), {
-        userId:          currentUser.uid,
-        userEmail:       currentUser.email,
+      const total    = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+      // Always read auth.currentUser at submit time — avoids race with onAuthStateChanged
+      const user     = auth.currentUser || currentUser;
+      const ref      = await addDoc(collection(db, 'orders'), {
+        userId:          user ? user.uid   : null,
+        userEmail:       user ? user.email : null,
         category:        CONFIG.category,
         items:           items.map(i => ({ productId: i.id, name: i.name, price: i.price, qty: i.qty })),
         total,
@@ -228,7 +230,11 @@ export function initOrderPage(CONFIG) {
 
       window.location.href = `order-confirmation.html?id=${ref.id}`;
     } catch(e) {
-      alert('Error submitting order: ' + e.message);
+      console.error('Order submission error:', e);
+      const msg = e.code === 'permission-denied'
+        ? 'Permission denied — please log in and try again.'
+        : 'Error: ' + e.message;
+      alert(msg + '\n\nOr contact us on WhatsApp: +91 81977 39697');
       btn.disabled  = false;
       btn.innerText = CONFIG.submitLabel;
     }
