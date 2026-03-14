@@ -1283,11 +1283,7 @@
         };
 
         const ref = await addDoc(collection(db, 'orders'), orderData);
-        const shortId = ref.id.slice(-6).toUpperCase();
-
-        $('successRef').textContent   = `Order #${shortId}`;
-        $('modalForm').style.display  = 'none';
-        $('modalSuccess').style.display = 'block';
+        window.location.href = `order-confirmation.html?id=${ref.id}`;
 
       } catch (e) {
         btn.disabled    = false;
