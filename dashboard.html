@@ -4,144 +4,368 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard — EduSupply</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
-    nav { background: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .nav-logo { font-size: 20px; font-weight: 800; color: #1a73e8; text-decoration: none; }
-    .nav-right { display: flex; align-items: center; gap: 16px; }
-    .school-name { font-weight: 600; color: #333; font-size: 14px; }
-    .btn-logout { background: #f44336; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
-    .btn-shop { background: #1a73e8; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; }
-    .container { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
-    .welcome { font-size: 26px; font-weight: 800; color: #222; margin-bottom: 6px; }
-    .welcome-sub { color: #888; font-size: 15px; margin-bottom: 32px; }
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
-    .stat-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .stat-icon { font-size: 28px; margin-bottom: 10px; }
-    .stat-value { font-size: 28px; font-weight: 800; color: #1a73e8; }
-    .stat-label { color: #888; font-size: 14px; margin-top: 4px; }
-    .section-title { font-size: 20px; font-weight: 700; color: #222; margin-bottom: 20px; }
-    .orders-table { width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .orders-table table { width: 100%; border-collapse: collapse; }
-    .orders-table th { background: #f8f9ff; padding: 14px 20px; text-align: left; font-size: 13px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .orders-table td { padding: 16px 20px; border-top: 1px solid #f0f0f0; font-size: 14px; color: #333; }
+    :root {
+      --bg:     #F3F6FF;
+      --sur:    #FAFCFF;
+      --ink:    #060A30;
+      --ink2:   #101C6C;
+      --ink3:   #4858A4;
+      --acc:    #E0C060;
+      --acclt:  #FFFADC;
+      --accdk:  #7A6000;
+      --line:   #C8D0F0;
+      --navy:   #060A30;
+      --ease:   cubic-bezier(.4,0,.2,1);
+      --t:      .3s;
+      --sh-sm:  0 2px 14px rgba(6,10,48,.06);
+      --sh-md:  0 8px 40px rgba(6,10,48,.11);
+      --r:      16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased; min-height:100vh; }
+    h1,h2,h3 { font-family:'Playfair Display',serif; }
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--line); border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:var(--acc); }
 
-    /* ── All status badges including Cancelled ── */
-    .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    .badge-pending   { background: #fff3e0; color: #e65100; }
-    .badge-confirmed { background: #e8f5e9; color: #2e7d32; }
-    .badge-delivered { background: #e3f2fd; color: #1565c0; }
-    .badge-cancelled { background: #fce4ec; color: #c62828; }
+    /* NAV */
+    nav {
+      background:rgba(243,246,255,.95);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--line);
+      padding:0 2.5rem;
+      height:64px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:700; color:var(--ink); text-decoration:none; letter-spacing:-.02em; }
+    .nav-logo span { color:var(--acc); filter:brightness(.8); }
+    .nav-right { display:flex; align-items:center; gap:10px; }
+    .school-chip {
+      display:flex; align-items:center; gap:8px;
+      background:var(--navy); color:rgba(255,255,255,.75);
+      padding:5px 14px 5px 5px; border-radius:100px;
+      font-size:12px; font-weight:500; max-width:200px;
+    }
+    .s-avatar {
+      width:28px; height:28px; border-radius:50%;
+      background:var(--acc); color:var(--navy);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:12px; font-weight:700; flex-shrink:0;
+    }
+    .s-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .btn-n {
+      padding:8px 18px; border-radius:100px;
+      font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600;
+      letter-spacing:.07em; text-transform:uppercase; text-decoration:none;
+      cursor:pointer; transition:background var(--t),color var(--t),border-color var(--t);
+      border:1.5px solid transparent;
+    }
+    .btn-out { background:transparent; border-color:var(--line); color:var(--ink2); }
+    .btn-out:hover { border-color:var(--ink); color:var(--ink); }
+    .btn-solid { background:var(--ink); color:var(--acc); }
+    .btn-solid:hover { background:var(--ink2); }
 
-    .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
-    .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
-    .empty-state p { font-size: 16px; margin-bottom: 20px; }
-    .btn-primary { background: #1a73e8; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; display: inline-block; }
-    .loading { text-align: center; padding: 40px; color: #aaa; }
+    /* CONTAINER */
+    .container { max-width:1100px; margin:0 auto; padding:44px 24px 80px; }
+
+    /* WELCOME */
+    .welcome-row { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:14px; }
+    .w-eyebrow { font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accdk); margin-bottom:6px; }
+    .w-heading { font-size:clamp(1.8rem,3vw,2.6rem); font-weight:700; color:var(--ink); letter-spacing:-.03em; line-height:1.1; }
+    .w-sub { font-size:13px; color:var(--ink3); margin-top:5px; }
+    .w-date { font-size:12px; color:var(--ink3); text-align:right; line-height:1.7; }
+
+    /* STATS */
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:44px; }
+    .stat-card {
+      background:var(--sur); border:1px solid var(--line); border-radius:var(--r); padding:24px;
+      position:relative; overflow:hidden;
+      transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+    }
+    .stat-card:hover { transform:translateY(-4px); box-shadow:var(--sh-md); border-color:var(--acc); }
+    .stat-card::before {
+      content:''; position:absolute; top:-28px; right:-28px;
+      width:84px; height:84px; border-radius:50%;
+      background:var(--acclt); opacity:.7; pointer-events:none;
+    }
+    .stat-icon { font-size:22px; margin-bottom:14px; display:block; position:relative; z-index:1; }
+    .stat-val { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:700; color:var(--ink); letter-spacing:-.03em; line-height:1; margin-bottom:6px; position:relative; z-index:1; }
+    .stat-lbl { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); position:relative; z-index:1; }
+
+    /* QUICK LINKS */
+    .quick-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:44px; }
+    .q-card {
+      background:var(--sur); border:1px solid var(--line); border-radius:var(--r);
+      padding:18px; text-decoration:none; color:inherit;
+      display:flex; align-items:center; gap:14px;
+      transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+    }
+    .q-card:hover { transform:translateY(-3px); box-shadow:var(--sh-sm); border-color:var(--acc); }
+    .q-icon {
+      width:40px; height:40px; border-radius:10px;
+      background:var(--acclt); border:1px solid rgba(224,192,96,.3);
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; flex-shrink:0;
+    }
+    .q-label { font-size:13px; font-weight:600; color:var(--ink); line-height:1.3; }
+    .q-sub { font-size:11px; color:var(--ink3); margin-top:2px; }
+
+    /* SECTION HEADER */
+    .sec-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+    .sec-title { font-size:1.5rem; font-weight:700; color:var(--ink); letter-spacing:-.02em; }
+    .sec-badge {
+      background:var(--acclt); color:var(--accdk);
+      border:1px solid rgba(224,192,96,.3);
+      padding:4px 14px; border-radius:100px;
+      font-size:11px; font-weight:600; letter-spacing:.06em;
+    }
+
+    /* ORDERS TABLE */
+    .orders-wrap { background:var(--sur); border:1px solid var(--line); border-radius:20px; overflow:hidden; box-shadow:var(--sh-sm); }
+    .otable { width:100%; border-collapse:collapse; }
+    .otable thead tr { background:var(--bg); border-bottom:1px solid var(--line); }
+    .otable th {
+      padding:13px 20px; text-align:left;
+      font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--ink3); white-space:nowrap;
+    }
+    .otable td {
+      padding:16px 20px; font-size:13px; color:var(--ink);
+      border-bottom:1px solid var(--line); vertical-align:middle;
+    }
+    .otable tbody tr:last-child td { border-bottom:none; }
+    .otable tbody tr { transition:background var(--t); }
+    .otable tbody tr:hover { background:var(--bg); }
+    .o-id { font-family:'Playfair Display',serif; font-weight:700; font-size:13px; }
+    .o-items { color:var(--ink3); font-size:12px; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block; }
+    .o-total { font-family:'Playfair Display',serif; font-weight:700; color:var(--ink2); }
+
+    /* BADGES */
+    .badge { display:inline-block; padding:4px 12px; border-radius:100px; font-size:11px; font-weight:600; letter-spacing:.04em; white-space:nowrap; }
+    .badge-pending   { background:#FFF8E0; color:#8A5800; border:1px solid #F0D898; }
+    .badge-confirmed { background:#E8F5E8; color:#1A6A1A; border:1px solid #98D898; }
+    .badge-delivered { background:var(--acclt); color:var(--ink2); border:1px solid rgba(224,192,96,.4); }
+    .badge-cancelled { background:#FFF0F0; color:#8A0000; border:1px solid #F8BBBB; }
+
+    /* EMPTY + LOADING */
+    .empty-state { text-align:center; padding:64px 24px; }
+    .empty-icon { font-size:52px; margin-bottom:18px; display:block; opacity:.45; }
+    .empty-state h3 { font-size:1.4rem; font-weight:700; color:var(--ink); margin-bottom:8px; }
+    .empty-state p { font-size:14px; color:var(--ink3); margin-bottom:28px; }
+    .btn-primary {
+      background:var(--ink); color:var(--acc);
+      padding:13px 32px; border-radius:100px; text-decoration:none;
+      font-family:'DM Sans',sans-serif; font-size:11px; font-weight:700;
+      letter-spacing:.1em; text-transform:uppercase; display:inline-block;
+      transition:background var(--t),transform var(--t);
+    }
+    .btn-primary:hover { background:var(--ink2); transform:translateY(-1px); }
+    .loading-row { display:flex; align-items:center; justify-content:center; gap:12px; padding:56px 24px; color:var(--ink3); font-size:14px; }
+    .spinner { width:20px; height:20px; border:2px solid var(--line); border-top-color:var(--acc); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* FOOTER */
+    .dash-footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .dash-footer span { font-size:12px; color:var(--ink3); }
+    .dash-footer a { color:var(--accdk); text-decoration:none; }
+    .dash-footer a:hover { text-decoration:underline; }
+
+    /* MOBILE */
+    @media (max-width:768px) {
+      nav { padding:0 1.2rem; }
+      .container { padding:28px 16px 60px; }
+      .school-chip { max-width:130px; }
+      .otable th:nth-child(3), .otable td:nth-child(3),
+      .otable th:nth-child(4), .otable td:nth-child(4) { display:none; }
+    }
+    @media (max-width:480px) {
+      .stats { grid-template-columns:1fr 1fr; }
+      .otable th, .otable td { padding:11px 12px; }
+    }
   </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">🏫 EduSupply</a>
+  <a href="index.html" class="nav-logo">Edu<span>Supply</span></a>
   <div class="nav-right">
-    <span class="school-name" id="schoolName">Loading...</span>
-    <a href="index.html" class="btn-shop">🛒 Shop</a>
-    <button class="btn-logout" onclick="logout()">Logout</button>
+    <div class="school-chip">
+      <div class="s-avatar" id="sAvatar">S</div>
+      <span class="s-name" id="sName">Loading…</span>
+    </div>
+    <a href="index.html" class="btn-n btn-out">Shop</a>
+    <button class="btn-n btn-solid" onclick="logout()">Logout</button>
   </div>
 </nav>
 
 <div class="container">
-  <div class="welcome" id="welcomeText">Welcome back!</div>
-  <div class="welcome-sub">Here's a summary of your EduSupply activity.</div>
+
+  <div class="welcome-row">
+    <div>
+      <div class="w-eyebrow">School Dashboard</div>
+      <h1 class="w-heading" id="wText">Welcome back!</h1>
+      <p class="w-sub">Here's a summary of your EduSupply activity</p>
+    </div>
+    <div class="w-date" id="wDate"></div>
+  </div>
 
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-icon">📦</div>
-      <div class="stat-value" id="totalOrders">0</div>
-      <div class="stat-label">Total Orders</div>
+      <span class="stat-icon">📦</span>
+      <div class="stat-val" id="sTotalOrders">—</div>
+      <div class="stat-lbl">Total Orders</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon">💰</div>
-      <div class="stat-value" id="totalSpent">₹0</div>
-      <div class="stat-label">Total Spent</div>
+      <span class="stat-icon">💰</span>
+      <div class="stat-val" id="sTotalSpent">—</div>
+      <div class="stat-lbl">Total Spent</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon">🚚</div>
-      <div class="stat-value" id="pendingOrders">0</div>
-      <div class="stat-label">Pending Deliveries</div>
+      <span class="stat-icon">🚚</span>
+      <div class="stat-val" id="sPending">—</div>
+      <div class="stat-lbl">Pending Deliveries</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">✅</span>
+      <div class="stat-val" id="sDelivered">—</div>
+      <div class="stat-lbl">Delivered</div>
     </div>
   </div>
 
-  <div class="section-title">Your Orders</div>
-  <div class="orders-table">
-    <div id="ordersContent" class="loading">Loading your orders...</div>
+  <div class="quick-grid">
+    <a class="q-card" href="index.html#categories">
+      <div class="q-icon">🏫</div>
+      <div><div class="q-label">Browse Categories</div><div class="q-sub">Furniture, Lab, Boards…</div></div>
+    </a>
+    <a class="q-card" href="track-order.html">
+      <div class="q-icon">📍</div>
+      <div><div class="q-label">Track an Order</div><div class="q-sub">Check delivery status</div></div>
+    </a>
+    <a class="q-card" href="index.html#contact">
+      <div class="q-icon">💬</div>
+      <div><div class="q-label">Contact Us</div><div class="q-sub">WhatsApp or email</div></div>
+    </a>
+    <a class="q-card" href="index.html#products">
+      <div class="q-icon">⭐</div>
+      <div><div class="q-label">Top Products</div><div class="q-sub">Bestsellers & new items</div></div>
+    </a>
   </div>
+
+  <div class="sec-hdr">
+    <h2 class="sec-title">Your Orders</h2>
+    <span class="sec-badge" id="oBadge">Loading…</span>
+  </div>
+
+  <div class="orders-wrap" id="ordersWrap">
+    <div class="loading-row"><div class="spinner"></div>Loading your orders…</div>
+  </div>
+
+  <div class="dash-footer">
+    <span>© 2025 EduSupply · Bengaluru · <a href="index.html#contact">Contact support</a></span>
+    <span>Need help? <a href="tel:+918197739697">+91 81977 39697</a></span>
+  </div>
+
 </div>
 
 <script type="module">
-  import { auth, db } from "./firebase-config.js";
-  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { auth, db } from './firebase-config.js';
+  import { onAuthStateChanged, signOut }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
   import { doc, getDoc, collection, query, where, getDocs }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const $ = id => document.getElementById(id);
+
+  $('wDate').innerHTML = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) { window.location.href = 'login.html'; return; }
 
-    const userDoc  = await getDoc(doc(db, 'users', user.uid));
-    const userData = userDoc.exists() ? userDoc.data() : { schoolName: user.email };
-    document.getElementById('schoolName').innerText   = userData.schoolName || user.email;
-    document.getElementById('welcomeText').innerText  = `Welcome, ${userData.schoolName || 'School'}! 👋`;
+    const snap     = await getDoc(doc(db, 'users', user.uid));
+    const data     = snap.exists() ? snap.data() : {};
+    const school   = data.schoolName || user.email;
+    const initials = school.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+
+    $('sName').textContent   = school;
+    $('sAvatar').textContent = initials;
+    $('wText').textContent   = `Welcome, ${school.split(' ')[0]}!`;
 
     try {
-      const q        = query(collection(db, 'orders'), where('userId', '==', user.uid));
-      const snapshot = await getDocs(q);
-      const orders   = [];
-      snapshot.forEach(d => orders.push({ id: d.id, ...d.data() }));
-      orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const qSnap  = await getDocs(query(collection(db,'orders'), where('userId','==',user.uid)));
+      const orders = [];
+      qSnap.forEach(d => orders.push({ id:d.id, ...d.data() }));
+      orders.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-      document.getElementById('totalOrders').innerText = orders.length;
-      const totalSpent = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-      document.getElementById('totalSpent').innerText  = '₹' + totalSpent.toLocaleString('en-IN');
-      document.getElementById('pendingOrders').innerText = orders.filter(o => o.status === 'Pending').length;
+      const spent     = orders.reduce((s,o) => s+(o.totalPrice||o.total||0), 0);
+      const pending   = orders.filter(o=>o.status==='Pending').length;
+      const delivered = orders.filter(o=>o.status==='Delivered').length;
+
+      $('sTotalOrders').textContent = orders.length;
+      $('sTotalSpent').textContent  = '₹'+spent.toLocaleString('en-IN');
+      $('sPending').textContent     = pending;
+      $('sDelivered').textContent   = delivered;
+      $('oBadge').textContent       = orders.length===0?'No orders yet':orders.length===1?'1 order':`${orders.length} orders`;
 
       if (orders.length === 0) {
-        document.getElementById('ordersContent').innerHTML = `
+        $('ordersWrap').innerHTML = `
           <div class="empty-state">
-            <div class="icon">🛒</div>
-            <p>You haven't placed any orders yet.</p>
-            <a href="index.html" class="btn-primary">Browse Products</a>
+            <span class="empty-icon">🛒</span>
+            <h3>No orders yet</h3>
+            <p>Browse our categories and place your first order.</p>
+            <a href="index.html#categories" class="btn-primary">Browse Products</a>
           </div>`;
-      } else {
-        document.getElementById('ordersContent').innerHTML = `
-          <table>
-            <thead><tr>
-              <th>Order ID</th><th>Category</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th>
-            </tr></thead>
-            <tbody>
-              ${orders.map(o => `
-                <tr>
-                  <td><strong>#EDU-${o.id.substring(0,6).toUpperCase()}</strong></td>
-                  <td>${o.category || '—'}</td>
-                  <td>${o.items ? o.items.map(i => i.name).join(', ') : 'N/A'}</td>
-                  <td>₹${(o.total || 0).toLocaleString('en-IN')}</td>
-                  <td>${o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN') : 'N/A'}</td>
-                  <td><span class="badge badge-${(o.status || 'pending').toLowerCase()}">${o.status || 'Pending'}</span></td>
-                </tr>`).join('')}
-            </tbody>
-          </table>`;
+        return;
       }
+
+      $('ordersWrap').innerHTML = `
+        <table class="otable">
+          <thead><tr>
+            <th>Order ID</th><th>Product</th><th>Qty</th><th>Total</th><th>Date</th><th>Status</th>
+          </tr></thead>
+          <tbody>
+            ${orders.map(o => {
+              const id      = '#EDU-'+o.id.substring(0,6).toUpperCase();
+              const product = o.productName||(o.items?o.items.map(i=>i.name).join(', '):'—');
+              const qty     = o.qty?`Qty ${o.qty}`:(o.items?`${o.items.length} item${o.items.length>1?'s':''}`:'—');
+              const total   = '₹'+((o.totalPrice||o.total||0)).toLocaleString('en-IN');
+              const date    = o.createdAt?new Date(o.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
+              const status  = o.status||'Pending';
+              return `<tr>
+                <td><span class="o-id">${id}</span></td>
+                <td>${product}</td>
+                <td><span class="o-items">${qty}</span></td>
+                <td><span class="o-total">${total}</span></td>
+                <td style="color:var(--ink3);font-size:12px">${date}</td>
+                <td><span class="badge badge-${status.toLowerCase()}">${status}</span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>`;
+
     } catch(e) {
-      document.getElementById('ordersContent').innerHTML =
-        '<div class="empty-state"><p>Could not load orders. Please try again.</p></div>';
+      $('ordersWrap').innerHTML = `
+        <div class="empty-state">
+          <span class="empty-icon">⚠️</span>
+          <h3>Could not load orders</h3>
+          <p>Please refresh or contact support.</p>
+        </div>`;
+      $('oBadge').textContent = 'Error';
     }
   });
 
-  window.logout = async function() {
-    await signOut(auth);
-    window.location.href = 'index.html';
-  }
+  window.logout = async () => { await signOut(auth); window.location.href='index.html'; };
 </script>
 </body>
 </html>
