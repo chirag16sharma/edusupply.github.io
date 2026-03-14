@@ -200,9 +200,10 @@ async function replaceProductImages() {
 
 /* ── Main ──────────────────────────────────────────────────── */
 async function init() {
-  if (!UNSPLASH_KEY || UNSPLASH_KEY === 'zx8EVDIK0N6jln1_VPUgF1w-H8j5uNI0XYcLhn7IiMs') {
+  if (!UNSPLASH_KEY) {
     console.warn('[EduSupply] Add your Unsplash API key to unsplash-images.js');
     return;
+}
   }
 
   await replaceSiteImages();
