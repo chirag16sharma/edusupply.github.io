@@ -1260,26 +1260,28 @@
       btn.textContent = 'Placing order…';
 
       try {
-        const qty   = getQty();
-        const total = unitPrice * qty;
+        const qty      = getQty();
+        const total    = unitPrice * qty;
+        // Always read auth.currentUser at submit time — avoids race with onAuthStateChanged
+        const user     = auth.currentUser;
 
         const orderData = {
-          productId:   product.id || null,
-          productName: product.name,
-          category:    product.category,
+          productId:    product.id || null,
+          productName:  product.name,
+          category:     product.category,
           qty,
           unitPrice,
-          totalPrice:  total,
+          totalPrice:   total,
           customerName: name,
           phone,
-          schoolName:  school,
-          area:    $('fArea').value.trim()  || '',
-          date:    $('fDate').value         || '',
-          notes:   $('fNotes').value.trim() || '',
-          userId:  currentUser ? currentUser.uid   : null,
-          userEmail: currentUser ? currentUser.email : null,
-          status:  'Pending',
-          createdAt: new Date().toISOString(),
+          schoolName:   school,
+          area:         $('fArea').value.trim()  || '',
+          date:         $('fDate').value         || '',
+          notes:        $('fNotes').value.trim() || '',
+          userId:       user ? user.uid   : null,
+          userEmail:    user ? user.email : null,
+          status:       'Pending',
+          createdAt:    new Date().toISOString(),
         };
 
         const ref = await addDoc(collection(db, 'orders'), orderData);
@@ -1288,7 +1290,11 @@
       } catch (e) {
         btn.disabled    = false;
         btn.textContent = 'Confirm Order';
-        alert('Error placing order. Please try again or contact us on WhatsApp.');
+        console.error('Order error:', e);
+        const msg = e.code === 'permission-denied'
+          ? 'Permission denied — please log in and try again.'
+          : `Error: ${e.message}`;
+        alert(msg + '\n\nOr contact us on WhatsApp: +91 81977 39697');
       }
     });
 
