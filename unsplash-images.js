@@ -91,17 +91,10 @@ function applyImage(img, url, alt) {
   if (!url || !img) return;
   img.src   = url;
   img.alt   = alt || img.alt;
-  img.style.objectFit = 'cover';
-  img.style.width      = '100%';   
-  img.style.height     = '100%';   
-  img.style.display    = 'block';  
+  img.style.objectFit = 'cover'; 
   img.style.filter    = 'none';
   img.dataset.realImg = '1';
-
-  const parent = img.parentElement;
-  if (parent) {
-    parent.style.overflow = 'hidden';
-    parent.style.position = 'relative';
+   
 }
 
 /* ── Replace static site images ───────────────────────────── */
