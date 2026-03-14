@@ -204,7 +204,6 @@ async function init() {
     console.warn('[EduSupply] Add your Unsplash API key to unsplash-images.js');
     return;
 }
-  }
 
   await replaceSiteImages();
 
