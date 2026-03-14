@@ -162,7 +162,10 @@ export function initOrderPage(CONFIG) {
 
   // ── Submit order ─────────────────────────────────────────────────────────
   window.submitOrder = async function() {
-    if (!currentUser) { window.location.href = 'login.html'; return; }
+    if (!currentUser) {
+      window.location.href = 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+      return;
+    }
 
     const items = Object.values(selectedItems);
     if (items.length === 0) { alert('Please add at least one item to your order.'); return; }
@@ -223,10 +226,7 @@ export function initOrderPage(CONFIG) {
         createdAt:       new Date().toISOString()
       });
 
-      document.getElementById('orderSection').style.display  = 'none';
-      document.getElementById('successScreen').style.display = 'block';
-      document.getElementById('successOrderId').innerText =
-        `Order ID: #EDU-${ref.id.substring(0, 6).toUpperCase()}`;
+      window.location.href = `order-confirmation.html?id=${ref.id}`;
     } catch(e) {
       alert('Error submitting order: ' + e.message);
       btn.disabled  = false;
