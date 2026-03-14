@@ -1,5 +1,5 @@
 /* ================================================================
-   EduSupply — premium.css  v6  "Deep Plum + Vivid Yellow"
+   EduSupply — premium.css  v7  "Sapphire + Champagne"
    Link AFTER style.css. All selectors verified against source.
    wow.js handles: cursor glow, counters,
    scroll progress, magnetic buttons, mobile nav panel.
@@ -9,22 +9,22 @@
 
 /* ── Tokens ─────────────────────────────────────────────────── */
 :root {
-  --p-bg:      #F6F5F1;
-  --p-surface: #FDFCFA;
-  --p-ink:     #0E0818;
-  --p-ink2:    #2C1C50;
-  --p-ink3:    #685890;
-  --p-gold:    #F5D020;
-  --p-gold-lt: #FFF8C0;
-  --p-gold-dk: #B89800;
-  --p-line:    #E2DDD0;
-  --p-navy:    #1A1030;
+  --p-bg:      #F3F6FF;
+  --p-surface: #FAFCFF;
+  --p-ink:     #060A30;
+  --p-ink2:    #101C6C;
+  --p-ink3:    #4858A4;
+  --p-gold:    #E0C060;
+  --p-gold-lt: #FFFADC;
+  --p-gold-dk: #7A6000;
+  --p-line:    #C8D0F0;
+  --p-navy:    #060A30;
   --p-ease:    cubic-bezier(.4,0,.2,1);
   --p-spring:  cubic-bezier(.34,1.56,.64,1);
   --p-t:       0.34s;
-  --p-sh-sm:   0 2px 14px rgba(14,8,24,.06);
-  --p-sh-md:   0 8px 40px rgba(14,8,24,.11);
-  --p-sh-lg:   0 20px 72px rgba(14,8,24,.15);
+  --p-sh-sm:   0 2px 14px rgba(6,10,48,.06);
+  --p-sh-md:   0 8px 40px rgba(6,10,48,.11);
+  --p-sh-lg:   0 20px 72px rgba(6,10,48,.15);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -74,7 +74,7 @@ h1, h2, h3, h4 {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(245,208,32,.08) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(224,192,96,.08) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
   transform: translate(-50%, -50%);
@@ -146,11 +146,11 @@ h1, h2, h3, h4 {
 #p-mobile-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(14,8,24,0);
+  background: rgba(6,10,48,0);
   transition: background .35s var(--p-ease);
 }
 #p-mobile-nav.open #p-mobile-overlay {
-  background: rgba(14,8,24,.55);
+  background: rgba(6,10,48,.55);
   backdrop-filter: blur(4px);
 }
 
@@ -252,12 +252,12 @@ h1, h2, h3, h4 {
 }
 .hero-bg-grid {
   background-image:
-    linear-gradient(rgba(14,8,24,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(14,8,24,.03) 1px, transparent 1px) !important;
+    linear-gradient(rgba(6,10,48,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,10,48,.03) 1px, transparent 1px) !important;
   background-size: 52px 52px !important;
 }
 .hero::before {
-  background: radial-gradient(circle, rgba(245,208,32,.16) 0%, transparent 65%) !important;
+  background: radial-gradient(circle, rgba(224,192,96,.16) 0%, transparent 65%) !important;
 }
 
 /* Word-reveal spans injected by wow.js */
@@ -707,7 +707,7 @@ a.edu-atc-btn:hover {
   font-family: 'Playfair Display', serif !important;
   font-size: 4.5rem !important;
   font-weight: 900 !important;
-  color: rgba(245,208,32,.22) !important;
+  color: rgba(224,192,96,.22) !important;
   line-height: 1 !important;
   display: block !important;
   margin-bottom: .6rem !important;
@@ -803,7 +803,7 @@ a.edu-atc-btn:hover {
   border-color: var(--p-gold) !important;
   background: var(--p-surface) !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(245,208,32,.12) !important;
+  box-shadow: 0 0 0 3px rgba(224,192,96,.12) !important;
 }
 .contact-form input::placeholder,
 .contact-form textarea::placeholder { color: var(--p-ink3) !important; }
