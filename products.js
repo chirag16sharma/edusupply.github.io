@@ -117,6 +117,7 @@ function injectStyles() {
       font-size: 0.68rem; font-weight: 700;
       padding: 3px 10px; border-radius: 20px;
       text-transform: uppercase; letter-spacing: 0.05em;
+      z-index: 10;
     }
     .edu-card-img { width: 100%; height: 130px; object-fit: contain; margin-bottom: 0.4rem; }
     .edu-card-img-fallback {
