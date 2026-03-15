@@ -37,7 +37,7 @@ const SITE_IMAGES = [
    .edu-card-cat. We build a search query from those.
 ──────────────────────────────────────────────────────────────── */
 const PRODUCT_QUERY_MAP = [
-  { keys: ['smart board', 'smartboard', 'interactive board'],  query: 'smart interactive whiteboard classroom' },
+  { keys: ['smart board', 'smartboard', 'interactive board'], query: 'smart interactive whiteboard classroom' }, 
   { keys: ['student desk', 'dual desk', 'school desk'],        query: 'school student desk wood classroom' },
   { keys: ['teacher desk', 'teacher cabin', 'cabin table'],    query: 'teacher office desk chair school' },
   { keys: ['chair', 'moulded chair', 'plastic chair'],         query: 'plastic school chair classroom stacking' },
