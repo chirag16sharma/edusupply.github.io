@@ -62,8 +62,8 @@ const PRODUCT_QUERY_MAP = [
 ];
 
 /* ── Cache wrapper ─────────────────────────────────────────── */
-function cacheGet(key)        { try { return sessionStorage.getItem('edu_img_' + key); } catch { return null; } }
-function cacheSet(key, value) { try { sessionStorage.setItem('edu_img_' + key, value); } catch {} }
+function cacheGet(key)        { try { return localStorage.getItem('edu_img_' + key); } catch { return null; } }
+function cacheSet(key, value) { try { localStorage.setItem('edu_img_' + key, value); } catch {} }
 
 /* ── Fetch one photo from Unsplash ─────────────────────────── */
 async function fetchUnsplashUrl(query) {
