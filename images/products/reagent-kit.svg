@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Rack -->
+  <rect x="20" y="130" width="160" height="14" rx="4" fill="#475569"/>
+  <rect x="30" y="60" width="8" height="72" rx="3" fill="#64748b"/>
+  <rect x="162" y="60" width="8" height="72" rx="3" fill="#64748b"/>
+  <rect x="30" y="58" width="140" height="8" rx="3" fill="#64748b"/>
+  <!-- Flasks/tubes -->
+  <!-- Flask 1 - red -->
+  <rect x="42" y="70" width="18" height="10" rx="2" fill="#94a3b8"/>
+  <path d="M44 80 L38 125 Q38 130 46 130 L62 130 Q70 130 70 125 L64 80 Z" fill="#fecaca"/>
+  <path d="M44 80 L38 125 Q38 130 46 130 L62 130 Q70 130 70 125 L64 80 Z" fill="#ef4444" opacity="0.6"/>
+  <ellipse cx="53" cy="117" rx="10" ry="5" fill="#ef4444" opacity="0.8"/>
+  <!-- Flask 2 - blue -->
+  <rect x="72" y="70" width="18" height="10" rx="2" fill="#94a3b8"/>
+  <path d="M74 80 L68 125 Q68 130 76 130 L92 130 Q100 130 100 125 L94 80 Z" fill="#bfdbfe"/>
+  <path d="M74 80 L68 125 Q68 130 76 130 L92 130 Q100 130 100 125 L94 80 Z" fill="#3b82f6" opacity="0.6"/>
+  <ellipse cx="83" cy="117" rx="10" ry="5" fill="#3b82f6" opacity="0.8"/>
+  <!-- Flask 3 - green -->
+  <rect x="102" y="70" width="18" height="10" rx="2" fill="#94a3b8"/>
+  <path d="M104 80 L98 125 Q98 130 106 130 L122 130 Q130 130 130 125 L124 80 Z" fill="#bbf7d0"/>
+  <path d="M104 80 L98 125 Q98 130 106 130 L122 130 Q130 130 130 125 L124 80 Z" fill="#22c55e" opacity="0.6"/>
+  <ellipse cx="113" cy="117" rx="10" ry="5" fill="#22c55e" opacity="0.8"/>
+  <!-- Flask 4 - yellow -->
+  <rect x="132" y="70" width="18" height="10" rx="2" fill="#94a3b8"/>
+  <path d="M134 80 L128 125 Q128 130 136 130 L152 130 Q160 130 160 125 L154 80 Z" fill="#fef9c3"/>
+  <path d="M134 80 L128 125 Q128 130 136 130 L152 130 Q160 130 160 125 L154 80 Z" fill="#eab308" opacity="0.6"/>
+  <ellipse cx="143" cy="117" rx="10" ry="5" fill="#eab308" opacity="0.8"/>
+  <!-- Bubbles -->
+  <circle cx="83" cy="95" r="3" fill="white" opacity="0.7"/>
+  <circle cx="113" cy="100" r="2" fill="white" opacity="0.7"/>
+  <circle cx="143" cy="93" r="2.5" fill="white" opacity="0.7"/>
+  <!-- Labels -->
+  <rect x="42" y="45" width="18" height="12" rx="2" fill="white" stroke="#94a3b8" stroke-width="1"/>
+  <text x="44" y="55" font-size="7" fill="#374151" font-family="Arial">HCl</text>
+  <rect x="72" y="45" width="18" height="12" rx="2" fill="white" stroke="#94a3b8" stroke-width="1"/>
+  <text x="74" y="55" font-size="7" fill="#374151" font-family="Arial">NaOH</text>
+  <rect x="102" y="45" width="18" height="12" rx="2" fill="white" stroke="#94a3b8" stroke-width="1"/>
+  <text x="103" y="55" font-size="7" fill="#374151" font-family="Arial">CuSO4</text>
+</svg>

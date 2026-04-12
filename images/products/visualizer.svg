@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Base -->
+  <rect x="50" y="150" width="100" height="18" rx="8" fill="#1e293b"/>
+  <rect x="60" y="143" width="80" height="12" rx="4" fill="#374151"/>
+  <!-- Vertical arm -->
+  <rect x="94" y="60" width="12" height="90" rx="5" fill="#334155"/>
+  <!-- Horizontal arm -->
+  <rect x="60" y="52" width="80" height="12" rx="5" fill="#334155"/>
+  <!-- Camera head -->
+  <rect x="55" y="28" width="50" height="32" rx="8" fill="#1e293b"/>
+  <rect x="60" y="32" width="40" height="24" rx="5" fill="#0f172a"/>
+  <!-- Lens -->
+  <circle cx="80" cy="44" r="11" fill="#374151"/>
+  <circle cx="80" cy="44" r="8" fill="#1e293b"/>
+  <circle cx="80" cy="44" r="5" fill="#0f172a"/>
+  <circle cx="77" cy="41" r="2" fill="#475569"/>
+  <!-- LED light on camera -->
+  <circle cx="97" cy="33" r="3" fill="#22c55e"/>
+  <!-- USB cable -->
+  <path d="M100 44 Q130 44 130 80 Q130 110 140 130" stroke="#64748b" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <rect x="136" y="130" width="14" height="8" rx="2" fill="#374151"/>
+  <!-- Display output preview -->
+  <rect x="115" y="55" width="70" height="55" rx="5" fill="#0f172a"/>
+  <rect x="118" y="58" width="64" height="49" rx="3" fill="#1d4ed8"/>
+  <!-- Document preview on screen -->
+  <rect x="122" y="62" width="56" height="40" rx="2" fill="white" opacity="0.9"/>
+  <line x1="126" y1="68" x2="174" y2="68" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="126" y1="74" x2="170" y2="74" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="126" y1="79" x2="172" y2="79" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="126" y1="84" x2="165" y2="84" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="126" y1="89" x2="168" y2="89" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="126" y1="94" x2="160" y2="94" stroke="#94a3b8" stroke-width="1"/>
+  <!-- Arm joint circle -->
+  <circle cx="100" cy="58" r="8" fill="#475569"/>
+  <circle cx="100" cy="58" r="4" fill="#64748b"/>
+</svg>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EduSupply — Product Illustrations Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding: 2rem; }
+  h1 { text-align: center; color: #1e293b; margin-bottom: 0.4rem; font-size: 1.6rem; }
+  p.sub { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.9rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.2rem; }
+  .card {
+    background: white; border-radius: 14px;
+    padding: 1.2rem; text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .card img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 0.6rem; }
+  .card .name { font-size: 0.8rem; font-weight: 700; color: #1e293b; }
+  .card .cat { font-size: 0.7rem; color: #6366f1; font-weight: 600; margin-bottom: 0.3rem; text-transform: uppercase; }
+  .section-label {
+    grid-column: 1/-1; margin-top: 1rem;
+    font-size: 1rem; font-weight: 700; color: #475569;
+    padding: 0.4rem 0.8rem; background: #e2e8f0;
+    border-radius: 8px; display: inline-block;
+  }
+</style>
+</head>
+<body>
+<h1>🎒 EduSupply — Product Illustrations</h1>
+<p class="sub">18 custom SVG illustrations — place the <code>images/products/</code> folder in your site root</p>
+<div class="grid">
+
+  <div class="section-label">🪑 Furniture</div>
+  <div class="card"><img src="images/products/student-desk.svg"><div class="cat">Furniture</div><div class="name">Student Dual Desk</div></div>
+  <div class="card"><img src="images/products/teacher-table.svg"><div class="cat">Furniture</div><div class="name">Teacher's Cabin Table</div></div>
+  <div class="card"><img src="images/products/chair.svg"><div class="cat">Furniture</div><div class="name">Plastic Moulded Chair</div></div>
+  <div class="card"><img src="images/products/bookshelf.svg"><div class="cat">Furniture</div><div class="name">Library Bookshelf</div></div>
+  <div class="card"><img src="images/products/locker.svg"><div class="cat">Furniture</div><div class="name">Storage Locker (12-Door)</div></div>
+
+  <div class="section-label">🧪 Lab Supplies</div>
+  <div class="card"><img src="images/products/reagent-kit.svg"><div class="cat">Lab</div><div class="name">Chemistry Reagent Kit</div></div>
+  <div class="card"><img src="images/products/vernier.svg"><div class="cat">Lab</div><div class="name">Vernier Caliper</div></div>
+  <div class="card"><img src="images/products/optics-kit.svg"><div class="cat">Lab</div><div class="name">Physics Optics Kit</div></div>
+  <div class="card"><img src="images/products/microscope.svg"><div class="cat">Lab</div><div class="name">Biology Microscope</div></div>
+  <div class="card"><img src="images/products/balance.svg"><div class="cat">Lab</div><div class="name">Digital Weighing Balance</div></div>
+
+  <div class="section-label">🖥️ Boards & Displays</div>
+  <div class="card"><img src="images/products/smartboard.svg"><div class="cat">Boards</div><div class="name">Interactive Smart Board</div></div>
+  <div class="card"><img src="images/products/whiteboard.svg"><div class="cat">Boards</div><div class="name">Magnetic Whiteboard</div></div>
+  <div class="card"><img src="images/products/chalkboard.svg"><div class="cat">Boards</div><div class="name">Green Chalkboard</div></div>
+  <div class="card"><img src="images/products/projector-screen.svg"><div class="cat">Boards</div><div class="name">Projector Screen</div></div>
+
+  <div class="section-label">✏️ Stationery</div>
+  <div class="card"><img src="images/products/markers.svg"><div class="cat">Stationery</div><div class="name">Whiteboard Markers</div></div>
+  <div class="card"><img src="images/products/chalk.svg"><div class="cat">Stationery</div><div class="name">Chalk Sticks</div></div>
+  <div class="card"><img src="images/products/visualizer.svg"><div class="cat">Stationery</div><div class="name">Document Projector</div></div>
+  <div class="card"><img src="images/products/duster.svg"><div class="cat">Stationery</div><div class="name">Classroom Duster Set</div></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Main body -->
+  <rect x="15" y="75" width="155" height="30" rx="4" fill="#94a3b8"/>
+  <rect x="15" y="79" width="155" height="4" rx="2" fill="#cbd5e1"/>
+  <!-- Scale markings on main -->
+  <line x1="30" y1="75" x2="30" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <line x1="40" y1="75" x2="40" y2="71" stroke="#374151" stroke-width="1"/>
+  <line x1="50" y1="75" x2="50" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <line x1="60" y1="75" x2="60" y2="71" stroke="#374151" stroke-width="1"/>
+  <line x1="70" y1="75" x2="70" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <line x1="80" y1="75" x2="80" y2="71" stroke="#374151" stroke-width="1"/>
+  <line x1="90" y1="75" x2="90" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <line x1="100" y1="75" x2="100" y2="71" stroke="#374151" stroke-width="1"/>
+  <line x1="110" y1="75" x2="110" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <line x1="120" y1="75" x2="120" y2="71" stroke="#374151" stroke-width="1"/>
+  <line x1="130" y1="75" x2="130" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <line x1="140" y1="75" x2="140" y2="71" stroke="#374151" stroke-width="1"/>
+  <line x1="150" y1="75" x2="150" y2="68" stroke="#374151" stroke-width="1.5"/>
+  <!-- Numbers -->
+  <text x="27" y="65" font-size="8" fill="#374151" font-family="Arial">0</text>
+  <text x="47" y="65" font-size="8" fill="#374151" font-family="Arial">1</text>
+  <text x="67" y="65" font-size="8" fill="#374151" font-family="Arial">2</text>
+  <text x="87" y="65" font-size="8" fill="#374151" font-family="Arial">3</text>
+  <text x="107" y="65" font-size="8" fill="#374151" font-family="Arial">4</text>
+  <text x="127" y="65" font-size="8" fill="#374151" font-family="Arial">5</text>
+  <!-- Sliding jaw -->
+  <rect x="55" y="70" width="40" height="40" rx="3" fill="#6366f1"/>
+  <rect x="58" y="105" width="14" height="35" rx="2" fill="#6366f1"/>
+  <rect x="80" y="40" width="12" height="35" rx="2" fill="#4f46e5"/>
+  <!-- Fixed jaw -->
+  <rect x="15" y="105" width="14" height="40" rx="2" fill="#475569"/>
+  <rect x="15" y="40" width="14" height="35" rx="2" fill="#475569"/>
+  <!-- Depth rod -->
+  <rect x="168" y="78" width="5" height="24" rx="2" fill="#e2e8f0"/>
+  <!-- Vernier scale -->
+  <line x1="60" y1="110" x2="60" y2="115" stroke="white" stroke-width="1"/>
+  <line x1="64" y1="110" x2="64" y2="114" stroke="white" stroke-width="0.8"/>
+  <line x1="68" y1="110" x2="68" y2="115" stroke="white" stroke-width="1"/>
+  <line x1="72" y1="110" x2="72" y2="114" stroke="white" stroke-width="0.8"/>
+  <line x1="76" y1="110" x2="76" y2="115" stroke="white" stroke-width="1"/>
+  <line x1="80" y1="110" x2="80" y2="114" stroke="white" stroke-width="0.8"/>
+  <line x1="84" y1="110" x2="84" y2="115" stroke="white" stroke-width="1"/>
+  <line x1="88" y1="110" x2="88" y2="114" stroke="white" stroke-width="0.8"/>
+  <line x1="92" y1="110" x2="92" y2="115" stroke="white" stroke-width="1"/>
+</svg>
